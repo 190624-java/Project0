@@ -12,8 +12,9 @@ public class Signup {
 		String uName = bReader.readLine();
 		System.out.print("\nPlease enter the password for your account: ");
 		String uPwd = bReader.readLine();
-		System.out.println(uName + uPwd);
 		
+		User newUser = new User(uName, uPwd);
+		System.out.println(newUser.toString());
 
 	}
 
