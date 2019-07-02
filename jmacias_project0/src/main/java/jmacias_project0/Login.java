@@ -16,8 +16,41 @@ public class Login {
 		String uPwd = bReader.readLine();
 		
 		List<User> users = PersistentUser.getUsers();
-		// TODO check list of users for username, and whether it matches
-		// password
+		boolean loggedIn = false;
+		boolean usernameExists = false;
+		String userName = "";
+		// TODO start here
+		for (User x : users) {
+			if (x.name.equals(uName)) {
+				usernameExists = true;
+				if (x.password.equals(uPwd)) {
+					loggedIn = true;
+					userName = x.name;
+				}
+			}
+				
+		}
+		
+		if (loggedIn) {
+			LoggedIn.startApp(userName);
+		} 
+		else if (usernameExists == false) {
+			System.out.println("Sorry, that user name does not exist."
+					+ "\nPress return to continue");
+			bReader.readLine();
+			String command = Driver.welcome();
+			Driver.check(command);
+		}
+		else if(!loggedIn) {
+			System.out.println("Sorry, that password is not correct."
+					+ "\nPress return to continue");
+			bReader.readLine();
+			String command = Driver.welcome();
+			Driver.check(command);
+		}
+		else {
+			System.out.println("Something wierd happened");
+		}
 	}
 	
 }

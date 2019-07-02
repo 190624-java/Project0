@@ -19,7 +19,8 @@ public class Signup {
 		PersistentUser.addUsers(newUser);
 		
 		// returning to first screen
-		Driver.welcome();
+		String command = Driver.welcome();
+		Driver.check(command);
 
 	}
 

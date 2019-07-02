@@ -20,9 +20,9 @@ public class Driver {
 		}
 	}
 	
-	private static void check(String command) throws IOException {
+	static void check(String command) throws IOException {
 		if (command.equals("1")) {
-			System.out.println(1);
+			Login.login();
 		}
 		else if (command.equals("2")) {
 			Signup.createAccount();
