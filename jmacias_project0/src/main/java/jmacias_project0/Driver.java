@@ -20,12 +20,12 @@ public class Driver {
 		}
 	}
 	
-	private static void check(String command) {
+	private static void check(String command) throws IOException {
 		if (command.equals("1")) {
 			System.out.println(1);
 		}
 		else if (command.equals("2")) {
-			System.out.println(2);
+			Signup.createAccount();
 		}
 		else {
 			System.out.println("   Please enter a valid command");
@@ -40,7 +40,7 @@ public class Driver {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// setting up readers
 		System.out.println("===========  Welcome to the Dealership  =============\n\n");
 		String command1 = welcome();
