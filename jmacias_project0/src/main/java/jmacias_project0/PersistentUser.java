@@ -15,4 +15,21 @@ public class PersistentUser {
 		}
 		return users;
 	}
+	
+	public static void addUsers(User newUser) throws FileNotFoundException, IOException {
+		List<User> users = getUsers();
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\main\\resources\\Data.txt")))) {
+			if (users != null) {
+				System.out.println("User data found, adding to users.");
+				users.add(newUser);
+			}
+			else {
+				System.out.println("You are the first user.");
+				users = new ArrayList<>();
+				users.add(newUser);
+			}
+			oos.writeObject(users);
+		}
+		System.out.println("HashSet updated.");
+	}
 }

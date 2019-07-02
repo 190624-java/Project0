@@ -14,7 +14,12 @@ public class Signup {
 		String uPwd = bReader.readLine();
 		
 		User newUser = new User(uName, uPwd);
-		System.out.println(newUser.toString());
+		System.out.println("New user name is: " + newUser.toString());
+		
+		PersistentUser.addUsers(newUser);
+		
+		// returning to first screen
+		Driver.welcome();
 
 	}
 
