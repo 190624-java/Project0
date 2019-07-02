@@ -1,31 +1,41 @@
 package project0.systems;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import project0.automobiles.Car;
 import project0.users.Customer;
 import project0.users.Employee;
-import project0.users.User;
 
 /*
  * Contains all business log for the DealershipSystem app
  */
 
-public class DealershipSystem {
+public class DealershipSystem implements Serializable {
 
+	private static final long serialVersionUID = 49076095176971175L;
 	public String currUser; // the current user using the system
 	public boolean isEmployee = false;
 	public boolean isCustomer = false;
 	public static ArrayList<Offer> offers = new ArrayList<Offer>();
+	
+	// HashMap<userName, Object>
+	public static HashMap<String, Customer> customers = new HashMap<String, Customer>();
+	public static HashMap<String, Employee> employees = new HashMap<String, Employee>();
+	
+	// FOR SERIALIZATION, static fields are ignored during serialization, so needed instance fields
+	public HashMap<String, Customer> customersInstance = new HashMap<String, Customer>();
+	public HashMap<String, Employee> employeesInstance = new HashMap<String, Employee>();
+	public ArrayList<Offer> offersInstance = new ArrayList<Offer>();
+	public ArrayList<Car> carsInLotInstance = new ArrayList<Car>();
+
 	private Customer customer;
 	private Employee employee;
-
-	public DealershipSystem() {
-		if (User.employees.isEmpty()) {
-			User.employees.put("user", new Employee("user", (short) 333));
-		}
-	}
+	
+	private static  byte acceptedOfferCarId;
+	private static boolean running = true; // for while loop
 
 	public void setCurrUser(String currUser) {
 		this.currUser = currUser;
@@ -53,15 +63,17 @@ public class DealershipSystem {
 		// REGISTRATION
 		case 1:
 			System.out.println("----- Registration Menu -----");
-			boolean isRegistered = Customer.registerAccount(scanner);
+			Customer c = new Customer();
+			boolean isRegistered = c.registerAccount(scanner);
 			if(!isRegistered) break;
 			systemStart(scanner);
 			break;
 
 			// USER LOGIN
 		case 2:
-			loginMenu(scanner);
-			if (isEmployee)
+			boolean loginSuccessful = loginMenu(scanner);
+			if(!loginSuccessful) return;
+			if (this.isEmployee)
 				employeeLoggedIn(scanner, this.employee); // determine who the user is, employee OR customer
 			if (this.isCustomer)
 				customerLoggedIn(scanner, this.customer);
@@ -70,10 +82,12 @@ public class DealershipSystem {
 		// EXIT SYSTEM
 		case 3:
 			System.out.println("Good bye! ...exiting");
+			running = false;
 			return; // exit system
 		default:
 			System.out.println("Invalid selection, please press 1, 2, or 3");
 			System.out.println("Exiting system...");
+			running = false;
 			return; // exit system
 		}
 	}
@@ -83,11 +97,12 @@ public class DealershipSystem {
 		for (Offer offer : offers) {
 			if (offer.getOfferStatus().equals(Offer.OFFERSTATUS.ACCEPTED)) {
 				byte carId = offer.getCarId();
+				acceptedOfferCarId = carId;
 				for (int i = 0; i < CarsInLot.getCarsInLot().size(); i++) { // get car
 					Car car = CarsInLot.getCarsInLot().get(i);
 					if (car.getId() == carId) {
 						String userName = offer.getCustomerUserName();
-						User.customers.get(userName).getCarsOwned().add(car); // add to customer
+						DealershipSystem.customers.get(userName).getCarsOwned().add(car); // add to customer
 						CarsInLot.getCarsInLot().remove(i); // remove from lot
 						return; // avoid nullpointer
 					}
@@ -97,7 +112,11 @@ public class DealershipSystem {
 	}
 
 	// helper method handles both customer and employee login
-	private void loginMenu(Scanner scanner) {
+	private boolean loginMenu(Scanner scanner) {
+		this.isCustomer = false;
+		this.isEmployee = false; // reset
+		boolean loginSuccessful = true;
+		
 		System.out.println("----- Login Menu -----");
 
 		System.out.print("User Name: ");
@@ -105,27 +124,27 @@ public class DealershipSystem {
 
 		System.out.print("Pin: ");
 		short loginPin = scanner.nextShort();
-		if (Customer.customers.containsKey(userName)) { // check to see if this customer is registered
-			this.customer = Customer.customers.get(userName); // get that customer
-			customer.login(userName, loginPin); // login, checks loginPin
+		if (DealershipSystem.customers.containsKey(userName)) { // check to see if this customer is registered
+			this.customer = DealershipSystem.customers.get(userName); // get that customer
+			loginSuccessful = customer.login(userName, loginPin); // login, checks loginPin
 			this.isCustomer = true; // set current user to customer
 			this.isEmployee = false;
 		}
-		else if (Employee.employees.containsKey(userName)) {
-			this.employee = Employee.employees.get(userName); // get that customer
-			employee.login(userName, loginPin); // login, checks loginPin
+		else if (DealershipSystem.employees.containsKey(userName)) {
+			this.employee = DealershipSystem.employees.get(userName); // get that employee
+			loginSuccessful = employee.login(userName, loginPin); // login, checks loginPin
 			this.isCustomer = false; 
 			this.isEmployee = true; // set current user to employee
 		}
 		else {
+			loginSuccessful = false;
 			System.out.println("No user found...exiting system");
-			return;
+			return loginSuccessful;
 		}
+		return loginSuccessful;
 	}
 
 	private void customerLoggedIn(Scanner scanner, Customer customer) {
-
-		boolean running = true;
 		while (running) {
 			System.out.println("----------------------------");
 			System.out.println("Press 1: View Cars in Lot");
@@ -167,17 +186,16 @@ public class DealershipSystem {
 				break;
 			case 7:
 				System.out.println("Exiting system...");
-				return;
+				running = false;
+				break;
 			default:
 				System.out.println("Invalid selection, please press 1, 2, 3, 4, 5 or 6");
 				System.out.println("Exiting system...");
 			}
-
 		}
 	}
 
 	private void employeeLoggedIn(Scanner scanner, Employee employee) {
-		boolean running = true;
 		while (running) {
 			System.out.println("----------------------------");
 			System.out.println("Press 1: View Cars in Lot");
@@ -222,6 +240,8 @@ public class DealershipSystem {
 			case 4:
 				// accept or reject offer
 				employee.acceptOrReject(scanner);
+				rejectPendingOffers();// system rejects all pending offers once offer is accepted
+				break;
 			case 5:
 				// view all payments
 				break;
@@ -232,13 +252,24 @@ public class DealershipSystem {
 				systemStart(scanner);
 				break;
 			case 7:
-				System.out.println("Exiting system...");		
-				return;
+				System.out.println("Exiting system...");	
+				running = false;
+				break;
 			default:
 				System.out.println("Invalid selection, please press 1, 2, 3, 4, 5 or 6");
 				System.out.println("Exiting system...");
 			}
 		}
+	}
+	
+	private static void rejectPendingOffers() {
+		for(Offer offer : offers) {
+			if(acceptedOfferCarId == offer.getCarId() 
+					&& offer.getOfferStatus().equals(Offer.OFFERSTATUS.PENDING)) {
+				offer.setOfferStatus(Offer.OFFERSTATUS.DECLINED);
+			}
+		}
+		acceptedOfferCarId = -1; // reset
 	}
 
 	public static void calculateMonthlyPayment() {

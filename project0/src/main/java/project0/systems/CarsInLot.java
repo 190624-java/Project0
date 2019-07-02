@@ -1,18 +1,20 @@
 package project0.systems;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import project0.automobiles.Car;
 
-public class CarsInLot {
-	
-	private static ArrayList<Car> carsInLot = new ArrayList<Car>();
-	
+public class CarsInLot implements Serializable {
+
+	private static final long serialVersionUID = -7630793809490527214L;
+	public static ArrayList<Car> carsInLot = new ArrayList<Car>();
+
 	public CarsInLot() {
 		initialize();
 	}
 	
-	private static void initialize() {
+	private void initialize() {
 		if(carsInLot.isEmpty()) {
 			Car car1 = new Car((byte)1, "Ford", "Mustang", "Black", (short)1966, 
 					70_000, 40_000);

@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Car implements Serializable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private byte carId; // used to identify car, particularly when making offer etc.
 	private String brand; // car brand, Ford, Nissan, etc.
@@ -18,7 +16,7 @@ public class Car implements Serializable {
 	private boolean hasOffer; // a customer offered 
 	private int currOfferAmount; // current offer amount from a customer
 	private HashMap<String, Integer> currentOffers; // all offers
-	private int monthlyPayment;
+	private double monthlyPayment;
 	private int remainingPrice; // amount customer to owes on car
 	
 	public Car(byte carId, String brand, String model, String color, 
@@ -109,7 +107,7 @@ public class Car implements Serializable {
 		this.currentOffers = currentOffers;
 	}
 
-	public int getMonthlyPayment() {
+	public double getMonthlyPayment() {
 		return monthlyPayment;
 	}
 

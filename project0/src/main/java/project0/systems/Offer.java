@@ -1,7 +1,10 @@
 package project0.systems;
 
-public class Offer {
+import java.io.Serializable;
 
+public class Offer implements Serializable {
+
+	private static final long serialVersionUID = -156479675038000817L;
 	private int offerAmount;
 	private String customerUserName;
 	private byte carId;

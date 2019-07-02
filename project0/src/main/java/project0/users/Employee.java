@@ -9,6 +9,7 @@ import project0.systems.Offer;
 
 public class Employee extends User {
 	
+	private static final long serialVersionUID = -1998507940139170601L;
 	private String userName;
 	private short loginPin;
 	
@@ -63,6 +64,7 @@ public class Employee extends User {
 				if(answer.equals("y") || answer.equals("Y")) {
 					offer.setOfferStatus(Offer.OFFERSTATUS.ACCEPTED);
 					DealershipSystem.updateCustomersOwnedCars(); // update lot and customer
+					return; // finished
 				} else if(answer.equals("n") || answer.equals("N")) {
 					offer.setOfferStatus(Offer.OFFERSTATUS.DECLINED);
 				} else {
@@ -80,8 +82,8 @@ public class Employee extends User {
 	public boolean login(String userName, short loginPin) {
 			// employee login
 			boolean loginSuccessful = true;
-			if(employees.containsKey(userName)  // check user existence
-					&& employees.get(userName).getLoginPin() == loginPin) { // check correct pin
+			if(DealershipSystem.employees.containsKey(userName)  // check user existence
+					&& DealershipSystem.employees.get(userName).getLoginPin() == loginPin) { // check correct pin
 				System.out.println("----- Welcome Employee -----");
 				
 				return loginSuccessful;
@@ -92,5 +94,11 @@ public class Employee extends User {
 				loginSuccessful = false; // login failed
 				return loginSuccessful;
 			}
+	}
+
+	@Override
+	public boolean registerAccount(Scanner scanner) { // employee is already registered in system
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -1,14 +1,13 @@
 package project0.users;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.Scanner;
 
-public abstract class User {
+public abstract class User implements Serializable {
 
-	// HashMap<userName, Object>
-	public static HashMap<String, Customer> customers = new HashMap<String, Customer>();
-	public static HashMap<String, Employee> employees = new HashMap<String, Employee>();
-
-	//public abstract boolean registerAccount(Scanner scanner);
+	private static final long serialVersionUID = 1L;
+	
+	public abstract boolean registerAccount(Scanner scanner);
 	public abstract boolean login(String userName, short loginPin);
 
 }

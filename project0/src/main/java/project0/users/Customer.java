@@ -9,10 +9,13 @@ import project0.systems.DealershipSystem;
 import project0.systems.Offer;
 
 public class Customer extends User {
-	
+
+	private static final long serialVersionUID = 4334646392593678540L;
 	private String userName;
 	private short loginPin;
 	private ArrayList<Car> carsOwned = new ArrayList<Car>();
+	
+	public Customer() {}
 	
 	public Customer(String userName, short loginPin) {
 		this.userName = userName;
@@ -30,7 +33,7 @@ public class Customer extends User {
 		return carsOwned;
 	}
 	
-	public static boolean registerAccount(Scanner scanner) {
+	public boolean registerAccount(Scanner scanner) {
 		boolean isRegistered = false; // assume failure
 		String userName;
 		short loginPin; // 3 digit pin
@@ -38,7 +41,7 @@ public class Customer extends User {
 		userName = scanner.next();
 		
 		// check that user name isn't taken. Note employees CAN'T register
-		if(customers.containsKey(userName) || employees.containsKey(userName)) {
+		if(DealershipSystem.customers.containsKey(userName) || DealershipSystem.employees.containsKey(userName)) {
 			System.out.println("User name taken. registration exiting...");
 			return isRegistered; // returns false
 		}
@@ -51,7 +54,9 @@ public class Customer extends User {
 			return isRegistered; // returns false
 		}
 		else {
-			customers.put(userName, new Customer(userName, loginPin));
+			this.userName = userName;
+			this.loginPin = loginPin;
+			DealershipSystem.customers.put(userName, this);
 			isRegistered = true;
 			return isRegistered; // returns true, everything worked
 		}
@@ -61,10 +66,9 @@ public class Customer extends User {
 	public boolean login(String userName, short loginPin) {
 		// customer login
 		boolean loginSuccessful = true;
-		if(customers.containsKey(userName)  // check user existence
-				&& customers.get(userName).getLoginPin() == loginPin) { // check correct pin
+		if(DealershipSystem.customers.containsKey(userName)  // check user existence
+				&& DealershipSystem.customers.get(userName).getLoginPin() == loginPin) { // check correct pin
 			System.out.println("----- Welcome Customer -----");
-			
 			return loginSuccessful;
 		}
 		else {
@@ -80,6 +84,10 @@ public class Customer extends User {
 	}
 	
 	public void offerStatus() {
+		if(DealershipSystem.offers.isEmpty()) {
+			System.out.println("No Offers");
+			return;
+		}
 		for(Offer offer : DealershipSystem.offers) {
 			if(this.userName.equals(offer.getCustomerUserName())) {
 				System.out.println("CarID: " + offer.getCarId()
@@ -103,7 +111,8 @@ public class Customer extends User {
 	// checks that customer isn't making a duplicate offer on a pending offer
 	private boolean duplicateOffer(String userName, byte carId) {
 		for(Offer offer : DealershipSystem.offers) {
-			if(offer.getCustomerUserName().equals(userName) && offer.getCarId() == carId) return true;
+			if(offer.getCustomerUserName().equals(userName) && offer.getCarId() == carId 
+					&& offer.getOfferStatus().equals(Offer.OFFERSTATUS.PENDING)) return true;
 		}
 		return false;
 	}
@@ -130,7 +139,7 @@ public class Customer extends User {
 	public void viewRemainingPayments() {
 		if(carsOwned.isEmpty()) System.out.println("No Payments (You don't own any cars)");
 		else {
-			// get all payments
+			
 		}
 	}
 }
