@@ -9,6 +9,7 @@ public class Lot {
 
 	private ArrayList<Car> spaces;
 	private int cap; //capacity of space available to hold cars
+	private User owner;
 	
 	public Lot(int capacity){
 		this.cap = capacity;
@@ -23,8 +24,14 @@ public class Lot {
 	 * @return
 	 */
 	private Car createEmptyCar() {
-		return new Car(null, "empty");
+		return new Car(null, null);
 	}
+	
+	
+	public void setOwner(User user) {
+		this.owner = user;
+	}
+	
 	
 	//TODO
 	public boolean parkCar(Car car) {

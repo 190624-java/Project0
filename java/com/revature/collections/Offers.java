@@ -1,5 +1,9 @@
 package com.revature.collections;
 
+import java.util.LinkedList;
+
+import com.revature.things.Offer;
+
 /**
  * A history of offers attached to a car.
  * The history is removed once the employee accepts an offer.
@@ -19,6 +23,12 @@ package com.revature.collections;
  *
  */
 public class Offers {
+	
+	private LinkedList<Offer> offers;
+	
+	public Offers() {
+		this.offers = new LinkedList<>();
+	}
 	
 	
 }

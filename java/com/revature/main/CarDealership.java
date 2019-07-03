@@ -2,14 +2,17 @@ package com.revature.main;
 
 import java.util.Scanner;
 
+import com.revature.exceptions.UserExit;
 import com.revature.parties.Customer;
 import com.revature.parties.DSystem;
+import com.revature.parties.Employee;
 
 public class CarDealership {
 
+	public static final DSystem dSys = new DSystem();
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		DSystem sys = new DSystem("Buck-a-Roos Car Place", new Customer("Dealer Buck", -100));		
+		// TODO Auto-generated method stub	
 		Scanner sr = new Scanner(System.in);
 		boolean noExit = true; //exit the program if this "noExit" equals false
 		boolean noMainMenuSelection;
@@ -17,7 +20,7 @@ public class CarDealership {
 		
 		do { //Start main menu
 		System.out.flush();
-		sys.giveStartUpMenu();				
+		dSys.giveStartUpMenu();				
 		sel = sr.nextInt(); // get the menu selection		
 		noMainMenuSelection = true;
 		
@@ -30,15 +33,19 @@ public class CarDealership {
 			noMainMenuSelection = false;
 			switch(sel) {
 			case 1: {
-				sys.beginLogin();				
+				try {
+					dSys.beginLogin();
+				} catch (UserExit e) {}				
 				break;
 			}
 			case 2: {
-				sys.createAccount();
+				try {
+					dSys.createAccount();
+				} catch (UserExit e) {}
 				break;
 			}
 			case 0: {
-				sys.exit();
+				dSys.exit();
 				noExit = false;
 				break;
 			}

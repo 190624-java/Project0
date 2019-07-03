@@ -29,8 +29,11 @@ public class Contract {
 
 	private float remainingBalance;
 	private LinkedList<Payment> payments;
+	private Offer soldOffer;
 	
 	public Contract(Offer offer){
 		this.payments = new LinkedList<>();
+		this.remainingBalance = offer.getAmount();
+		this.soldOffer = new Offer(offer);
 	}
 }

@@ -3,6 +3,8 @@ package com.revature.things;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.revature.collections.Contract;
+import com.revature.collections.Offers;
 import com.revature.parties.DSystem;
 import com.revature.parties.User;
 
@@ -14,11 +16,12 @@ public class Car {
 	
 	//Common Buyer Description
 	//------------------------	
-	private String color;	
+	//private String color;	
 	
 	//Containers
 	//----------
-	private LinkedList<Offer> offers;
+	private Offers offers;
+	private Contract contract;
 	
 	/**
 	 * To verify that the car belongs to the correct user when using the system
@@ -26,12 +29,14 @@ public class Car {
 	 */
 	private User owner;
 	
-	public Car(CarRegistration reg, String color){
+	public Car(CarRegistration reg, User owner){
 		//if(reg==null) new Registration(); //empty due
 		this.reg = reg;
-		this.color = color;
-		
-		this.offers = new LinkedList();
+		this.owner = owner;
+		//this.color = color;
+		this.offers = new Offers();
+		//contract is not created till a sale is made; it needs to be null
+		// till then to know the state of the car ownership
 	}
 	
 	/**
@@ -47,9 +52,9 @@ public class Car {
 	 * Method2: Store accepted offer into new offer, delete the list, assign new list.
 	 * @return
 	 */
-	public Iterator<Offer> getOffersIterator(DSystem s) {
-		return offers.iterator();
-	}
+//	public Iterator<Offer> getOffersIterator(DSystem s) {
+//		return offers.iterator();
+//	}
 
 	public String getMake() {
 		// TODO Auto-generated method stub

@@ -1,6 +1,7 @@
 package com.revature.parties;
 
 import com.revature.collections.Lot;
+import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Offer;
 
@@ -16,10 +17,17 @@ import com.revature.things.Offer;
  */
 public class Employee extends User{
 
-	private DSystem employer;
+	private Employee employer;
 	
-	Employee(String name, int driversID) {
-		super(name, driversID);
+	public Employee(int driversID,int passH, Employee dealer) {
+		super(driversID, passH);
+		this.employer = dealer;
+		this.type = UserTypes.EMPLOYEE;
+	}
+
+	public Employee(int driversID, int passH) {
+		super(driversID, passH);
+		this.type = UserTypes.EMPLOYEE;
 	}
 
 	//TODO
@@ -55,9 +63,9 @@ public class Employee extends User{
 	 * Gets the dealership that the employee is hired by to sale vehicles
 	 * @return the dealership
 	 */
-	public DSystem getEmployer(){
-		return this.employer;
-	}
+//	public DSystem getEmployer(){
+//		return this.employer;
+//	}
 
 	//TODO
 	public void removeCarFromLot(Car carToRemove) {

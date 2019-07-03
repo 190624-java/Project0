@@ -3,11 +3,14 @@ package com.revature.parties;
 
 
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 
 import com.revature.collections.Accounts;
 import com.revature.exceptions.NewPasswordMismatch;
+import com.revature.exceptions.UserExit;
+import com.revature.things.Account;
 import com.revature.things.Car;
 import com.revature.things.Offer;
 import com.revature.things.Password;
@@ -69,15 +72,19 @@ public class DSystem {
 	
 	private HashSet<User> online;
 	private Accounts accounts;
-	private String dealershipName;
-	private Customer companyOwner;
-	
-	
-	public DSystem(String dealershipName, Customer companyOwner) {
-		this.online = new HashSet();
-		this.dealershipName = dealershipName;
-		this.accounts = new Accounts();
+	//private String dealershipName;
+	private Employee dealer;
+		
+	public DSystem() {
+		this.online = new HashSet<>();
+		this.dealer = new Employee(-1000000, "admin".hashCode());
+		this.accounts = new Accounts(dealer);
 	}
+//	public DSystem(int dealerDriversID, Employee dealer) {
+//		this.online = new HashSet<>();
+//		this.dealer = new Employee(-1000000, "admin".hashCode());
+//		this.accounts = new Accounts(dealer);
+//	}
 
 	public static float calMonthlyPayment(User carOwner, Car ownedCar) {
 		
@@ -85,15 +92,15 @@ public class DSystem {
 		
 	}
 	
-	/**
-	 * Go through all the offers on the car.
-	 * @param car
-	 */
-	public void rejectPendingOffers(Offer chosenOffer) {
-		Offer keptOffer = new Offer(chosenOffer);
-		Car dCar = chosenOffer.getDesiredCar();
-		Iterator<Offer> it = dCar.getOffersIterator(this);
-	}
+//	/**
+//	 * Go through all the offers on the car.
+//	 * @param car
+//	 */
+//	public void rejectPendingOffers(Offer chosenOffer) {
+//		Offer keptOffer = new Offer(chosenOffer);
+//		Car dCar = chosenOffer.getDesiredCar();
+//		Iterator<Offer> it = dCar.getOffersIterator(this);
+//	}
 	
 
 	
@@ -111,53 +118,63 @@ public class DSystem {
 	
 
 	/**
-	 * Gets user ID and Password
+	 * Gets user/drivers ID and Password
 	 * Checks them for system compatibility
-	 * If so, Logs into the accounts object
+	 * If so, Logs into the accounts object (i.e. continues menus)
 	 * Else, returns to main menu.
+	 * @throws UserExit 
 	 */
-	public void beginLogin() {
-		boolean unusableID = true;
-		boolean noExit = true;
-		boolean unusablePassword = true;
-		Scanner sr = new Scanner(System.in);
-		String uID; //user ID
-		String pass;
-		String exitChoice = "n";
+	public void beginLogin() throws UserExit {
+	//Method 2
+		User user = accounts.authenticate();
+		//authenticate will throw an exception if problem occurs and
+		//user cancels, otherwise it will not be null.		
+		//if(user==null) return; //authentication cancelled by user
 		
-		//User ID
-		do { 
-			System.out.println("Enter your user ID");
-			uID = sr.nextLine();
-			if(accounts.hasUser(uID))
-				unusableID = false;
-			else {
-				System.out.println("Error: Username doesn't exist\n");
-				System.out.println("Try Again? y or n \n");
-				exitChoice = sr.next();
-				if(!exitChoice.equalsIgnoreCase("y"))
-					noExit = false;
-			}//end else
-		}while(unusableID && noExit);	
+		Account acc = accounts.getUserAccount(user.getDriversID());
 		
-		//Password
-		while(noExit && unusablePassword){ 
-			System.out.println("Enter your password: ");
-			pass = sr.nextLine();
-			if(accounts.passwordMatchesUser(uID, pass.hashCode())) {
-				accounts.logIn(uID, pass.hashCode());
-				unusablePassword = false;
-			}else {
-				System.out.println("Error: password doesn't match");
-				System.out.println("Do you want to continue? y or n");
-				exitChoice = sr.next();
-				if(!exitChoice.equalsIgnoreCase("y"))
-					noExit = false;
-			}
-		}
-		
-		sr.close();
-		
+	//Method 1
+//		boolean unusableID = true;
+//		boolean noExit = true;
+//		boolean unusablePassword = true;
+//		Scanner sr = new Scanner(System.in);
+//		String uID; //user ID
+//		String pass;
+//		String exitChoice = "n";
+//		
+//		//User ID
+//		do { 
+//			System.out.println("Enter your user ID");
+//			uID = sr.nextLine();
+//			if(accounts.hasUser(uID))
+//				unusableID = false;
+//			else {
+//				System.out.println("Error: Username doesn't exist\n");
+//				System.out.println("Try Again? y or n \n");
+//				exitChoice = sr.next();
+//				if(!exitChoice.equalsIgnoreCase("y"))
+//					noExit = false;
+//			}//end else
+//		}while(unusableID && noExit);	
+//		
+//		//Password
+//		while(noExit && unusablePassword){ 
+//			System.out.println("Enter your password: ");
+//			pass = sr.nextLine();
+//			if(accounts.passwordMatchesUser(uID, pass.hashCode())) {
+//				accounts.logIn(uID, pass.hashCode());
+//				unusablePassword = false;
+//			}else {
+//				System.out.println("Error: password doesn't match");
+//				System.out.println("Do you want to continue? y or n");
+//				exitChoice = sr.next();
+//				if(!exitChoice.equalsIgnoreCase("y"))
+//					noExit = false;
+//			}
+//		}
+//		
+//		sr.close();
+//		
 	}
 	
 	//TODO
@@ -166,22 +183,27 @@ public class DSystem {
 	}
 	
 	//TODO
-	public void createAccount() {
+	public void createAccount() throws UserExit {
 		boolean unusableID = true;
 		boolean noExit = true;
 		boolean unusablePassword = true;
 		Scanner sr = new Scanner(System.in);
-		String uID; //user ID
+		int driversID = -1; //user ID
 		String pass;
 		String exitChoice = "n";
+		UIUtil ui = new UIUtil();
 		
 		//User ID
 		do {
 			//Get UserID Attempt
 			System.out.println("Enter a user ID");
-			uID = sr.nextLine();
+			try { driversID = sr.nextInt(); }
+			catch(InputMismatchException e) {
+				if(ui.determineContinue()) continue; //restart do..while
+				else return;
+			}
 			//Check UserID
-			if(accounts.hasUser(uID)) {				
+			if(accounts.hasUser(driversID)) {				
 				System.out.println("Error: Username Already Exists\n");
 				System.out.println("Try Again? y or n \n");
 				exitChoice = sr.next();
@@ -205,7 +227,7 @@ public class DSystem {
 		
 		//Method 2
 		//------------------------------------------------------
-		UIUtil ui = new UIUtil();
+		
 		boolean needPassword = true;
 		String p1 = ""; String p2 = ""; //password double checking
 		
@@ -226,7 +248,7 @@ public class DSystem {
 			//TODO test s.close();
 		}		
 		}while(needPassword);
-		if(!needPassword) accounts.createAccount(uID,p1.hashCode());
+		if(!needPassword) accounts.createAccount(driversID,p1.hashCode());
 		//end--------------------------------------------------------
 		
 		sr.close();

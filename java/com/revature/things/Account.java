@@ -2,6 +2,9 @@ package com.revature.things;
 
 import java.util.LinkedList;
 
+import com.revature.main.UserTypes;
+import com.revature.parties.Customer;
+import com.revature.parties.Employee;
 import com.revature.parties.User;
 
 public class Account {
@@ -20,7 +23,20 @@ public class Account {
 	}
 	
 	//TODO
-	public Account(String userID, String password) throws Exception{
+	public Account(int userID, int password, int type) {
+		//Method 2
+		switch(type) {
+		case UserTypes.CUSTOMER:
+			this.user = new Customer(userID, password);
+			break;
+		case UserTypes.EMPLOYEE:
+			this.user = new Employee(userID, password);
+			break;
+		case UserTypes.DEALER:
+			this.user = new Employee(userID, password);
+		}
+		
+		//Method 1
 		//password requires
 			//at least 4 characters
 			//at least 1 Uppercase
@@ -60,6 +76,16 @@ public class Account {
 	
 	public void access() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	//TODO
+	public void logIn() {
+		
+	}
+	//TODO
+	public void logOut() {
 		
 	}
 }

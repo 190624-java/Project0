@@ -1,6 +1,7 @@
 package com.revature.parties;
 
 import com.revature.collections.Lot;
+import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Offer;
 
@@ -16,8 +17,9 @@ public class Customer extends User {
 
 	Lot ownedLot;
 	
-	public Customer(String name, int identification) {
-		super(name, identification);
+	public Customer(int driversID,int passH) {
+		super(driversID, passH);
+		this.type = UserTypes.CUSTOMER;
 	}
 
 	/**

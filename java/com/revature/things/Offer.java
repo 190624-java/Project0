@@ -15,14 +15,12 @@ public class Offer {
 	private Car product;
 	private User offeree;
 	private Employee salesperson;
-	private DSystem dealership;
 
 	public Offer(Offer offer) {
 		this.amount = offer.amount;
 		this.product = offer.product;
 		this.offeree = offer.offeree;
 		this.salesperson = offer.salesperson;
-		this.dealership = offer.dealership;
 	}
 	
 	public Offer(float amount, Car product, User offeree, Employee salesperson){
@@ -30,7 +28,7 @@ public class Offer {
 		this.product = product;
 		this.offeree = offeree;
 		this.salesperson = salesperson;
-		this.dealership = salesperson.getEmployer();
+		
 	}
 
 	/**
