@@ -45,9 +45,37 @@ public class CustomerService {
 			bReader.readLine();
 			break;
 		case "3":
-			
+			List<Payment> payments = PaymentService.getPayments();
+			List<Car> cars3 = CarService.getCars();
+			System.out.println("Your cars:");
+			for (Payment x : payments) {
+				if (x.buyerName.equals(userName)) {
+					for (Car y : cars3) {
+						if (x.carNumber == y.number) {
+							System.out.println(y.makeAndModel);
+						}
+					}
+				}
+			}
+			System.out.println("\n(press return)");
+			bReader.readLine();
 			break;
 		case "4":
+			List<Payment> payments2 = PaymentService.getPayments();
+			List<Car> cars4 = CarService.getCars();
+			System.out.println("Your remaining payments:");
+			for (Payment x : payments2) {
+				if (x.buyerName.equals(userName)) {
+					System.out.print(x.paymentsLeft + " payments remaining on ");
+					for (Car y : cars4) {
+						if (x.carNumber == y.number) {
+							System.out.println(y.makeAndModel);
+						}
+					}
+				}
+			}
+			System.out.println("\n(press return)");
+			bReader.readLine();
 			break;
 		case "5":
 			System.out.println("Goodbye.");
