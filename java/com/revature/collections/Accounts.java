@@ -152,8 +152,6 @@ public class Accounts {
 	 */
 	public User authenticate() throws UserExit{
 		boolean unusableID = true;
-		Scanner sr = new Scanner(System.in);
-		UIUtil ui = new UIUtil();
 		int driversID = -1;
 		String pass;
 		
@@ -161,9 +159,9 @@ public class Accounts {
 		do { 
 			System.out.println("Enter your drivers ID");
 			try {
-			driversID = sr.nextInt();
+			driversID = UIUtil.s.nextInt();
 			}catch(InputMismatchException e) {
-				if(ui.determineContinue()) continue; //restart do..while
+				if(UIUtil.determineContinue()) continue; //restart do..while
 				else throw new UserExit();
 			}
 			if(hasUser(driversID))
@@ -172,24 +170,23 @@ public class Accounts {
 				System.out.println("Error: ID doesn't exist\n");
 				//If user doesn't want to continue to enter username and pass
 				//then, authentication fails.
-				if(!ui.determineContinue()) { sr.close(); return null; }
+				if(!UIUtil.determineContinue()) { return null; }
 			}//end else
 		}while(unusableID);	
 		
-		//check for the licence ID
+		//check for the license ID
 		unusableID = false;
 		
 		//Password
 		while(true){ 
 			System.out.println("Enter your password: ");
-			pass = sr.nextLine();
+			pass = UIUtil.s.nextLine();
 			if(passwordMatchesUser(driversID, pass.hashCode())) {
-				sr.close();
 				return new User(driversID, pass.hashCode()); //default driversID argument
 			}
 			else {
 				System.out.println("Error: password doesn't match");
-				if(!ui.determineContinue()) { sr.close(); return null; }
+				if(!UIUtil.determineContinue()) { return null; }
 			}
 		}//end while
 	}//end method

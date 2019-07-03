@@ -9,6 +9,7 @@ import java.util.Scanner;
  */
 public class UIUtil {
 
+	public static Scanner s = new Scanner(System.in);
 	/**
 	 * Asks user to try again.
 	 * 
@@ -16,24 +17,22 @@ public class UIUtil {
 	 * If user answers 'y' or 'Y' then true is returned
 	 * else false
 	 */
-	public boolean determineContinue() {
-		Scanner s = new Scanner(System.in);
-		String answer;
-		
+	public static boolean determineContinue() {
+		String answer;		
 		System.out.println("Try again? y or n");
 		answer = s.next();
-		s.close();
 		if(answer.equalsIgnoreCase("y")) return true;
 		else return false;
 	}
 	
-	public void printException(Exception e) {
+	public static void printException(Exception e) {
 		System.out.println(e.getMessage());
 	}
 
-	public void clearScreen() {
+	public static void clearScreen() {
 		System.out.flush();		
 	}
+	
 	
 //	public String getCredential(String credentialName) {		
 //		String c;

@@ -74,12 +74,26 @@ public class DSystem {
 	private Accounts accounts;
 	//private String dealershipName;
 	private Employee dealer;
+//	private Scanner scanner;
 		
 	public DSystem() {
 		this.online = new HashSet<>();
 		this.dealer = new Employee(-1000000, "admin".hashCode());
 		this.accounts = new Accounts(dealer);
+		//this.scanner = new Scanner(System.in);
+		
 	}
+	
+//	public int readInt() {
+//		return scanner.nextInt();
+//	}
+//	public String readLine() {
+//		return scanner.nextLine();
+//	}
+//	public String readWord() {
+//		return scanner.next();
+//	}
+	
 //	public DSystem(int dealerDriversID, Employee dealer) {
 //		this.online = new HashSet<>();
 //		this.dealer = new Employee(-1000000, "admin".hashCode());
@@ -129,7 +143,7 @@ public class DSystem {
 		User user = accounts.authenticate();
 		//authenticate will throw an exception if problem occurs and
 		//user cancels, otherwise it will not be null.		
-		//if(user==null) return; //authentication cancelled by user
+		if(user==null) return; //authentication cancelled by user
 		
 		Account acc = accounts.getUserAccount(user.getDriversID());
 		
