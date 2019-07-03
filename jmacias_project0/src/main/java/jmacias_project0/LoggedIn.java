@@ -41,9 +41,11 @@ public class LoggedIn {
 		PersistentUser.overwriteUsers(users);
 		if (userRole.equals("customer")) {
 			System.out.println("Welcome valued customer :-)");
+			CustomerService.customerMenu(userName);
 		}
 		if (userRole.equals("employee")) {
 			System.out.println("Get to work, employee :-p");
+			EmployeeService.employeeMenu(userName);
 		}
 		
 		
