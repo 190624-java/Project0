@@ -3,6 +3,7 @@ package jmacias_project0;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class EmployeeService {
 	private static InputStreamReader iReader = new InputStreamReader(System.in);
@@ -14,7 +15,8 @@ public class EmployeeService {
 		System.out.println("1. Add a car to the lot\t\t\t"
 				+ "2. Remove a car from the lot\n"
 				+ "3. Review customer offers\t\t"
-				+ "4. View payments");
+				+ "4. View payments\n"
+				+ "5. Exit");
 		String response = bReader.readLine();
 		
 		switch (response) {
@@ -44,16 +46,37 @@ public class EmployeeService {
 			CarService.addCar(newCar);
 			break;
 		case "2":
+			System.out.println("Choose the model number of the car to remove:");
+			List<Car> cars = CarService.getCars();
+			for (Car x : cars) {
+				System.out.println(x.number + ". " + x.MakeAndModel);
+			}
+			String response2 = bReader.readLine();
+			for (Car x : cars) {
+				if (x.number == Integer.parseInt(response2)) {
+					CarService.removeCars(x.number);
+					break;
+				}
+				else {
+					System.out.println("Please enter a valid number (press return).");
+					bReader.readLine();
+					employeeMenu(userName);
+				}
+			}
 			break;
 		case "3":
 			break;
 		case "4":
 			break;
+		case "5":
+			System.out.println("Goodbye.");
+			System.exit(0);
 		default:
 			System.out.println("Please enter a valid number (press return to continue)");
 			bReader.readLine();
 			employeeMenu(userName);
 		}
+		employeeMenu(userName);
 		
 	}
 }

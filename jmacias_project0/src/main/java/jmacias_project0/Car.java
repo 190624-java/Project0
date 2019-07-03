@@ -13,6 +13,7 @@ public class Car implements Serializable {
 	public int number;
 	public String MakeAndModel;
 	public int price;
+	public List<User> offers;
 	public Car(String makeAndModel, int price) {
 		super();
 		count++;

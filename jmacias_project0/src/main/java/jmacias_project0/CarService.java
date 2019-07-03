@@ -39,4 +39,15 @@ public class CarService {
 			oos.writeObject(cars);
 		}
 	}
+	
+	public static void removeCars(int carNumber) throws FileNotFoundException, IOException {
+		List<Car> cars = getCars();
+		for (Car x : cars) {
+			if (x.number == carNumber) {
+				cars.remove(x);
+				break;
+			}
+		}
+		overwriteCars(cars);
+	}
 }
