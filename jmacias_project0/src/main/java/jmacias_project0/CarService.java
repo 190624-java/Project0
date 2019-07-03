@@ -25,7 +25,7 @@ public class CarService {
 				cars.add(newCar);
 			}
 			else {
-				System.out.println("You are the first user.");
+				System.out.println("This is the first car.");
 				cars = new ArrayList<>();
 				cars.add(newCar);
 			}
