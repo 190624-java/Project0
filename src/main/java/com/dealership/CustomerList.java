@@ -19,9 +19,10 @@ public class CustomerList extends UserList{
 		if(INSTANCE == null)
 		{
 			INSTANCE = new CustomerList();
-			try {
+			try{
 				INSTANCE.read();
-			} catch(Exception e)
+			} 
+			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -47,7 +48,7 @@ public class CustomerList extends UserList{
 	
 	public Customer findByID(String id) {
 		for(User user: userList) {
-			if(((Customer) user).id == id)
+			if(((Customer) user).id.equals(id))
 				return (Customer) user;
 		}
 		return null;
@@ -83,6 +84,4 @@ public class CustomerList extends UserList{
 			e.printStackTrace();
 		}
 	}
-	
-	
 }

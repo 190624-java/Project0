@@ -33,12 +33,11 @@ public class Employee extends User {
 			try{
 				System.out.println("Enter your first name");
 				fName = DealershipDriver.inScan.nextLine();
-				System.out.println("Scanning last name");
 				System.out.println("Enter your last name");
 				lName = DealershipDriver.inScan.nextLine();
 				System.out.println("Enter your access level. Enter A for admin, M for manager, and S for sales");
-				accessLevel = DealershipDriver.inScan.next().charAt(0);
-				DealershipDriver.inScan.nextLine();
+				accessLevel = DealershipDriver.inScan.nextLine().charAt(0);
+				//DealershipDriver.inScan.nextLine();
 			}
 			finally
 			{

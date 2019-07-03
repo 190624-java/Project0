@@ -43,7 +43,7 @@ public class EmployeeList extends UserList{
 	
 	public Employee findByID(String id) {
 		for(User user: userList) {
-			if(((Employee) user).id == id)
+			if(((Employee) user).id.equals(id))
 				return (Employee) user;
 		}
 		return null;

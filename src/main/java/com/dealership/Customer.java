@@ -51,7 +51,7 @@ public class Customer extends User implements Serializable {
 				System.out.println("Enter your last name");
 				lName = DealershipDriver.inScan.nextLine();
 				System.out.println("Enter a username. No spaces");
-				id = DealershipDriver.inScan.next();
+				id = DealershipDriver.inScan.nextLine();
 			}
 			finally
 			{

@@ -12,7 +12,7 @@ abstract class User implements Serializable {
 	
 	public boolean checkLogin(String id, String password)
 	{
-		if(id == this.id && password == this.password)
+		if(id.equals(this.id) && password.equals(this.password))
 			return true;
 		return false;
 	}

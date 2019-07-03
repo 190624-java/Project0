@@ -43,7 +43,6 @@ public class DealershipDriver {
 			LoanList.getInstance().write();
 			Lot.getInstance().write();
 		}
-		
 	}
 	
 	public static void initialize()
@@ -174,13 +173,15 @@ public class DealershipDriver {
 	public static boolean displayLoginOrRegisterMenu()
 	{
 		int choice = -1;
-		while(choice != 0)
+		while(activeAccount == null)
 		{
 			System.out.println("No user currently logged in. Select an option:\n"
 					+ "Enter 0 to shutdown\nEnter 1 to login as a customer\nEnter 2 to register as a customer\n"
 					+ "Enter 3 to login as an employee");
 			choice = inScan.nextInt(); inScan.nextLine();
 			switch(choice) {
+				case 0: logOut();
+					break;
 				case 1: customerLogin();
 					break;
 				case 2: registerAccount();
@@ -189,11 +190,9 @@ public class DealershipDriver {
 					break;
 			}
 		}
-		
-		return true;
-		
-		
-		
+		if(choice == 0)
+			return true;
+		return false;
 	}
 	
 	public static void displayCustomerMainMenu() {
@@ -225,6 +224,7 @@ public class DealershipDriver {
 			System.out.println("Select an option:\n"
 					+ "Enter 0 to exit\nEnter 1 to view cars in the lot\nEnter 2 to view all offers\n"
 					+ "Enter 3 to view all payments\nEnter 4 to register a new employee");
+			optionSelect = inScan.nextInt(); inScan.nextLine();
 			switch(optionSelect) {
 			case 1: displayLot();
 				break;
@@ -244,13 +244,13 @@ public class DealershipDriver {
 	public static void displayOfferMenu() {
 		String input = "";
 		
-		while(input != "0")
+		while(!input.equals("0"))
 		{
 			System.out.println("Enter 0 to exit\nEnter the following separated by a semicolon to accept an offer:\n"
 					+ "Customer's username, Car make model and year (space separated), the amount offered, and the number 1\n" +
 					"To reject an offer, end the line in 2 instead");
 			input = inScan.nextLine();
-			if(input == "0")
+			if(!input.equals("0"))
 				break;
 			else
 			{
@@ -263,14 +263,14 @@ public class DealershipDriver {
 					if(cust != null) {
 						Offer targetOffer = null;
 						for(Offer offer : cust.offers) {
-							if(offer.amount == Double.parseDouble(offerParts[2]) && offer.car.getCarkey() == offerParts[1])
+							if(offer.amount == Double.parseDouble(offerParts[2]) && offer.car.getCarkey().equals(offerParts[1]))
 								targetOffer = offer;
 						}
 						if(targetOffer != null)
 						{
 							if(offerParts[3] == String.valueOf(1))
 								OfferList.getInstance().acceptOffer(targetOffer);
-							else if(offerParts[3] == String.valueOf(2))
+							else if(offerParts[3].equals(String.valueOf(2)))
 								OfferList.getInstance().rejectOffer(targetOffer);
 						}
 							
@@ -303,7 +303,7 @@ public class DealershipDriver {
 		{
 			System.out.println("Please enter the make, model, and year to examine cars of that type. Enter 0 to exit");
 			carKey = inScan.nextLine();
-			if(carKey == "0")
+			if(carKey.equals("0"))
 				break;
 			else if(Lot.getInstance().lotContainsType(carKey)) {
 				Lot.getInstance().displayOfType(carKey);

@@ -15,7 +15,8 @@ public abstract class UserList {
 	
 	public boolean containsID(String id) {
 		for(User fromList: userList) {
-			if(fromList.getId() == id)
+			System.out.println("Checking if " + fromList.getId() + " is equal to " + id);
+			if(fromList.getId().equals(id))
 				return true;
 		}
 		return false;
