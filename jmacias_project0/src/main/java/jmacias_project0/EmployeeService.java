@@ -19,7 +19,7 @@ public class EmployeeService {
 		
 		switch (response) {
 		case "1":
-			System.out.println("Enter make and model of car to add (e.g. \"AMC Gremlin\"");
+			System.out.println("Enter make and model of car to add (e.g. \"AMC Gremlin\")");
 			String makeModel = bReader.readLine();
 			System.out.println("Enter the asking price for this " + makeModel);
 			String priceStr = bReader.readLine();

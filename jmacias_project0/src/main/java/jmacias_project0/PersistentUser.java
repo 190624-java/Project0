@@ -30,7 +30,7 @@ public class PersistentUser {
 			}
 			oos.writeObject(users);
 		}
-		System.out.println("HashSet updated.");
+		System.out.println("Users updated.");
 	}
 	
 	public static void overwriteUsers(List<User> users) throws FileNotFoundException, IOException {
