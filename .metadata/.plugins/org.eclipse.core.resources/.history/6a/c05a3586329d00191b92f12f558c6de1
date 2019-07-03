@@ -1,0 +1,33 @@
+package com.revature.project0;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Iterator;
+
+public class FileWriterReader {
+	
+	public static void writeUserData() {
+		ObjectOutputStream objectOutputStream;
+		Iterator<UsersAbstract> iterator = Project0.userData.iterator();
+		try {
+			objectOutputStream = new ObjectOutputStream(new FileOutputStream("UserData.txt"));
+			while(iterator.hasNext()) {
+				UsersAbstract object = iterator.next();
+				objectOutputStream.writeObject(object);
+				
+			}
+			objectOutputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

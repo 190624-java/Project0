@@ -1,0 +1,21 @@
+package com.revature.project0;
+
+public class Customer extends UsersAbstract {
+	
+	public Customer(String username, String password) {
+
+		super.username = username;
+		super.password = password;
+	}
+	
+	public void viewCars() {
+		System.out.println("------------------------------");
+		for(Cars i : Project0.cars) {
+			System.out.println("Make: " + i.make);
+			System.out.println("Starting Price: " + i.offer);
+			System.out.println("Identification number: " + i.serialNumber);
+			System.out.println("------------------------------");
+		}
+	}
+
+}

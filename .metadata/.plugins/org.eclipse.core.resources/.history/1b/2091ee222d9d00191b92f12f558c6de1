@@ -1,0 +1,6 @@
+package com.revature.project0;
+
+public abstract class UsersAbstract {
+	protected String username;
+	protected String password;
+}

@@ -1,0 +1,41 @@
+package com.revature.project0;
+
+import static org.junit.Assert.*;
+import java.util.HashSet;
+import org.junit.Test;
+
+public class TestCarDealership {
+	
+	
+	@Test
+	public static void testGetCustomer() {
+		Offers offer = new Offers("Jeff", 15000, 1, "Kia");
+		String result = offer.getCustomer();
+		assertEquals("Jeff", result);
+	}
+	
+	@Test
+	public static void testGetOffer() {
+		Offers offer = new Offers("Jeff", 15000, 1, "Kia");
+		double result = offer.getOffer();
+		assertEquals(15000, result);
+		
+	}
+	
+	@Test
+	public static void testGetSerial() {
+		Offers offer = new Offers("Jeff", 15000, 1, "Kia");
+		int result = offer.getSerial();
+		assertEquals(1, result);
+		
+	}
+	
+	@Test
+	public static void testGetMake() {
+		Offers offer = new Offers("Jeff", 15000, 1, "Kia");
+		String result = offer.getMake();
+		assertEquals("Jeff", result);
+		
+	}
+
+}

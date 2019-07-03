@@ -1,0 +1,52 @@
+package com.revature.project0;
+
+public class UserTemp extends UsersAbstract {
+	
+	public int register(String username, String password, boolean employee) {
+		
+		boolean taken = false;
+		
+		for(UsersAbstract i : Project0.userData) {
+			if(i.username.equals(username)) {
+				System.out.println("Username taken...");
+				taken = true;
+				return -2;
+			}
+		}
+		
+		if(!taken) {
+			if(employee) {
+				Project0.userData.add(new Employee(username, password));
+			}
+			else {
+				Project0.userData.add(new Customer(username, password));
+			}
+		}
+		return 1;
+		
+	}
+	
+	public UsersAbstract logIn(String username, String password) {
+		
+		boolean pass = false;
+		boolean name = false;
+		
+		for(UsersAbstract i : Project0.userData) {
+			if(i.username.equals(username)){
+				name = true;
+			}
+			if(i.password.equals(password)) {
+				pass = true;
+			}
+			if(name && pass) {
+				System.out.println("Log in sucessful. Welcome " + i.username);
+				return i;
+			}
+		}
+		
+		System.out.println("Username is incorrect please try again.");
+		
+		return null;
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.revature.project0;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Iterator;
+
+public class FileWriterReader {
+	
+	
+
+}

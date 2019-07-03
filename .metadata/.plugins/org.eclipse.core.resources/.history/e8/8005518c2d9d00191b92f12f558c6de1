@@ -1,0 +1,19 @@
+package com.revature.project0;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.Iterator;
+
+public class FileWriterReader {
+	
+	public void writeUsers() {
+		BufferedWriter out = new BufferedWriter(new FileWriter("User.txt"));
+		Iterator<UsersAbstract> it = Project0.userData.iterator();
+		while(it.hasNext()) {
+		    out.writeObject(it.next());
+		    out.newLine();
+		}
+		out.close();
+	}
+
+}

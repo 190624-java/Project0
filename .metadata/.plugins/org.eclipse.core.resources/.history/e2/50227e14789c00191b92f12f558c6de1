@@ -1,0 +1,19 @@
+package com.revature.project0;
+
+import java.util.HashSet;
+
+public class Project0 {
+	
+	static HashSet<UsersAbstract> userData = new HashSet<>();
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		System.out.println(userData.size());
+		
+
+	}
+
+}

@@ -1,0 +1,30 @@
+package com.revature.project0;
+
+import java.util.HashSet;
+
+public class Project0 {
+	
+	static int nextSerial = 1;
+	
+	static HashSet<UsersAbstract> userData = new HashSet<>();
+	static HashSet<Offers> offers = new HashSet<>();
+	static HashSet<Cars> cars = new HashSet<>();
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		cars.add(new Cars(12500, "Firebird"));
+		cars.add(new Cars(10200, "Camero"));
+		cars.add(new Cars(10000, "Mustang"));
+		cars.add(new Cars(70300, "GTO"));
+		
+		Employee user1 = new Employee("trey", "123");
+		
+		user1.removeCar(2);
+		
+		
+		
+
+	}
+
+}

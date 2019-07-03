@@ -1,0 +1,21 @@
+package com.revature.project0;
+
+import java.util.HashSet;
+
+public class Project0 {
+	
+	static int nextSerial = 1;
+	
+	static HashSet<UsersAbstract> userData = new HashSet<>();
+	static HashSet<Offers> offers = new HashSet<>();
+	static HashSet<Cars> cars = new HashSet<>();
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		
+		
+
+	}
+
+}

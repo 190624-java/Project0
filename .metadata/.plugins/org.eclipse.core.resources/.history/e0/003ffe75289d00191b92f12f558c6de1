@@ -1,0 +1,133 @@
+package com.revature.project0;
+
+import java.util.Scanner;
+
+public class MenuHandler {
+	
+	public static UsersAbstract user;
+	
+	public static void startMenue(Scanner scanner) {
+		int caseid = -1;
+		int passes = 0;
+		UserTemp temp = new UserTemp();
+		
+		System.out.println("------------------------------");
+		System.out.println("1: Log in \n2: Register");
+	
+		caseid = scanner.nextInt();
+		
+		do {
+			if(caseid == -1) {
+				System.out.println("------------------------------");
+				System.out.println("1: Log in");
+				System.out.println("2: Register");
+		
+				caseid = scanner.nextInt();
+			}
+			if(passes > 0) {
+				System.out.println("Try again\n");
+			}
+		
+			switch(caseid){
+			
+			case 1: 
+				UsersAbstract tempuser = temp.logIn(scanner);
+				user = tempuser;
+				passes++;
+				
+				if(user == null) {
+					caseid = 1;
+				}else {
+					caseid = 3;
+				}
+				
+				break;
+				
+			case 2:
+				caseid = temp.register(scanner);
+				user = temp.logIn(scanner);
+				
+				passes++;
+				
+				break;
+			
+			default: 
+				caseid = -1;
+				System.out.println("Invalid response. Please try again.");
+				passes++;
+				
+				break;
+			
+		
+			}
+		}while(caseid == -1 || caseid == 1 || caseid == 2);
+		
+	}
+	
+	public static void userHandler(Scanner scanner) {
+		int userChoice = 0;
+		if(user instanceof Employee) {
+			Employee tempEmploy = (Employee) user;
+			do {
+				System.out.println("------------------------------");
+				System.out.println("1: Veiw all cars for sale");
+				System.out.println("2: Add new cars");
+				System.out.println("3: Remove a car");
+				System.out.println("4: Review current offers");
+				System.out.println("5: View all current payment");
+				System.out.println("6: Exit");
+				
+				userChoice = scanner.nextInt();
+				
+				switch(userChoice) {
+				
+				case 1:
+					tempEmploy.viewCars();
+					break;
+				
+				case 2:
+					tempEmploy.addCar(scanner);
+					break;
+				
+				case 3:
+					tempEmploy.removeCar(scanner);
+					break;
+					
+				case 4:
+					tempEmploy.reviewOffers(scanner);
+					break;
+				
+				case 5:
+					tempEmploy.viewPayments();
+					break;
+				
+				case 6:
+					System.out.println("Loging off. Good bye.");
+					break;
+					
+				default:
+					
+					System.out.println("Invalid Input please try again.");
+					userChoice = -1;
+					
+					break;
+				
+				
+				}
+			
+			}while(userChoice != 6);
+			
+		}else if(user instanceof Customer) {
+			
+			System.out.println("I am a Customer");
+			
+			
+			
+		}else {
+			System.out.println("WHAT AM I!!!!!!");
+		}
+	}
+	
+	
+
+}

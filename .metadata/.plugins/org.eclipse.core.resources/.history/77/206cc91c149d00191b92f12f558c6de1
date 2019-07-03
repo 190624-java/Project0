@@ -1,0 +1,88 @@
+package com.revature.project0;
+
+import java.util.Scanner;
+
+public class MenuHandler {
+	
+	public static UsersAbstract user;
+	
+	public static void startMenue(Scanner scanner) {
+		int caseid = -1;
+		int passes = 0;
+		UserTemp temp = new UserTemp();
+		String username;
+		String password;
+		String isEmployee;
+		boolean employee = false;
+		
+		System.out.println("------------------------------");
+		System.out.println("1: Log in \n2: Register");
+	
+		caseid = scanner.nextInt();
+		
+		do {
+			if(caseid == -1) {
+				System.out.println("------------------------------");
+				System.out.println("1: Log in");
+				System.out.println("2: Register");
+		
+				caseid = scanner.nextInt();
+			}
+			if(passes > 0) {
+				System.out.println("Try again");
+			}
+		
+			switch(caseid){
+			
+			case 1: 
+				System.out.print("Username: ");
+				username = scanner.next();
+				System.out.print("Password: ");
+				password = scanner.next();
+				System.out.println();
+				
+				UsersAbstract tempuser = temp.logIn(username, password);
+				user = tempuser;
+				passes++;
+				
+				break;
+				
+			case 2:
+
+				System.out.print("Username: ");
+				username = scanner.next();
+				System.out.print("Password: ");
+				password = scanner.next();
+				System.out.print("Are you an Employee? Y/N ");
+				isEmployee =  scanner.next();
+				
+				if(isEmployee.contains("Y") || isEmployee.contains("y")) {
+					employee = true;
+				}
+				
+				temp.register(username, password, employee);
+				user = temp.logIn(username, password);
+				passes++;
+				
+				break;
+			
+			default: 
+				caseid = -1;
+				System.out.println("Invalid response. Please try again.");
+				passes++;
+				
+				break;
+			
+		
+			}
+		}while(caseid == -1);
+		
+	}
+	
+	public void userHandler(Scanner scanner) {
+		
+	}
+	
+	
+
+}

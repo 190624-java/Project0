@@ -1,0 +1,27 @@
+package com.revature.project0;
+
+public class Cars {
+	
+	int serialNumber;
+	double offer;
+	String make;
+	static int numPayments = 6*12;
+	double payments;
+	boolean owned = false;
+	
+	public Cars(double price, String make) {
+		this.make = make;
+		this.offer = price;
+		this.serialNumber = Project0.nextSerial;
+		Project0.nextSerial+=1;
+		this.payments = this.offer/numPayments;
+	}
+	
+	public void setOwner(String username, double offer) {
+		this.payments = offer/numPayments;
+		this.owned = true;
+	}
+	
+	
+
+}

@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+/Users/TreHhardin/Desktop/Revature/Code/Repositories/Assignments/Project0/.metadata/.plugins/org.eclipse.jdt.core
+1670455800.index
+341558243.index

@@ -1,0 +1,8 @@
+package com.revature.project0;
+
+import java.io.Serializable;
+
+public abstract class UsersAbstract implements Serializable {
+	protected String username;
+	protected String password;
+}

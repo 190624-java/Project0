@@ -1,0 +1,18 @@
+package com.revature.project0;
+
+public class Cars {
+	
+	int serialNumber;
+	double offer;
+	String make;
+	
+	public Cars(double initoffer, String make) {
+		this.make = make;
+		this.offer = initoffer;
+		this.serialNumber = Project0.nextSerial;
+		//Project0.nextSerial+=1;
+	}
+	
+	
+
+}

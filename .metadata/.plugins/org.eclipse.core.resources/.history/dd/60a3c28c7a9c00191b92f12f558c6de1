@@ -1,0 +1,8 @@
+package com.revature.project0;
+
+public class Employee extends UsersAbstract {
+	public Employee(String username, String password) {
+		super.username = username;
+		super.password = password;
+	}
+}
