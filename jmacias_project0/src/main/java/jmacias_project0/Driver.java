@@ -9,7 +9,7 @@ public class Driver {
 	
 	static String welcome() {
 		System.out.println("     Please enter the number of your command");
-		System.out.println("1. Login\n2. Signup");
+		System.out.println("1. Login\t\t\t\t2. Signup");
 		
 		try {
 			String command = bReader.readLine();

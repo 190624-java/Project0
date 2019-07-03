@@ -4,6 +4,6 @@ public class CustomerService {
 
 	
 	public static void customerMenu(String userName) {
-		System.out.println("This is the customer menu");
+		System.out.println("=============  Customer Menu =============");
 	}
 }

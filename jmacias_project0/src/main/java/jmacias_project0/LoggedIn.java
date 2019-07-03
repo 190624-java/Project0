@@ -44,7 +44,7 @@ public class LoggedIn {
 			CustomerService.customerMenu(userName);
 		}
 		if (userRole.equals("employee")) {
-			System.out.println("Get to work, employee :-p");
+			System.out.println("");
 			EmployeeService.employeeMenu(userName);
 		}
 		
