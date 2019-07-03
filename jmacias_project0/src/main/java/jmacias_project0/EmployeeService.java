@@ -91,17 +91,30 @@ public class EmployeeService {
 						if (answer.equals("y") || answer.equals("Y")) {
 							Payment newPayment = new Payment(x.number, y);
 							System.out.println("Car number " + x.number + " now belongs to " + y);
-							// TODO send this to PaymentService
+							PaymentService.addPayment(newPayment);
+							System.out.println("(press return)");
+							bReader.readLine();
 							break;
 						}
 					}
 				}
 			}
 			
-			System.out.println("(press return)");
 			bReader.readLine();
 			break;
 		case "4":
+			List<Payment> payments = PaymentService.getPayments();
+			List<Car> cars3 = CarService.getCars();
+			for (Payment x : payments) {
+				System.out.print("Payments for car number " + x.carNumber + " made by " + x.buyerName + ": " + (30 - x.paymentsLeft));
+				for (Car y : cars3) {
+					if (y.number == x.carNumber) {
+						System.out.println(" at " + (y.price / 30) + "$ each.");
+					}
+				}
+			}
+			System.out.println("(press return)");
+			bReader.readLine();
 			break;
 		case "5":
 			System.out.println("Goodbye.");
