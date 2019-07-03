@@ -3,6 +3,7 @@ package jmacias_project0;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService {
@@ -74,6 +75,7 @@ public class EmployeeService {
 			System.out.println("Current offers on our cars:");
 			List<Car> cars2 = CarService.getCars();
 			boolean hasOffers = false;
+			List<Integer> carsOffered = new ArrayList<>();
 			for (Car x : cars2) {
 				if (x.offers.isEmpty()) {
 					continue;
@@ -81,11 +83,21 @@ public class EmployeeService {
 				else {
 					hasOffers = true;
 					System.out.println("Offer on car number " + x.number + " from:");
+					carsOffered.add(x.number);
 					for (String y : x.offers) {
 						System.out.println(y);
+						System.out.println("Would you like to accept this offer? (y or n)");
+						String answer = bReader.readLine();
+						if (answer.equals("y") || answer.equals("Y")) {
+							Payment newPayment = new Payment(x.number, y);
+							System.out.println("Car number " + x.number + " now belongs to " + y);
+							// TODO send this to PaymentService
+							break;
+						}
 					}
 				}
 			}
+			
 			System.out.println("(press return)");
 			bReader.readLine();
 			break;
