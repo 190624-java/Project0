@@ -2,6 +2,7 @@ package com.revature.things;
 
 import java.util.LinkedList;
 
+import com.revature.collections.Contract;
 import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.parties.Employee;
@@ -12,6 +13,7 @@ public class Account {
 	private String loginID;
 	private int password_hashed;
 	private User user;
+	private Contract contract;
 	
 	private LinkedList<Payment> paymentHistory;
 	

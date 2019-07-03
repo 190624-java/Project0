@@ -21,7 +21,7 @@ public class Car {
 	//Containers
 	//----------
 	private Offers offers;
-	private Contract contract;
+	
 	
 	/**
 	 * To verify that the car belongs to the correct user when using the system
@@ -71,8 +71,8 @@ public class Car {
 		return this.reg.getYEAR();
 	}
 
-	public String getColor() {
-		// TODO Auto-generated method stub
-		return this.color;
-	}
+//	public String getColor() {
+//		// TODO Auto-generated method stub
+//		return this.color;
+//	}
 }

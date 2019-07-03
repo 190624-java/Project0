@@ -30,7 +30,7 @@ public class User {
 	public User(int driversID, int passHash) {
 		this(driversID);
 		this.password = passHash;
-		this.garage = new Lot();
+		this.garage = new Lot(10,this);
 		this.account = account;
 	}
 

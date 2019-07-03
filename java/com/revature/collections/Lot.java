@@ -2,6 +2,7 @@ package com.revature.collections;
 
 import java.util.ArrayList;
 
+import com.revature.parties.User;
 import com.revature.things.Car;
 
 
@@ -11,8 +12,9 @@ public class Lot {
 	private int cap; //capacity of space available to hold cars
 	private User owner;
 	
-	public Lot(int capacity){
+	public Lot(int capacity, User owner){
 		this.cap = capacity;
+		this.owner = owner;
 		this.spaces = new ArrayList(capacity);
 //		for(i=0;i<capacity;i++) {
 //			
@@ -84,7 +86,7 @@ public class Lot {
 					space.getMake()+"  "+ 
 					space.getModel()+"  "+ 
 					space.getYear()+"  "+ 
-					space.getColor()+"  "+ 
+//					space.getColor()+"  "+ 
 					space.getMSRP()
 					);			
 		}//end for

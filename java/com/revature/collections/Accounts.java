@@ -120,7 +120,7 @@ public class Accounts {
 		User hirer = authenticate();
 		if(hirer==null) return false;
 		
-		if(hirer)
+		//TODO //if(hirer)
 		return true;
 		
 	}
