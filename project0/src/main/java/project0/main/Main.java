@@ -17,7 +17,6 @@ public class Main {
 		
 		// initialize 
 		if(ds.employeesInstance.isEmpty()) {
-			System.out.println("NULL");
 			ds = new DealershipSystem();
 			ds.employeesInstance.put("user", new Employee("user", (short)333));
 			CarsInLot cl = new CarsInLot();

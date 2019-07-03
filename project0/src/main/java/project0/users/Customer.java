@@ -43,6 +43,7 @@ public class Customer extends User {
 		// check that user name isn't taken. Note employees CAN'T register
 		if(DealershipSystem.customers.containsKey(userName) || DealershipSystem.employees.containsKey(userName)) {
 			System.out.println("User name taken. registration exiting...");
+			DealershipSystem.running = false;
 			return isRegistered; // returns false
 		}
 		System.out.print("Desired 3-digit pin: ");
@@ -51,6 +52,7 @@ public class Customer extends User {
 		// check pin requirements
 		if(loginPin < 100 || loginPin > 999) {
 			System.out.println("INVALID LENGTH, system exiting...");
+			DealershipSystem.running = false;
 			return isRegistered; // returns false
 		}
 		else {
@@ -74,6 +76,7 @@ public class Customer extends User {
 		else {
 			System.out.println("Invalid userName OR login pin");
 			System.out.println("Exiting system...");
+			DealershipSystem.running = false;
 			loginSuccessful = false; // login failed
 			return loginSuccessful;
 		}
@@ -139,7 +142,17 @@ public class Customer extends User {
 	public void viewRemainingPayments() {
 		if(carsOwned.isEmpty()) System.out.println("No Payments (You don't own any cars)");
 		else {
-			
+			System.out.println("Remaining Payments: ");
+			for(Car car : this.carsOwned) {
+				byte carId = car.getId();
+				String brand = car.getBrand();
+				String model = car.getModel();
+				int remainingPrice = car.getRemainingPrice();
+				System.out.println("CarId: " + carId);
+				System.out.println("Brand: " + brand);
+				System.out.println("Model: " + model);
+				System.out.println("Remaining Payment: " + remainingPrice);
+			}
 		}
 	}
 }

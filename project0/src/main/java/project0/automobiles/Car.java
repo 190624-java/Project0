@@ -16,7 +16,6 @@ public class Car implements Serializable {
 	private boolean hasOffer; // a customer offered 
 	private int currOfferAmount; // current offer amount from a customer
 	private HashMap<String, Integer> currentOffers; // all offers
-	private double monthlyPayment;
 	private int remainingPrice; // amount customer to owes on car
 	
 	public Car(byte carId, String brand, String model, String color, 
@@ -105,14 +104,6 @@ public class Car implements Serializable {
 
 	public void setCurrentOffers(HashMap<String, Integer> currentOffers) {
 		this.currentOffers = currentOffers;
-	}
-
-	public double getMonthlyPayment() {
-		return monthlyPayment;
-	}
-
-	public void setMonthlyPayment(int monthlyPayment) {
-		this.monthlyPayment = monthlyPayment;
 	}
 
 	public int getRemainingPrice() {

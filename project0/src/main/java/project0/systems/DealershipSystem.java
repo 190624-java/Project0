@@ -35,7 +35,7 @@ public class DealershipSystem implements Serializable {
 	private Employee employee;
 	
 	private static  byte acceptedOfferCarId;
-	private static boolean running = true; // for while loop
+	public static boolean running = true; // for while loop
 
 	public void setCurrUser(String currUser) {
 		this.currUser = currUser;
@@ -138,6 +138,7 @@ public class DealershipSystem implements Serializable {
 		}
 		else {
 			loginSuccessful = false;
+			running = false;
 			System.out.println("No user found...exiting system");
 			return loginSuccessful;
 		}
@@ -191,6 +192,7 @@ public class DealershipSystem implements Serializable {
 			default:
 				System.out.println("Invalid selection, please press 1, 2, 3, 4, 5 or 6");
 				System.out.println("Exiting system...");
+				running = false;
 			}
 		}
 	}
@@ -243,7 +245,7 @@ public class DealershipSystem implements Serializable {
 				rejectPendingOffers();// system rejects all pending offers once offer is accepted
 				break;
 			case 5:
-				// view all payments
+				employee.viewAllPayments();
 				break;
 			case 6:
 				// reset booleans

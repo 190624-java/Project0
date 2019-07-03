@@ -64,6 +64,15 @@ public class Employee extends User {
 				if(answer.equals("y") || answer.equals("Y")) {
 					offer.setOfferStatus(Offer.OFFERSTATUS.ACCEPTED);
 					DealershipSystem.updateCustomersOwnedCars(); // update lot and customer
+					// update remainingPrice
+					short carId = offer.getCarId();
+					String userName = offer.getCustomerUserName();
+					Customer customer = DealershipSystem.customers.get(userName);
+					for(Car car : customer.getCarsOwned()) {
+						if(carId == car.getId()) {
+							car.setRemainingPrice(car.getPrice() - offer.getOfferAmount());
+						}
+					}
 					return; // finished
 				} else if(answer.equals("n") || answer.equals("N")) {
 					offer.setOfferStatus(Offer.OFFERSTATUS.DECLINED);
@@ -75,7 +84,19 @@ public class Employee extends User {
 	}
 	
 	public void viewAllPayments() {
-		
+		System.out.println("Remaining Payments: ");
+		for(Customer customer : DealershipSystem.customers.values()) {
+			for(Car car : customer.getCarsOwned()) {
+				byte carId = car.getId();
+				String brand = car.getBrand();
+				String model = car.getModel();
+				int remainingPrice = car.getRemainingPrice();
+				System.out.println("CarId: " + carId);
+				System.out.println("Brand: " + brand);
+				System.out.println("Model: " + model);
+				System.out.println("Remaining Payment: " + remainingPrice);	
+			}
+		}
 	}
 
 	@Override
@@ -91,6 +112,7 @@ public class Employee extends User {
 			else {
 				System.out.println("Invalid userName OR login pin");
 				System.out.println("Exiting system...");
+				DealershipSystem.running = false;
 				loginSuccessful = false; // login failed
 				return loginSuccessful;
 			}
