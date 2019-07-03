@@ -69,7 +69,7 @@ public class CustomerService {
 					System.out.print(x.paymentsLeft + " payments remaining on ");
 					for (Car y : cars4) {
 						if (x.carNumber == y.number) {
-							System.out.println(y.makeAndModel);
+							System.out.println(y.makeAndModel + " at $" + (y.price / 30) + " per payment.");
 						}
 					}
 				}
