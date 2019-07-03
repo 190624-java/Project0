@@ -22,14 +22,30 @@ public class CustomerService {
 		case "1":
 			List<Car> cars = CarService.getCars();
 			for (Car x : cars) {
-				System.out.println(x.number + ". " + x.MakeAndModel + ": $" + x.price);
+				System.out.println(x.number + ". " + x.makeAndModel + ": $" + x.price);
 			}
 			System.out.println("(press return)");
 			bReader.readLine();
 			break;
 		case "2":
+			System.out.println("Choose the number of a car to make an offer on:");
+			List<Car> cars2 = CarService.getCars();
+			for (Car x : cars2) {
+				System.out.println(x.number + ". " + x.makeAndModel + ": $" + x.price);
+			}
+			String response2 = bReader.readLine();
+			for (Car x : cars2) {
+				if (x.number == Integer.parseInt(response2)) {
+					x.offers.add(userName);
+					System.out.println("Your offer has been added to car number " + x.number);
+				}
+			}
+			CarService.overwriteCars(cars2);
+			System.out.println("(press return)");
+			bReader.readLine();
 			break;
 		case "3":
+			
 			break;
 		case "4":
 			break;

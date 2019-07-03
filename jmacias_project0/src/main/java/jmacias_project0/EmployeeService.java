@@ -49,22 +49,45 @@ public class EmployeeService {
 			System.out.println("Choose the model number of the car to remove:");
 			List<Car> cars = CarService.getCars();
 			for (Car x : cars) {
-				System.out.println(x.number + ". " + x.MakeAndModel);
+				System.out.println(x.number + ". " + x.makeAndModel);
 			}
 			String response2 = bReader.readLine();
+			boolean removed = false;
 			for (Car x : cars) {
 				if (x.number == Integer.parseInt(response2)) {
 					CarService.removeCars(x.number);
+					removed = true;
+					System.out.println("car " + x.number + " removed (press return)");
+					bReader.readLine();
 					break;
 				}
-				else {
-					System.out.println("Please enter a valid number (press return).");
-					bReader.readLine();
-					employeeMenu(userName);
-				}
 			}
+			if (removed) {
+				
+				employeeMenu(userName);
+			}
+			System.out.println("Please enter a valid number (press return).");
+			bReader.readLine();
+			employeeMenu(userName);
 			break;
 		case "3":
+			System.out.println("Current offers on our cars:");
+			List<Car> cars2 = CarService.getCars();
+			boolean hasOffers = false;
+			for (Car x : cars2) {
+				if (x.offers.isEmpty()) {
+					continue;
+				}
+				else {
+					hasOffers = true;
+					System.out.println("Offer on car number " + x.number + " from:");
+					for (String y : x.offers) {
+						System.out.println(y);
+					}
+				}
+			}
+			System.out.println("(press return)");
+			bReader.readLine();
 			break;
 		case "4":
 			break;

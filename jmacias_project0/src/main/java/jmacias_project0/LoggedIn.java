@@ -33,6 +33,7 @@ public class LoggedIn {
 						userRole = x.role;
 					}
 				}
+				break;
 			default:
 				System.out.println("You must choose a valid number.");
 				startApp(userName, userRole);
