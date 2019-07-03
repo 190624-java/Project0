@@ -32,4 +32,10 @@ public class PersistentUser {
 		}
 		System.out.println("HashSet updated.");
 	}
+	
+	public static void overwriteUsers(List<User> users) throws FileNotFoundException, IOException {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(".\\src\\main\\resources\\Data.txt")))) {
+			oos.writeObject(users);
+		}
+	}
 }

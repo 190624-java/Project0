@@ -19,20 +19,22 @@ public class Login {
 		boolean loggedIn = false;
 		boolean usernameExists = false;
 		String userName = "";
-		// TODO start here
+		String userRole = "";
 		for (User x : users) {
+			
 			if (x.name.equals(uName)) {
 				usernameExists = true;
 				if (x.password.equals(uPwd)) {
 					loggedIn = true;
 					userName = x.name;
+					userRole = x.role;
 				}
 			}
 				
 		}
 		
 		if (loggedIn) {
-			LoggedIn.startApp(userName);
+			LoggedIn.startApp(userName, userRole);
 		} 
 		else if (usernameExists == false) {
 			System.out.println("Sorry, that user name does not exist."
