@@ -14,7 +14,7 @@ public class Car implements Serializable {
 	private Customer owner;
 	public HashSet<Offer> offers;
 	
-	public Car(String make, String model, int year, String color, int price)
+	public Car(String make, String model, int year, String color, double price)
 	{
 		this.make = make;
 		this.model = model;

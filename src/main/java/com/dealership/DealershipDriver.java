@@ -77,24 +77,7 @@ public class DealershipDriver {
 	
 	public static boolean registerAccount()
 	{
-		char type = 'u';
-		while(type != 'e' && type != 'c')
-		{
-			System.out.println("Greetings! Please enter c to register a customer account or "
-					+ "e to register an employee account");
-			try
-			{
-				type = inScan.next().charAt(0);
-				inScan.nextLine();
-				}
-			finally
-			{
-				//Do nothing
-				
-			}
-		}
-		
-		if(type == 'c')
+		if(activeAccount == null)
 		{
 			Customer newCust = Customer.createCustomer();
 			if(CustomerList.getInstance().addCustomer(newCust))
@@ -109,7 +92,7 @@ public class DealershipDriver {
 				return false;
 			}
 		}
-		else if(activeAccount != null)
+		else if(activeAccount instanceof Employee)
 		{
 			Employee newEmp = Employee.createEmployee();
 			try {
@@ -119,7 +102,7 @@ public class DealershipDriver {
 					return true;
 				}
 				else
-					System.out.println("Cannot register an employee as a non-employee");
+					System.out.println("Cannot register an employee by a non-employee");
 				return false;
 			}
 			catch(AccessControlException e)
@@ -289,11 +272,33 @@ public class DealershipDriver {
 		int input = -1;
 		while(input != 0) {
 			Lot.getInstance().displayLot();
-			System.out.println("Enter 0 to go back\nEnter 1 to examine cars");
+			System.out.println("Enter 0 to go back\nEnter 1 to examine cars\nEnter 2 to add a car");
 			input = inScan.nextInt(); inScan.nextLine();
-			if(input == 1)
-				displayCarsOfType();
+			switch(input) {
+			case 1: displayCarsOfType();
+				break;
+			case 2: displayAddCar();
+				break;
+			}
+				
 		}
+	}
+	
+	
+	public static void displayAddCar() 
+	{
+		System.out.println("Enter the make");
+		String make = inScan.nextLine();
+		System.out.println("Enter the model");
+		String model = inScan.nextLine();
+		System.out.println("Enter the year");
+		int year = inScan.nextInt(); inScan.nextLine();
+		System.out.println("Enter the color");
+		String color = inScan.nextLine();
+		System.out.println("Enter the price");
+		double price = inScan.nextDouble();inScan.nextLine();
+		Car tmpCar = new Car(make, model, year, color, price);
+		Lot.getInstance().addCar(tmpCar);
 	}
 	
 	public static void displayCarsOfType()
@@ -315,7 +320,6 @@ public class DealershipDriver {
 				 		displayCarInteractionMenu(carKey, carIndex);
 				 	}
 				}
-				
 			}
 			else {
 				System.out.println("Not valid. Please make sure you have the make, model, and year listed in order and separated by a single space");
@@ -332,6 +336,7 @@ public class DealershipDriver {
 			while(choice != 0)
 			{
 				System.out.println("Enter 0 to exit\nEnter 1 to make an offer on this car");
+				choice = inScan.nextInt(); inScan.nextLine();
 				if(choice == 1)
 				{
 					System.out.println("Enter an offer");
@@ -342,6 +347,22 @@ public class DealershipDriver {
 					OfferList.getInstance().offers.add(newOff);
 				}
 			}
+		}
+		else if(activeAccount instanceof Employee)
+		{
+			int choice = -1;
+			while(choice != 0)
+			{
+				System.out.println("Enter 0 to exit\nEnter 1 to remove this car");
+				choice = inScan.nextInt(); inScan.nextLine();
+				if(choice == 1)
+				{
+					Lot.getInstance().removeCar(tmpCar);
+					choice = 0;
+				}
+			}
+			
+			
 		}
 	}
 	
