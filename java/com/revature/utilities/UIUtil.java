@@ -1,5 +1,7 @@
 package com.revature.utilities;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Scanner;
  */
 public class UIUtil {
 
-	public static Scanner s = new Scanner(System.in);
+	public static final Scanner s = new Scanner(System.in);
 	/**
 	 * Asks user to try again.
 	 * 
@@ -33,6 +35,75 @@ public class UIUtil {
 		System.out.flush();		
 	}
 	
+	private boolean makeFileScanner(Scanner fileScanner, Scanner keyboardScanner) {
+		String path;
+		boolean fileNotFound = true;
+		boolean tryAgain = true;
+		
+		do {
+			path = this.getFilename(fileScanner);
+			try {
+				fileScanner = new Scanner(new File(path));
+				if(fileScanner==null) {
+					System.out.println("Error: Something went wrong with that entry.");
+					tryAgain = this.willRepeat(keyboardScanner);
+				}
+				else return true;
+			} catch (FileNotFoundException e) {
+				//e.printStackTrace();
+				System.out.println("Error: File not found");
+				tryAgain = this.willRepeat(keyboardScanner);
+			}
+		}while(fileNotFound && tryAgain);
+		return false;
+	}
+	
+	/**
+	 * Asks user to try again.
+	 * 
+	 * @return
+	 * If user answers 'y' or 'Y' then true is returned
+	 * else false
+	 */
+	public static boolean willRepeat(Scanner is) {
+		String answer;		
+		boolean invalidResponse = true;
+		System.out.println("Try again? y or n");
+		
+		while(invalidResponse) {
+		
+			try{
+				answer = is.nextLine();
+				
+				if(answer==null) 
+					System.out.println("Invalid Response: must be y or n");//invalidResponse = true;
+				else if(answer.equalsIgnoreCase("y")) 
+					return true; 
+					//invalideResponse = false;
+				else if(answer.equalsIgnoreCase("n"))
+					return false; //user wants to exit
+					//invalideResponse = false;
+				else System.out.println("Invalid response: Enter y or n.");
+			}
+			catch(Exception e) {
+				System.out.println("Error: Exception Occurred: Should have been y or n.");
+				//return true;
+			}
+		}//end while
+		return true;
+	}
+	/**
+	 * Get file path from user.
+	 * 
+	 * @return
+	 * If user answers 'y' or 'Y' then true is returned
+	 * else false
+	 */
+	public String getFilename(Scanner is) {
+		System.out.println("Enter a filename: ");
+		return ".\\src\\main\\resources\\"+is.nextLine();
+		
+	}
 	
 //	public String getCredential(String credentialName) {		
 //		String c;

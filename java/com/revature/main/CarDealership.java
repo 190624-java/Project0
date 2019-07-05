@@ -17,7 +17,7 @@ public class CarDealership {
 		
 		do { //Start main menu
 		//System.out.flush();
-		dSys.giveStartUpMenu();	
+		dSys.printStartUpMenu();	
 		try {
 			sel = UIUtil.s.nextInt(); // get the menu selection	
 		}

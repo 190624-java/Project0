@@ -81,13 +81,5 @@ public class Account {
 		
 	}
 	
-	
-	//TODO
-	public void logIn() {
-		
-	}
-	//TODO
-	public void logOut() {
-		
-	}
+
 }

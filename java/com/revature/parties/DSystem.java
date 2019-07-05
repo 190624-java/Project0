@@ -123,15 +123,41 @@ public class DSystem {
 	}
 	
 
-	public void giveStartUpMenu() {
+	public void printStartUpMenu() {
 		System.out.println("Hello! Welcome to the System!\n");
 		System.out.println("\t\t"+"1 - Login");
 		System.out.println("\t\t"+"2 - Create Account");
 		System.out.println("\t\t"+"0 - Exit");
 	}
 	
+	//TODO
+	/**
+	 *  - add a car to the lot.
+	 * 	- accept or reject an offer for a car.
+	 * 	- remove a car from the lot.
+	 * 	- view all payments.
+	 */
+	public void printEmployeeMenu() {
+		System.out.println("Employee Account");
+		System.out.println("\t\t1 - Add car to lot");
+		System.out.println("\t\t2 - Accept or Reject Offers");
+		System.out.println("\t\t3 - Remove car from the lot");
+		System.out.println("\t\t4 - View all payments");
+	}
+	
+	//TODO
+	/**
+	 *  * 	view the cars on the lot.
+ * 	make an offer for a car.
+ * 	view the cars that I own.
+ * 	view my remaining payments for a car.
+	 */
+	public void printCustomerMenu() {
+		
+	}
 
 	/**
+	 * TODO
 	 * Gets user/drivers ID and Password
 	 * Checks them for system compatibility
 	 * If so, Logs into the accounts object (i.e. continues menus)
@@ -143,11 +169,18 @@ public class DSystem {
 		User user = accounts.authenticate();
 		//authenticate will throw an exception if problem occurs and
 		//user cancels, otherwise it will not be null.		
-		if(user==null) return; //authentication cancelled by user
+		if(user==null) {
+			System.out.println("Error: null authentication");
+			return; //authentication cancelled by user
+		}
 		
 		Account acc = accounts.getUserAccount(user.getDriversID());
 		
+		//test which type of employee it is.
+		//if it is a Customer, then display customer id
 		
+		
+		//if it is an employee, then display the employee id
 		
 	//Method 1
 //		boolean unusableID = true;
