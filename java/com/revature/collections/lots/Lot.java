@@ -1,9 +1,12 @@
-package com.revature.collections;
+package com.revature.collections.lots;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.parties.User;
 import com.revature.things.Car;
+import com.revature.utilities.UIUtil;
 
 
 public class Lot {
@@ -34,6 +37,52 @@ public class Lot {
 		this.owner = user;
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * null if car not found
+	 * Car if found
+	 */
+	public Car searchForCarByID(long id) {
+		Iterator<Car> it = spaces.iterator();
+		Car c;
+		while(it.hasNext()) {
+			c = it.next();
+			if(c==null); //continue
+			else if(c.getRegID()==id) return c;			
+		}
+		return null;
+		
+	}
+	/**
+	 * Displays the park car UI to get a car description from the user
+	 * Exits with 
+	 * 	-1 if car not found
+	 * 	1 - car found, successful park
+	 *  0 - car found, failed park
+	 * 
+	 * 
+	 */
+	public int parkCar() {		
+		long carRegID = -1;
+		boolean carNotFound= true;
+		
+		do {
+			System.out.println("Enter the Car Registration ID");
+			try {
+				carRegID = UIUtil.getMenuSelection();
+			} catch (InvalidMenuSelection e) {
+				e.printError();
+				return -1; //go back to the dSys's account menu
+			}
+			carNotFound = spaces.contains(new Car())
+			
+		}while(carNotFound);
+		
+		
+		
+	}
 	
 	//TODO
 	public boolean parkCar(Car car) {
@@ -92,5 +141,7 @@ public class Lot {
 		}//end for
 		return i; //number of lot spaces/cars displayed
 	}//end display
+
+
 	
 }

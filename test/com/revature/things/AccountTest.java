@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Test;
 
+import com.revature.things.logins.Account;
+
 public class AccountTest {
 
 	String s;

@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.InvalidMenuSelection;
+
 /**
  * Helps with user input
  * @author Jarvis Adams
@@ -21,10 +24,13 @@ public class UIUtil {
 	 */
 	public static boolean determineContinue() {
 		String answer;		
-		System.out.println("Try again? y or n");
-		answer = s.next();
-		if(answer.equalsIgnoreCase("y")) return true;
-		else return false;
+		do {
+			System.out.println("Try again? y or n");
+			answer = s.nextLine();
+			if(answer.equalsIgnoreCase("y")) return true;
+			if(answer.equalsIgnoreCase("n")) return false;
+			System.out.println("Sorry, invalid selection");
+		} while(true);
 	}
 	
 	public static void printException(Exception e) {
@@ -105,52 +111,51 @@ public class UIUtil {
 		
 	}
 	
-//	public String getCredential(String credentialName) {		
-//		String c;
-//		while(true){ 
-//			System.out.println("Enter your "+credentialName+": ");
-//			c = sr.nextLine();
-//			if(passwordMatchesUser(uID, credentialName.hashCode())) {
-//				sr.close();
-//				return  //default driversID argument
-//			}
-//			else {
-//				System.out.println("Error: password doesn't match");
-//				if(!ui.determineContinue()) { sr.close(); return null; }
-//			}
-//		}//end while
-//	}
-
-//	class UserNameChecker implements Callable<String>{
-//		@Override
-//		public String call() throws Exception {
-//			passwordMatchesUser(uID, pass.hashCode())
-//			return null;
-//		}		
-//	}
-//	class PasswordChecker implements Callable<String>{
-//		
-//		public PasswordChecker(){
-//			
-//		}
-//		@Override
-//		public String call() throws Exception {
-//			passwordMatchesUser(uID, pass.hashCode())
-//			return null;
-//		}		
-//	}
-//	class DriversLicenseChecker implements Callable<String>{
-//		int licenseID;
-//		public DriversLicenseChecker(int licenseID){
-//			this.licenseID = licenseID;
-//		}
-//		@Override
-//		public String call() throws Exception {
-//			
-//			return null;
-//		}		
-//	}
+	public static int getMenuSelection() throws InvalidMenuSelection{
+		try {
+			return UIUtil.s.nextInt(); // get the menu selection	
+		}
+		catch(Exception e) {
+			throw new InvalidMenuSelection();
+		}
+	}
+	public static long getLong() throws InvalidInput {
+		if(UIUtil.s.hasNextLong()) return UIUtil.s.nextLong(); // get the menu selection
+		else throw new InvalidInput();
+		
+	}
 	
+	
+//	/**
+//	 * 
+//	 * @param lowRange
+//	 * @param highRange
+//	 * @param acc
+//	 * @return
+//	 * @throws InvalidMenuSelection
+//	 */
+//	public static int getMenuSelectionUntil(int lowRange, int highRange, Account acc) throws InvalidMenuSelection{
+//		try {
+//			return UIUtil.s.nextInt(); // get the menu selection	
+//		}
+//		catch(Exception e) {
+//			throw new InvalidMenuSelection();
+//		}
+//	}
 
+	/**
+	 * Gets an integer input from the user.
+	 */
+	public static int getInt() {
+		
+	}
+
+	public static void echoCompletion(String s) {
+		System.out.println("Completion: " +s);
+	}
+	
+	public static void echo(String s) {
+		System.out.println("User input was: " + s);
+	}
 	
 }

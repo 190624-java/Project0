@@ -29,6 +29,7 @@ public class Car {
 	 */
 	private User owner;
 	
+	
 	public Car(CarRegistration reg, User owner){
 		//if(reg==null) new Registration(); //empty due
 		this.reg = reg;
@@ -69,6 +70,10 @@ public class Car {
 	public int getYear() {
 		// TODO Auto-generated method stub
 		return this.reg.getYEAR();
+	}
+	
+	public long getRegID() {
+		return this.reg.getREG_ID();
 	}
 
 //	public String getColor() {

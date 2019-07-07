@@ -1,6 +1,6 @@
 package com.revature.parties;
 
-import com.revature.collections.Lot;
+import com.revature.collections.lots.Lot;
 import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Offer;
@@ -59,6 +59,11 @@ public class Customer extends User {
 	//TODO
 	public void getPaymentsRemaining(Car ownedCar) {
 		
+	}
+
+	@Override
+	public int getType() {
+		return UserTypes.CUSTOMER;
 	}
 	
 	

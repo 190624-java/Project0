@@ -1,6 +1,6 @@
 package com.revature.parties;
 
-import com.revature.collections.Lot;
+import com.revature.collections.lots.Lot;
 import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Offer;
@@ -75,6 +75,11 @@ public class Employee extends User{
 	//TODO
 	public void viewPayments() {
 
+	}
+
+	@Override
+	public int getType() {
+		return UserTypes.EMPLOYEE;
 	}
 	
 }

@@ -1,7 +1,7 @@
 package com.revature.parties;
 
-import com.revature.collections.Lot;
-import com.revature.things.Account;
+import com.revature.collections.lots.Lot;
+import com.revature.things.logins.Account;
 
 /**
  * Users can:
@@ -17,22 +17,19 @@ public class User {
 	
 //	protected String name;
 	protected int driversID;
-	private int password;
 	int type;
 	
 	public User(int identification){
-		//this.name = name;
 		this.driversID = identification;
-		this.password = -1;
 		this.type=-1;
 	}
 	
-	public User(int driversID, int passHash) {
-		this(driversID);
-		this.password = passHash;
-		this.garage = new Lot(10,this);
-		this.account = account;
-	}
+//	public User(int driversID, int passHash) {
+//		this(driversID);
+//		this.password = passHash;
+//		this.garage = new Lot(10,this);
+//		this.account = account;
+//	}
 
 	
 	
@@ -52,5 +49,9 @@ public class User {
 	public int getDriversID() {
 		return this.driversID;
 	}
+	
+	public int getType() {
+		return this.type;
+	};
 	
 }

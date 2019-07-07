@@ -7,21 +7,34 @@ import java.util.Scanner;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
+import com.revature.parties.Customer;
+import com.revature.parties.DSystem;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
-import com.revature.things.Account;
+import com.revature.things.logins.Account;
 import com.revature.utilities.UIUtil;
 
 public class Accounts {
 	
 	HashMap<Integer,Account> accounts;
 	Employee ownerOfDealership; //used for creation of employee accounts
+	DSystem dSys;
+	Account activeAccount;
 	
 	public Accounts(Employee owner){
 		this.accounts = new HashMap<>();
 		this.ownerOfDealership = owner;
+		this.dSys = DSystem.getInstance();
 	}
 
+	
+	private void logInEmployee(Employee eUser) {
+		dSys.mPrint.employee();		
+	}
+	
+	private void logInCustomer(Customer cUser) {
+		dSys.mPrint.customer();
+	}
 	
 	public void showCreationMenu() {
 		System.out.println("Enter Type of Account: ");
@@ -29,6 +42,8 @@ public class Accounts {
 		System.out.println("2 - Customer");
 		System.out.println("0 - Exit");
 	}
+	
+	
 	/**
 	 * Additionally checks for type of user.
 	 * If choosing Employee, dealership owner user password 
@@ -85,29 +100,8 @@ public class Accounts {
 		} //end switch
 		s.close();
 		
-		
-		//Method 1
-//		try {
-//			
-//			System.out.println("Enter a password: ");
-//			p1 = s.nextLine();
-//			
-//			this.checkExists(p1);
-//			System.out.println("Verify password: ");
-//			p2 = s.nextLine();
-//			
-//			checkPasswords(p1,p2);
-//			
-//			noPassword = false;
-//		}catch(NewPasswordMismatch mm) {
-//			ui.printException(mm);
-//			cont = ui.determineContinue();
-//			//TODO test s.close();
-//		}		
-//		}while(cont && noPassword);
-//		s.close();
-		
 	} //end create account
+	
 	
 	/**
 	 * Requires login information of an employee
@@ -130,6 +124,8 @@ public class Accounts {
 		if(a.equals(b)) return true;
 		else return false;
 	}
+	
+	
 	//TODO finish
 	/**
 	 * Asks for owner password
@@ -143,6 +139,7 @@ public class Accounts {
 		
 		return false;		
 	}
+	
 	
 	/**
 	 * Checks that the user login info is valid for an existing
@@ -227,8 +224,25 @@ public class Accounts {
 //		accounts.get(driversID).access();
 //	}
 	
+	//TODO
+	/**
+	 * Method 1
+	 * Determine which type of account is logging in
+	 * Show corresponding main account menu
+	 * Method 2 
+	 * call the account's login function and give it access to what it needs
+	 * @param acc Account to use information from.
+	 */
+	public void logIn(Account acc) {
+		//Determine which type of account is logging in
+		
+		//Show corresponding main account menu
+	}
+	
 	//TODO 
-	//save the information to the files, exit the program
+	//save the user's information to the files,
+	//unlink the user
+	//exit the main menu
 	public void logOut() {
 		
 	}
