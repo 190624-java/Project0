@@ -13,7 +13,7 @@ public class CarDealership {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub	
 		boolean noExit = true; //exit the program if this "noExit" equals false
-		boolean noMainMenuSelection;
+//		boolean noMainMenuSelection;
 		int sel = -1; //menu selection number
 		
 		do { //Start main menu

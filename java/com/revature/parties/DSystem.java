@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import com.revature.collections.Accounts;
 import com.revature.collections.lots.Lot;
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
@@ -16,6 +17,7 @@ import com.revature.things.Car;
 import com.revature.things.Offer;
 import com.revature.things.Password;
 import com.revature.things.logins.Account;
+import com.revature.things.logins.EmployeeAccount;
 import com.revature.utilities.UIUtil;
 
 /*
@@ -78,14 +80,13 @@ public class DSystem {
 	
 	private Accounts accounts;
 	//private String dealershipName;
-	private Employee dealer;
+	private EmployeeAccount dealer;
 //	private Scanner scanner;
 		
 	private DSystem() {
-		this.dealer = new Employee(-1000000, "admin".hashCode());
+		this.dealer = new EmployeeAccount(-1000000, "admin".hashCode());
 		this.accounts = new Accounts(dealer);
-		this.dLot = new Lot(100,this.dealer);
-		
+		this.dLot = new Lot(100,this.dealer);	
 		
 	}
 	
@@ -93,21 +94,6 @@ public class DSystem {
 		return dealerSystem;
 	};
 	
-//	public int readInt() {
-//		return scanner.nextInt();
-//	}
-//	public String readLine() {
-//		return scanner.nextLine();
-//	}
-//	public String readWord() {
-//		return scanner.next();
-//	}
-	
-//	public DSystem(int dealerDriversID, Employee dealer) {
-//		this.online = new HashSet<>();
-//		this.dealer = new Employee(-1000000, "admin".hashCode());
-//		this.accounts = new Accounts(dealer);
-//	}
 
 	public static float calMonthlyPayment(User carOwner, Car ownedCar) {
 		
@@ -126,10 +112,7 @@ public class DSystem {
 //	}
 	
 
-	
-	private boolean checkPasswordStrength(String pass) {
-		return Password.hasUppercase(pass);
-	}
+
 	
 	/**
 	 * TODO
@@ -141,15 +124,16 @@ public class DSystem {
 	 */
 	public void beginLogin() throws UserExit {
 	//Method 2
-		User user = accounts.authenticate();
+		Integer userID = accounts.getAuthenticator().authenticateUser();
 		//authenticate will throw an exception if problem occurs and
 		//user cancels, otherwise it will not be null.		
-		if(user==null) {
+		if(userID==null) {
 			System.out.println("Error: null authentication");
 			return; //authentication cancelled by user
 		}
 		
-		Account acc = accounts.getUserAccount(user.getDriversID());
+		//is already a particular type upon account creation
+		Account acc = accounts.getUserAccount(userID.intValue());
 		
 		//test which type of employee it is.		
 		// if it is a Customer, then display customer menu		
@@ -192,13 +176,15 @@ public class DSystem {
 			//Get UserID Attempt
 			System.out.println("Enter a user ID");
 			try { 
-				driversID = UIUtil.s.nextInt();
+				driversID = UIUtil.getInt();
 				UIUtil.echo(String.valueOf(driversID));
 			}
 			catch(InputMismatchException e) {
 				System.out.println("Invalid entry. ID must be a number.");
 				if(UIUtil.determineContinue()) continue; //restart do..while
 				else return;
+			} catch (InvalidInput e) {
+				e.printMessage(); //should have been integer
 			}
 			//Check UserID
 			if(accounts.hasUser(driversID)) {				
@@ -216,8 +202,7 @@ public class DSystem {
 		String p1 = ""; String p2 = ""; //password double checking
 		
 		do {
-			try {	
-				UIUtil.s.nextLine(); //clear newline character from integer input
+			try {				
 				System.out.println("Enter a password: ");
 				p1 = UIUtil.s.nextLine();
 				UIUtil.echo(p1);				
@@ -250,6 +235,10 @@ public class DSystem {
 		
 	}
 	
+	public Lot getdLot() {
+		return dLot;
+	}
+
 	public class MenuPrinter {
 		
 		public void startUp() {
@@ -266,7 +255,7 @@ public class DSystem {
 		 * 	view my remaining payments for a car.
 		 */
 		public void customer() {
-			System.out.println("\t\t"+"1 - View Cars on Dealer Lot");
+			System.out.println("\t\t"+"1 - View Cars on the Dealer Lot");
 			System.out.println("\t\t"+"2 - Make an Offer on a car");
 			System.out.println("\t\t"+"3 - View My Car Lot");
 			System.out.println("\t\t"+"4 - View remaining payments for a car");
@@ -289,59 +278,26 @@ public class DSystem {
 			System.out.println("\t\t"+"4 - View all payments for a car");
 			System.out.println("\t\t"+"0 - Exit");
 		}
-		/**
-		 * 	- add a car to the lot.
-		 * 	- accept or reject an offer for a car.
-		 * 	- remove a car from the lot.
-		 * 	- view all payments.
-		 * 
-		 * @author Jarvis Adams
-		 *
-		 */
-		public void parkCar() {
-			System.out.println("\t\t"+"1 - ");
-			System.out.println("\t\t"+"2 - ");
-			System.out.println("\t\t"+"3 - ");
-			System.out.println("\t\t"+"4 - ");
-			System.out.println("\t\t"+"0 - Exit");
-		}
+		
+		
+		
+//		/**
+//		 * 
+//		 * @author Jarvis Adams
+//		 *
+//		 */
+//		public void parkCar() {
+//			System.out.println("\t\t"+"1 - ");
+//			System.out.println("\t\t"+"2 - ");
+//			System.out.println("\t\t"+"3 - ");
+//			System.out.println("\t\t"+"4 - ");
+//			System.out.println("\t\t"+"0 - Exit");
+//		}
 
 		
 
 	}
-	
-	static class Logins{
 
-		//TODO
-		/**
-		 * Perform the menu interaction
-		 */
-		private static int serveEmployee() {			
-			while(UIUtil.s.hasNextInt()){
-				switch(UIUtil.s.nextInt()) {
-				case 1:
-					DSystem.getInstance().dLot.parkCar();
-					break;
-				case 2:
-					
-					break;
-				case 3:
-					break;
-				case 4: 
-					break;
-				}
-			}
-				
-		}
-
-		//TODO
-		private static void serveCustomer() {
-			
-		}
-		
-		
-		
-	}
 	
 
 }

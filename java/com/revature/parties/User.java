@@ -13,15 +13,16 @@ import com.revature.things.logins.Account;
 public class User {
 
 	Account account;
-	Lot garage;
-	
-//	protected String name;
 	protected int driversID;
-	int type;
+
+//	/**
+//	 * not needed since the system just requires the unique identifier, driversID.
+//	 */
+//	protected String username; 
 	
-	public User(int identification){
+	public User(int identification, Account account){
 		this.driversID = identification;
-		this.type=-1;
+		this.account = account;
 	}
 	
 //	public User(int driversID, int passHash) {
@@ -37,21 +38,11 @@ public class User {
 //		return this.name;
 //	}
 
-	
-	public void setPassword(int passHash) {
-		this.password = passHash;
-	}
 
-	public int getPassword() {
-		return this.password;
-	}
 
 	public int getDriversID() {
 		return this.driversID;
 	}
 	
-	public int getType() {
-		return this.type;
-	};
 	
 }

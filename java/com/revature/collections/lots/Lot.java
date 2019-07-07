@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.revature.exceptions.InvalidMenuSelection;
+import com.revature.exceptions.NoParkingAvailable;
 import com.revature.parties.User;
 import com.revature.things.Car;
 import com.revature.utilities.UIUtil;
@@ -18,7 +19,7 @@ public class Lot {
 	public Lot(int capacity, User owner){
 		this.cap = capacity;
 		this.owner = owner;
-		this.spaces = new ArrayList(capacity);
+		this.spaces = new ArrayList<>(capacity);
 //		for(i=0;i<capacity;i++) {
 //			
 //		}
@@ -30,6 +31,28 @@ public class Lot {
 	 */
 	private Car createEmptyCar() {
 		return new Car(null, null);
+	}
+	
+	/**
+	 * Gets the empty car if a space is found, otherwise throws a NoParkingAvailable exception.
+	 * 
+	 * @return empty car (symbolizing an address to a car space in the lot)
+	 * @throws NoParkingAvailable
+	 */
+	public Car findSpace() throws NoParkingAvailable {
+		for(Car space : spaces) {
+			if(isSpace(space)) return space; //no reg means empty car 
+		}
+		throw new NoParkingAvailable();
+	}
+	
+	/**
+	 * Used by findSpace() to distinguish between cars and spaces. 
+	 * @param space
+	 * @return
+	 */
+	public boolean isSpace(Car space) {
+		return (space==null || !space.hasRegistration());
 	}
 	
 	
@@ -55,6 +78,9 @@ public class Lot {
 		return null;
 		
 	}
+	
+	
+	
 	/**
 	 * Displays the park car UI to get a car description from the user
 	 * Exits with 
@@ -71,20 +97,24 @@ public class Lot {
 		do {
 			System.out.println("Enter the Car Registration ID");
 			try {
-				carRegID = UIUtil.getMenuSelection();
+				carRegID = UIUtil.getLong();
 			} catch (InvalidMenuSelection e) {
 				e.printError();
 				return -1; //go back to the dSys's account menu
 			}
 			carNotFound = spaces.contains(new Car())
 			
-		}while(carNotFound);
-		
-		
-		
+		}while(carNotFound);		
 	}
 	
-	//TODO
+	/**	 
+	 * 
+	 * @param car car to place in the lot at a found car space.
+	 * @return
+	 * if a blank space can be found on the lot, then it will be parked and 
+	 * true will be returned,
+	 * else false will be returned.
+	 */
 	public boolean parkCar(Car car) {
 		
 		//if a blank space can be found on the lot, then it will be parked and 
@@ -93,12 +123,27 @@ public class Lot {
 		return false;
 	}
 	
-	//TODO
-	public boolean parkCar(Car car, int spaceNumber) {
+	/**
+	 * 
+	 * @param car
+	 * @param spaceNumber
+	 * @return
+	 */
+	public boolean parkCar(Car car, Car carSpace) {
 		//if the car can be parked in the space, it will return true.
+		if(isSpace(carSpace)) {
+			carSpace = car;
+			return true;
+		}
 		//else return's false, indicating the parking space is full or invalid
-		return true;
+		return false;
 	}
+	
+//	public boolean parkCar(Car car, int spaceNumber) {
+//		//if the car can be parked in the space, it will return true.
+//		//else return's false, indicating the parking space is full or invalid
+//		return true;
+//	}
 	
 	//TODO
 	/**
@@ -116,30 +161,38 @@ public class Lot {
 			return false;
 		}
 		//otherwise, a car is there, and needs to be removed.
-		//it can be placed in a system temporarilly
+		//it can be placed in a system temporarily
 		spaces.set(spaceNumber, null);
 		return true;
 	}
 
 	/**
 	 * Prints the list of cars and their descriptions all at once
+	 *  				Space   CarID    Make   Model   Year
+	 *  
+	 *  (deprecated)	Space   CarID    Make   Model   Year   Color   MSRP
+	 *  		
 	 * @param lot
 	 */
 	public int display() {
-		System.out.println("Space   Make   Model   Year    Color   MSRP");
-		int i=1;
+		//System.out.println("Space   CarID    Make   Model   Year   Color   MSRP");
+		System.out.println("Space   CarID    Make   Model   Year");
+		int spaceNumber=1;
 		for(Car space : this.spaces) {
-			System.out.print((i++)+ "\t");
+			System.out.print((spaceNumber++)+ "\t");
 			if(space==null) System.out.println("");
 			else System.out.println(
-					space.getMake()+"  "+ 
+//						spaceNumber +"  "+
+					space.getRegID()+"  "+
+					space.getMake() +"  "+ 
 					space.getModel()+"  "+ 
-					space.getYear()+"  "+ 
+					space.getYear() 
+					//+"  "+ 
 //					space.getColor()+"  "+ 
-					space.getMSRP()
+//					space.getMSRP()
 					);			
 		}//end for
-		return i; //number of lot spaces/cars displayed
+		return spaceNumber; //number of lot spaces/cars displayed
 	}//end display
 
 

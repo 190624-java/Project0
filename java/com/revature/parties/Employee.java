@@ -1,11 +1,20 @@
 package com.revature.parties;
 
+import java.util.Iterator;
+
+import com.revature.collections.Contract;
+import com.revature.collections.Offers;
 import com.revature.collections.lots.Lot;
-import com.revature.main.UserTypes;
+import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.things.Car;
 import com.revature.things.Offer;
+import com.revature.things.logins.Account;
+import com.revature.utilities.UIUtil;
 
 /**
+ * A class to directly implement person capabilities
+ * This class is in contrast to the User's Account which houses the data structures and displays menus.
+ * 
  * 	As an employee, I can 
  * 	- add a car to the lot.
  * 	- accept or reject an offer for a car.
@@ -17,46 +26,98 @@ import com.revature.things.Offer;
  */
 public class Employee extends User{
 
+	//----------------------
+	//	Field
+	//----------------------
+	
 	private Employee employer;
 	
-	public Employee(int driversID,int passH, Employee dealer) {
-		super(driversID, passH);
+	
+	//----------------------
+	//	Constructor
+	//----------------------
+		
+	public Employee(int driversID, Account account, Employee dealer) {
+		super(driversID, account);
 		this.employer = dealer;
-		this.type = UserTypes.EMPLOYEE;
 	}
 
-	public Employee(int driversID, int passH) {
-		super(driversID, passH);
-		this.type = UserTypes.EMPLOYEE;
-	}
-
+	
+	//----------------------
+	//	Methods
+	//----------------------
+	
 	//TODO
 	public void addCarToLot(Car car, Lot lot) {
 		//find an empty location in the lot
+		Car space = findEmptyLotSpace(lot);
+		if(space==null)
+		lot.parkCar(car, spaceNumber)
 	}
 	
-	/**
-	 * 
-	 * @param offer
-	 * @return 
-	 * 	false = refused offer
-	 *  true = accepted offer
-	 */
-	public boolean reactToOffer(Offer offer) {
-		float MSRP = offer.getDesiredCar().getMSRP();
-		if(offer.getAmount() < Offer.getPercentOff(20, MSRP)) return false;
-		processOffer(offer);
-		return true;
+
+	public void reject(Offer o) {
+		// TODO Auto-generated method stub
+		this.offers.remove(o);		
+	}
+
+	
+	public void accept(Offer ao) {
+		//create new contract based on offer		
+		Contract acceptedOfferContract = new Contract(ao);
+		//attach contract to the car
 	}
 	
-	/**
-	 * TODO
-	 * Send the offer to the system's list of offers on the car
-	 * @param offer
-	 */
-	private void processOffer(Offer offer) {
+//	/**
+//	 * (Deprecated)-this is a GUI user decision, not automated
+//	 * @param offer
+//	 * @return 
+//	 * 	false = refused offer
+//	 *  true = accepted offer
+//	 */
+//	public boolean reactToOffer(Offer offer) {
+//		float MSRP = offer.getDesiredCar().getMSRP();
+//		if(offer.getAmount() < Offer.getPercentOff(20, MSRP)) return false;
+//		processOffer(offer);
+//		return true;
+//	}
+	
+
+	public void processOffers1AtATime(Car car) {
+		int sel = -1;
+		boolean invalidSelection = true;
+		Iterator<Offer> oIt = car.getOffersHSetIterator();
+		//Iterator<Offer> it = this.offers.iterator();
+		Offers offers = car.getOffers();
+		Offer o;
 		
-		
+		//for(Offer o : offers) {
+		while(oIt.hasNext()) {
+			o = oIt.next();
+			o.displayRow();
+			offers.displayOfferMenu();			
+			
+			do {
+				try {
+					switch(UIUtil.getMenuSelection()) {
+						case 1:	//next offer				
+							continue;
+						case 2: //accept offer 
+							accept(o);
+							return;
+						case 3:	//reject offer	
+							reject(o);
+							continue;
+						case 4:
+							break;
+						case 0:
+							break;
+					}
+				} catch (InvalidMenuSelection e) { 
+					//don't ask to try again, that's what the menu, exit option 0, is for.
+				} 				
+			} while(invalidSelection);
+		}
 	}
 	
 	/**
@@ -67,9 +128,14 @@ public class Employee extends User{
 //		return this.employer;
 //	}
 
-	//TODO
+	/**
+	 * 
+	 * @param carToRemove
+	 */
 	public void removeCarFromLot(Car carToRemove) {
-		
+		System.out.println("Enter Car Registration ID");
+		long regID = UIUtil.getLong();		
+		this.account.
 	}
 	
 	//TODO
@@ -77,9 +143,5 @@ public class Employee extends User{
 
 	}
 
-	@Override
-	public int getType() {
-		return UserTypes.EMPLOYEE;
-	}
 	
 }

@@ -27,13 +27,62 @@ import com.revature.things.Payment;
  */
 public class Contract {
 
+	//--------------------------
+	//	Fields
+	//--------------------------
+	
 	private float remainingBalance;
 	private LinkedList<Payment> payments;
 	private Offer soldOffer;
+	private float balance;
+	private float bill;
+	private int termInMonths;
+	
+	
+	//--------------------------
+	//	Constructor
+	//--------------------------
 	
 	public Contract(Offer offer){
-		this.payments = new LinkedList<>();
 		this.remainingBalance = offer.getAmount();
+		this.payments = new LinkedList<Payment>();
 		this.soldOffer = new Offer(offer);
+		this.termInMonths = offer.getTerm();
+	}
+
+	
+	//--------------------------
+	//	Methods
+	//--------------------------	
+
+	
+	public void displayPaymentsHeading() {
+		System.out.println("-----------------");
+		System.out.println("	Payments"	  );
+		System.out.println("-----------------");
+		System.out.println("ID     \tAmount      \tDate");
+	}
+	
+	public void displayPaymentRows() {
+		for(Payment p : payments) {
+			System.out.println(p.getID()+"    \t"+p.getAmount()+"    \t"+p.getDate());
+		}
+	}
+
+	public void makePayment(Payment payment) {
+		if(payments==null) {
+			System.out.println("Error: can't make payment, null list");
+			return;
+		}
+		this.payments.add(payment);
+		this.balance+=payment.getAmount();
+	}
+
+	public float getBalance() {
+		return balance;
+	}
+
+	public float getBill() {
+		return this.bill;
 	}
 }

@@ -15,6 +15,8 @@ import com.revature.exceptions.InvalidMenuSelection;
 public class UIUtil {
 
 	public static final Scanner s = new Scanner(System.in);
+	
+	
 	/**
 	 * Asks user to try again.
 	 * 
@@ -33,13 +35,16 @@ public class UIUtil {
 		} while(true);
 	}
 	
+	
 	public static void printException(Exception e) {
 		System.out.println(e.getMessage());
 	}
+	
 
 	public static void clearScreen() {
 		System.out.flush();		
 	}
+	
 	
 	private boolean makeFileScanner(Scanner fileScanner, Scanner keyboardScanner) {
 		String path;
@@ -63,6 +68,7 @@ public class UIUtil {
 		}while(fileNotFound && tryAgain);
 		return false;
 	}
+	
 	
 	/**
 	 * Asks user to try again.
@@ -98,6 +104,8 @@ public class UIUtil {
 		}//end while
 		return true;
 	}
+	
+	
 	/**
 	 * Get file path from user.
 	 * 
@@ -111,18 +119,28 @@ public class UIUtil {
 		
 	}
 	
+	
 	public static int getMenuSelection() throws InvalidMenuSelection{
+		int sel;
 		try {
-			return UIUtil.s.nextInt(); // get the menu selection	
+			sel = UIUtil.s.nextInt(); // get the menu selection
+			UIUtil.s.nextLine(); //to get the newline character
+			return sel;
 		}
 		catch(Exception e) {
+			UIUtil.echoProblem("Invalid Selection");
 			throw new InvalidMenuSelection();
 		}
 	}
+	
+	
 	public static long getLong() throws InvalidInput {
-		if(UIUtil.s.hasNextLong()) return UIUtil.s.nextLong(); // get the menu selection
-		else throw new InvalidInput();
-		
+		if(UIUtil.s.hasNextLong()) {
+			long val = s.nextLong(); // get the menu selection
+			s.nextLine(); //removed the newline character
+			return val;
+		}			
+		else throw new InvalidInput("Invalid Input: should have been a long number value");
 	}
 	
 	
@@ -143,19 +161,38 @@ public class UIUtil {
 //		}
 //	}
 
+	
 	/**
 	 * Gets an integer input from the user.
 	 */
-	public static int getInt() {
+	public static int getInt() throws InvalidInput{
+		Integer integer;
+		try{
+			integer = UIUtil.s.nextInt();
+			UIUtil.s.nextLine(); //clear newline character from integer input
+		}catch(Exception e) {
+			throw new InvalidInput("Error: must be integer input");
+		}
 		
+//		if(integer==null) throw new InvalidInput("Invalid Input: null found, must be integer value");		
+		
+		return integer.intValue();
 	}
 
+	
 	public static void echoCompletion(String s) {
 		System.out.println("Completion: " +s);
 	}
 	
+	
 	public static void echo(String s) {
 		System.out.println("User input was: " + s);
+	}
+	
+
+	public static void echoProblem(String string) {
+		System.out.println(string);
+		
 	}
 	
 }

@@ -1,12 +1,14 @@
 package com.revature.things;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import com.revature.collections.Contract;
 import com.revature.collections.Offers;
 import com.revature.parties.DSystem;
 import com.revature.parties.User;
+import com.revature.utilities.UIUtil;
 
 public class Car {
 
@@ -21,6 +23,7 @@ public class Car {
 	//Containers
 	//----------
 	private Offers offers;
+	private Contract contract;
 	
 	
 	/**
@@ -33,9 +36,9 @@ public class Car {
 	public Car(CarRegistration reg, User owner){
 		//if(reg==null) new Registration(); //empty due
 		this.reg = reg;
-		this.owner = owner;
+		this.setOwner(owner);
 		//this.color = color;
-		this.offers = new Offers();
+		this.addOffer(new Offers());
 		//contract is not created till a sale is made; it needs to be null
 		// till then to know the state of the car ownership
 	}
@@ -57,6 +60,10 @@ public class Car {
 //		return offers.iterator();
 //	}
 
+	public Offers getOffers() {
+		return offers;
+	}
+	
 	public String getMake() {
 		// TODO Auto-generated method stub
 		return this.reg.getMAKE();
@@ -72,8 +79,50 @@ public class Car {
 		return this.reg.getYEAR();
 	}
 	
+	/**
+	 * Needed for a test in searching for empty spaces on lots.
+	 * @return
+	 */
+	public boolean hasRegistration() {
+		if (this.reg == null) return false;
+		else return true;
+	}
+	
 	public long getRegID() {
 		return this.reg.getREG_ID();
+	}
+
+	public User getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public Contract getContract() {
+		return contract;
+	}
+
+	/**
+	 * Called by the Employee who accepts an offer.
+	 * Employee passes that accepted offer to this function.
+	 * @param acceptedOffer
+	 */
+	public void makeContract(Offer acceptedOffer) {
+		if(this.contract!=null)
+			UIUtil.echoProblem("Warning: contract already exists for this car");		
+			//throw new Exception();
+		this.contract = new Contract(acceptedOffer);
+
+	}
+
+	public Iterator<Offer> getOffersHSetIterator() {		
+		return offers.getOffersHSet().iterator();
+	}
+
+	public void addOffer(Offers offers) {
+		this.offers = offers;
 	}
 
 //	public String getColor() {

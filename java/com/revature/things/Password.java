@@ -32,6 +32,12 @@ public class Password {
 	}
 	
 	
+	
+	private static int encode(String pass) {
+		return pass.hashCode();
+	}
+	
+	
 	//----------------------
 	//	Getters and Setters
 	//----------------------
@@ -64,12 +70,12 @@ public class Password {
 	}
 	
 	
-	private static int hashPassword(String pass) {
-		return pass.hashCode();
-	}
-	
 	public boolean passwordMatches(int passHash) {
 		if(this.pHash == passHash) return true;
 		else return false;
+	}
+		
+	private boolean checkPasswordStrength(String pass) {
+		return Password.hasUppercase(pass);
 	}
 }

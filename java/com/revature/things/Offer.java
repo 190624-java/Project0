@@ -11,10 +11,15 @@ import com.revature.parties.User;
  */
 public class Offer {
 
+	//primary
+	private Car product;  //primary: carID
+	private User offeree; //primary: userID
+	
 	private float amount;
-	private Car product;
-	private User offeree;
 	private Employee salesperson;
+	private int offerID;
+	private int termInMonths = 48;
+	private float rateAPR = 0.072f; 
 
 	public Offer(Offer offer) {
 		this.amount = offer.amount;
@@ -46,8 +51,45 @@ public class Offer {
 		return this.product;
 	}
 	
+	/**
+	 * Displays the data only, so it can be output as rows in the Offers class.
+	 * Format: 
+	 * OfferID		CustomerID		OfferAmount 
+	 */
+	public void displayRow() {		
+		System.out.println(getOfferID()+"\t\t"+getOfferee().getDriversID()+"\t\t"+this.getAmount());
+	}
+
 	
 	
+	public int getOfferID() {
+		return offerID;
+	}
+
+	public void setOfferID(int offerID) {
+		this.offerID = offerID;
+	}
+	
+	public User getOfferee() {
+		return offeree;
+	}
+
+	public void setOfferee(User offeree) {
+		this.offeree = offeree;
+	}
+
+	public int getTerm() {		
+		return this.termInMonths;
+	}
+	
+	/**
+	 * Annual Percentage Rate
+	 * Compounded annually on the remaining balance
+	 * @return
+	 */
+	public float getRate() {
+		return this.rateAPR;
+	}
 	
 	
 }

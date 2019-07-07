@@ -1,8 +1,11 @@
 package com.revature.collections;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
+import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.things.Offer;
+import com.revature.utilities.UIUtil;
 
 /**
  * A history of offers attached to a car.
@@ -24,11 +27,52 @@ import com.revature.things.Offer;
  */
 public class Offers {
 	
-	private LinkedList<Offer> offers;
+	private LinkedHashSet<Offer> offersHSet;
 	
-	public Offers() {
-		this.offers = new LinkedList<>();
+	public LinkedHashSet<Offer> getOffersHSet() {
+		return offersHSet;
 	}
+
+
+	public Offers() {
+		this.offersHSet = new LinkedHashSet<>();
+	}
+	
+	/**
+	 * Show the offers on a car.
+	 * 	float amount
+	 *	Car product
+	 *	User offeree
+	 */
+	public void displayOffers() {
+		System.out.println(
+				  "----------------------"
+				+ "       Offers"
+				+ "----------------------");
+		displayOfferColumns();		
+		displayOfferRows();
+		
+	}
+	
+	
+	public void displayOfferColumns() {
+		System.out.println("OfferID\t\t"+"CUSTOMER\t\t"+"AMOUNT\t\t");
+	}
+	
+	public void displayOfferMenu(){
+		System.out.println(
+			"Menu: 1 next   2 accept   3 reject   0 exit");
+	}
+	
+	
+	public void displayOfferRows() {
+		for(Offer o : offersHSet) {
+			o.displayRow();
+		}
+	};
+	
+
+	
 	
 	
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
@@ -16,25 +17,36 @@ import com.revature.utilities.UIUtil;
 
 public class Accounts {
 	
-	HashMap<Integer,Account> accounts;
-	Employee ownerOfDealership; //used for creation of employee accounts
-	DSystem dSys;
-	Account activeAccount;
+	//---------------------------
+	//	Fields
+	//---------------------------
+	
+	private HashMap<Integer,Account> accounts;
+	private Employee ownerOfDealership; //used for creation of employee accounts
+	protected DSystem dSys;
+	private Account activeAccount;
+	private Authenticator authenticator;
+	
+	//---------------------------
+	//	Constructors
+	//---------------------------
+	
 	
 	public Accounts(Employee owner){
 		this.accounts = new HashMap<>();
 		this.ownerOfDealership = owner;
 		this.dSys = DSystem.getInstance();
+		authenticator = new Authenticator();
 	}
 
+	//---------------------------
+	//	Methods
+	//---------------------------
 	
-	private void logInEmployee(Employee eUser) {
-		dSys.mPrint.employee();		
+	public Authenticator getAuthenticator() {
+		return authenticator;
 	}
-	
-	private void logInCustomer(Customer cUser) {
-		dSys.mPrint.customer();
-	}
+
 	
 	public void showCreationMenu() {
 		System.out.println("Enter Type of Account: ");
@@ -111,19 +123,21 @@ public class Accounts {
 	private boolean seekAuthorization() throws UserExit{
 		System.out.println("Enter a Hiring Employee Login");
 		//TODO this should be the ownerOfDealership, but authorize will suffice for now.
-		User hirer = authenticate();
-		if(hirer==null) return false;
-		
-		//TODO //if(hirer)
-		return true;
-		
+		Integer hirerID = authenticator.authenticateUser();		
+		if(hirerID==null) {
+			UIUtil.echoProblem("Error: null userID returned");
+			return false;
+		} else UIUtil.echoCompletion("Account Found");
+		if(getUserAccount(hirerID).getAccountType() == UserTypes.DEALER) {
+			UIUtil.echoCompletion("Success: Dealer Authority Recognized");
+			return true;
+		}
+		//account didn't have the authority
+		UIUtil.echoProblem("Problem: Account Authority Not Recognized. Must be Dealer Account");
+		return false;		
 	}
 
 
-	private boolean passwordsMatch(String a, String b) {
-		if(a.equals(b)) return true;
-		else return false;
-	}
 	
 	
 	//TODO finish
@@ -141,76 +155,15 @@ public class Accounts {
 	}
 	
 	
-	/**
-	 * Checks that the user login info is valid for an existing
-	 * account. 
-	 * @return Returns that user info, if so.
-	 * @throws UserExit
-	 */
-	public User authenticate() throws UserExit{
-		boolean unusableID = true;
-		int driversID = -1;
-		String pass;
-		
-		//User ID
-		do { 
-			System.out.println("Enter your drivers ID");
-			try {
-			driversID = UIUtil.s.nextInt();
-			}catch(InputMismatchException e) {
-				if(UIUtil.determineContinue()) continue; //restart do..while
-				else throw new UserExit();
-			}
-			if(hasUser(driversID))
-				unusableID = false;
-			else {
-				System.out.println("Error: ID doesn't exist\n");
-				//If user doesn't want to continue to enter username and pass
-				//then, authentication fails.
-				if(!UIUtil.determineContinue()) { return null; }
-			}//end else
-		}while(unusableID);	
-		
-		//check for the license ID
-		unusableID = false;
-		
-		//Password
-		while(true){ 
-			System.out.println("Enter your password: ");
-			pass = UIUtil.s.nextLine();
-			if(passwordMatchesUser(driversID, pass.hashCode())) {
-				return new User(driversID, pass.hashCode()); //default driversID argument
-			}
-			else {
-				System.out.println("Error: password doesn't match");
-				if(!UIUtil.determineContinue()) { return null; }
-			}
-		}//end while
-	}//end method
 
 	
-	private void checkExists(String p1) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void checkPasswords(String a, String b) throws NewPasswordMismatch{
-		if(passwordsMatch(a,b)) return;
-		else throw new NewPasswordMismatch();
-	}
 
-	public boolean hasUser(int licenseID) {
-		return accounts.containsKey(licenseID);
-	}
 	
 	public Account getUserAccount(int driversID) {
 		return accounts.get(driversID);
 	}
 	
-	public boolean passwordMatchesUser(int userID, int passHash) {
-		if(accounts.get(userID).passwordMatches(passHash)) return true;
-		else return false;
-	}
+
 	
 
 //	/**
@@ -244,9 +197,104 @@ public class Accounts {
 	//unlink the user
 	//exit the main menu
 	public void logOut() {
-		
+		this
 	}
 
-	
+	public class Authenticator{
+		
+
+		public boolean passwordsMatch(String a, String b) {
+			if(a.equals(b)) return true;
+			else return false;
+		}
+		
+		
+		public boolean passwordMatchesUser(int userID, int passHash) {
+			if(accounts.get(userID).getPassword().passwordMatches(passHash)) return true;
+			else return false;
+		}
+		
+		
+		public void checkPasswords(String a, String b) throws NewPasswordMismatch{
+			if(passwordsMatch(a,b)) return;
+			else throw new NewPasswordMismatch();
+		}
+
+		
+		public boolean hasUser(int licenseID) {
+			return accounts.containsKey(licenseID);
+		}
+		
+		
+		/**
+		 * Allows multiple username attempts
+		 * Checks that the user login info is valid for an existing
+		 * account. 
+		 * @return If account exists, Returns that user's username (i.e. driverID)
+		 * @throws UserExit
+		 */
+		public Integer authenticateUser() throws UserExit{
+			boolean unusableID = true;
+			Integer driversID;
+
+			//User ID
+			do { 
+				driversID = this.authenticateUsername(); 
+				if(driversID!=null) unusableID = false; //authenticated userID, so 
+			}while(unusableID);	
+			
+			//Password
+			while(true){
+					if(authenticatePassword(driversID)) 
+						return new Integer(driversID);
+			}//end while
+		}//end method
+
+		
+		/**
+		 * Only 1 username attempt per method run.
+		 * @return
+		 * @throws UserExit
+		 */
+		private Integer authenticateUsername() throws UserExit {
+			System.out.println("Enter your drivers ID");
+			int driversID = -1;
+			try {
+				driversID = UIUtil.getInt();
+			}catch(InputMismatchException e) {
+				if(UIUtil.determineContinue()) return null; //continue; //restart do..while
+				else throw new UserExit();
+			}catch(InvalidInput e) {
+				e.printMessage();
+			}
+			if(hasUser(driversID))
+				return new Integer(driversID); //authenticated
+				//unusableID = false;
+			else {
+				System.out.println("Error: ID doesn't exist\n");
+				//If user doesn't want to continue to enter username and pass
+				//then, authentication fails.
+				if(!UIUtil.determineContinue()) { throw new UserExit(); }
+			}//end else
+			return null; //continue the main authentication loop
+		}
+		
+		
+		private boolean authenticatePassword(Integer driversID) throws UserExit {
+			System.out.println("Enter your password: ");
+			String pass = UIUtil.s.nextLine();
+			if(passwordMatchesUser(driversID, pass.hashCode())) {
+				return true;
+				//return new Integer(driversID);
+				//return new User(driversID, pass.hashCode()); //default driversID argument
+			}
+			else {
+				System.out.println("Error: password doesn't match");
+				if(!UIUtil.determineContinue()) { throw new UserExit(); }
+			}
+			return false; //continue the main authentication loop
+		}
+		
+	}
 
 }

@@ -4,8 +4,12 @@ import com.revature.collections.lots.Lot;
 import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Offer;
+import com.revature.things.logins.Account;
 
-/*
+/**
+ * A class to directly implement person capabilities
+ * This class is in contrast to the User's Account which houses the data structures and displays menus.
+ * 
  * As a customer, I can 
  * 	view the cars on the lot.
  * 	make an offer for a car.
@@ -15,11 +19,8 @@ import com.revature.things.Offer;
  */
 public class Customer extends User {
 
-	Lot ownedLot;
-	
-	public Customer(int driversID,int passH) {
-		super(driversID, passH);
-		this.type = UserTypes.CUSTOMER;
+	public Customer(int driversID, Account account) {
+		super(driversID,account);
 	}
 
 	/**
@@ -35,36 +36,67 @@ public class Customer extends User {
 	 * Randomly generates a number between 30 and 0.
 	 * That number is used to calculate a percentage off the MSRP.
 	 * The result is the offerPrice.
+	 * 
+	 * Car will be passed in when Customer is browsing.
+	 * Ask for amount
+	 * Verify correct amount in loop till (exit || correctDataType_given)
+	 * Construct an offer with the car's offer's list, the price, and the Customer
+	 * if no errors, return the 1 for pass
+	 * else return error code
 	 * @param offer
 	 */
-	public Offer makeOffer(Car carDesired, Employee salesperson) {
-		float MSRP = carDesired.getMSRP();
-		//Offer(float amount, Car product, User offeree, Employee salesperson, DSystem dealership)
-		return new Offer(Offer.getPercentOff(generateMarkoff(), MSRP), carDesired, this, salesperson);
+	public int makeOffer(Car carDesired ) { //, Employee salesperson) {
+				
+		
+	}
+	
+//	/**
+//	 * Finds a percentage that the customer may ask off the MSRP.
+//	 * @return a random integer from 0 - 30.
+//	 */
+//	private int generateMarkoff() {
+//		return  ((int)Math.random()) % 30;
+//	}
+	
+	/**
+	 * Displays in table form, the cars in a customer's garage/private_lot
+	 * @param ownedLot
+	 */
+	public void viewPrivateLot(Lot ownedLot) {
+		Lot g = this.account.getGarage();
+		
+		System.out.println(
+				  "-------------------\n"
+				+ "		My Garage\n"
+				+ "-------------------");
+		//System.out.println("CarID    \tMake    \tModel");
+		g.display();
 	}
 	
 	/**
-	 * Finds a percentage that the customer may ask off the MSRP.
-	 * @return a random integer from 0 - 30.
+	 * 
+	 * @param ownedCar
 	 */
-	private int generateMarkoff() {
-		return  ((int)Math.random()) % 30;
+	public float getPaymentsRemaining(Car ownedCar) {
+		float bal = ownedCar.getContract().getBalance();
+		float bill = ownedCar.getContract().getBill();
+		//calculate
+		float remaining = bal/bill;
+
+		return remaining;
 	}
 	
-	//TODO
-	public void viewPrivateLot(Lot ownedLot) {
-		
+	public void printPaymentsRemaining(float remaining, float bill) {
+		String message = String.format("There are %.0f remaining bills of %.2f", remaining, bill);
+		System.out.println(message);
 	}
-	
-	//TODO
-	public void getPaymentsRemaining(Car ownedCar) {
-		
+	public void printPaymentsRemaining(Car ownedCar) {		
+		String message = String.format("There are %.0f remaining bills of %.2f", 
+				getPaymentsRemaining(ownedCar), 
+				ownedCar.getContract().getBill());
+		System.out.println(message);
 	}
 
-	@Override
-	public int getType() {
-		return UserTypes.CUSTOMER;
-	}
 	
 	
 }

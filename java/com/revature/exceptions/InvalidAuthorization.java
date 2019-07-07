@@ -1,6 +1,6 @@
 package com.revature.exceptions;
 
-public class InvalidAuthorization {
+public class InvalidAuthorization extends Exception{
 	protected String m = "Error: hiring manager password not accepted";
 	
 	public String getMessage() {
