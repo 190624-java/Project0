@@ -7,6 +7,7 @@ import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.NoParkingAvailable;
 import com.revature.parties.User;
 import com.revature.things.Car;
+import com.revature.things.logins.Account;
 import com.revature.utilities.UIUtil;
 
 
@@ -14,9 +15,9 @@ public class Lot {
 
 	private ArrayList<Car> spaces;
 	private int cap; //capacity of space available to hold cars
-	private User owner;
+	private Account owner;
 	
-	public Lot(int capacity, User owner){
+	public Lot(int capacity, Account owner){
 		this.cap = capacity;
 		this.owner = owner;
 		this.spaces = new ArrayList<>(capacity);

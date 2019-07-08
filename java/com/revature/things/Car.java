@@ -4,10 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
-import com.revature.collections.Contract;
-import com.revature.collections.Offers;
-import com.revature.parties.DSystem;
+import com.revature.collections.ContractMngr;
+import com.revature.collections.OffersMngr;
 import com.revature.parties.User;
+import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
 public class Car {
@@ -22,8 +22,8 @@ public class Car {
 	
 	//Containers
 	//----------
-	private Offers offers;
-	private Contract contract;
+	private OffersMngr offersMngr;
+	private ContractMngr contract;
 	
 	
 	/**
@@ -38,7 +38,7 @@ public class Car {
 		this.reg = reg;
 		this.setOwner(owner);
 		//this.color = color;
-		this.addOffer(new Offers());
+		this.addOffer(new OffersMngr());
 		//contract is not created till a sale is made; it needs to be null
 		// till then to know the state of the car ownership
 	}
@@ -60,8 +60,8 @@ public class Car {
 //		return offers.iterator();
 //	}
 
-	public Offers getOffers() {
-		return offers;
+	public OffersMngr getOffersMngr() {
+		return offersMngr;
 	}
 	
 	public String getMake() {
@@ -100,7 +100,7 @@ public class Car {
 		this.owner = owner;
 	}
 
-	public Contract getContract() {
+	public ContractMngr getContract() {
 		return contract;
 	}
 
@@ -113,17 +113,15 @@ public class Car {
 		if(this.contract!=null)
 			UIUtil.echoProblem("Warning: contract already exists for this car");		
 			//throw new Exception();
-		this.contract = new Contract(acceptedOffer);
+		this.contract = new ContractMngr(acceptedOffer);
 
 	}
 
 	public Iterator<Offer> getOffersHSetIterator() {		
-		return offers.getOffersHSet().iterator();
+		return offersMngr.getOffersHSet().iterator();
 	}
 
-	public void addOffer(Offers offers) {
-		this.offers = offers;
-	}
+
 
 //	public String getColor() {
 //		// TODO Auto-generated method stub

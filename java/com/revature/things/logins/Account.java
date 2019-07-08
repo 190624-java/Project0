@@ -2,18 +2,20 @@ package com.revature.things.logins;
 
 import java.util.LinkedList;
 
-import com.revature.collections.Contract;
+import com.revature.collections.ContractMngr;
 import com.revature.collections.lots.Garage;
 import com.revature.collections.lots.Lot;
+import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.InvalidUserID;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NoUppercase;
 import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
-import com.revature.parties.DSystem;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
 import com.revature.things.Password;
 import com.revature.things.Payment;
+import com.revature.utilities.DSystem;
 
 public class Account {
 
@@ -21,60 +23,68 @@ public class Account {
 	//	Fields
 	//------------------------
 	
-	private int loginID;	
-	private boolean loggedIn = false;
-	private int type;
+	protected boolean loggedIn = false;
+	/**
+	 * So checks can be done with authorization.
+	 */
+	protected final int type; //override
 	
 	//------------------------
 	//	Objects
 	//------------------------
 	
-	private User user;
+	protected final User user; //set user's account		
+	protected Password password;	
 	protected Lot lot; //TODO construct in other classes; make abstract
+	
 	protected DSystem dSys = DSystem.getInstance();
-	private Password password;
 	
 	//------------------------
 	//	Data Structures
 	//------------------------
 	
-	private LinkedList<Payment> paymentHistory;
+	private LinkedList<Payment> userPaymentHistory;
 	
 	//------------------------
 	//	Constructors
 	//------------------------
 	
 	
-	public Account() {
-		this.loginID = -1;
-		try {
-			password = new Password("1AaaaBbbb");
-		} catch (NoUppercase e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		
-		this.paymentHistory = new LinkedList<>();
-		this.type = -1; //unknown
-		this.loggedIn = false;
-	}
-	
-	
 	/**
 	 * Meant to be overridden
 	 * @param userID
-	 * @param password
+	 * @param password //requires creator to have valid password
 	 * @param type
 	 * @throws NoUppercase 
 	 */
-	public Account(int userID, String password, int type) throws NoUppercase {		
-		this.loginID = userID;
-		this.password = new Password(password);
+	public Account(User userWithID, Password password){		
+		this.user = userWithID;
+		this.password = password;
+		//TODO - test. It might not be constructed yet, and fail the null check
+		try {
+			this.user.setAccount(this);
+		} catch (InvalidUserID | InvalidInput e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		basicInit();
+
+		//---------
+		//Overrides
+		//---------
+		this.type = -1;
+		
 	}
 	
 	//------------------------
 	//	Methods
 	//------------------------		
+	
+	private void basicInit() {
+		this.userPaymentHistory = new LinkedList<>();
+		this.loggedIn = false;
+		this.lot = new Lot(10,this.user);		
+	}
 	
 	public boolean isLoggedIn() {
 		return loggedIn;
@@ -114,12 +124,12 @@ public class Account {
 	}
 
 	public LinkedList<Payment> getPaymentHistory() {
-		return paymentHistory;
+		return userPaymentHistory;
 	}
 
 	
 	public int getUserID() {
-		return this.loginID;
+		return this.user.getDriversID();
 	}
 
 

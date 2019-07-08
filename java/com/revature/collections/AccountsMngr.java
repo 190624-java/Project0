@@ -7,23 +7,27 @@ import java.util.Scanner;
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
+import com.revature.exceptions.NoUppercase;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
-import com.revature.parties.DSystem;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
+import com.revature.things.Password;
 import com.revature.things.logins.Account;
+import com.revature.things.logins.CustomerAccount;
+import com.revature.things.logins.EmployeeAccount;
+import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
-public class Accounts {
+public class AccountsMngr {
 	
 	//---------------------------
 	//	Fields
 	//---------------------------
 	
 	private HashMap<Integer,Account> accountsMap;
-	private Employee ownerOfDealership; //used for creation of employee accounts
+	private EmployeeAccount ownerOfDealership; //used for creation of employee accounts
 	protected DSystem dSys;
 	private Account activeAccount;
 	private Authenticator authenticator;
@@ -33,7 +37,7 @@ public class Accounts {
 	//---------------------------
 	
 	
-	public Accounts(Employee owner){
+	public AccountsMngr(EmployeeAccount owner){
 		this.accountsMap = new HashMap<>();
 		this.ownerOfDealership = owner;
 		this.dSys = DSystem.getInstance();
@@ -61,7 +65,7 @@ public class Accounts {
 	 * @param driversID
 	 * @param passHash
 	 */
-	public void createAccount(int driversID, int passHash) throws UserExit{		
+	public void createAccount(int driversID, String pass) throws UserExit, NoUppercase{		
 		int choice = -1;		
 		boolean needAuthorization = true;
 		
@@ -77,22 +81,26 @@ public class Accounts {
 			else {UIUtil.echoProblem("Invalid Choice. Must be a menu number");}
 		}while(doMenu);
 		
+		Password password = new Password(pass);
+		
 		//Handle the Menu Choice
 		switch(choice) {
 			case 1: { //employee
 					try{this.seekAuthorization();} //throws UserExit
 					catch(UserExit ue) {
-						s.close();
 						throw ue;
 					}
-					this.accountsMap.put(driversID, new Account(
-							driversID, passHash, UserTypes.EMPLOYEE
+					Employee employeeWithID = new Employee(driversID);
+					
+					this.accountsMap.put(driversID, new EmployeeAccount(
+							employeeWithID, password
 							));
 					break;
 			}
 			case 2: { //customer
-				this.accountsMap.put(driversID, new Account(
-						driversID, passHash, UserTypes.CUSTOMER
+				Customer customerWithID = new Customer(driversID);
+				this.accountsMap.put(driversID, new CustomerAccount(
+						customerWithID, password
 						));
 				break;
 			}
@@ -118,7 +126,8 @@ public class Accounts {
 			UIUtil.echoProblem("Error: null userID returned");
 			return false;
 		} else UIUtil.echoCompletion("Account Found");
-		if(getUserAccount(hirerID).getAccountType() == UserTypes.DEALER) {
+		if(getUserAccount(hirerID).getAccountType() == UserTypes.EMPLOYEE) {
+//			if(getUserAccount(hirerID).getAccountType() == UserTypes.DEALER) {
 			UIUtil.echoCompletion("Success: Dealer Authority Recognized");
 			return true;
 		}
@@ -256,9 +265,7 @@ public class Accounts {
 			}catch(InputMismatchException e) {
 				if(UIUtil.determineContinue()) return null; //continue; //restart do..while
 				else throw new UserExit();
-			}catch(InvalidInput e) {
-				e.printMessage();
-			}
+			}catch(InvalidInput e) {} //error printed in getInt()
 			if(hasUser(driversID))
 				return new Integer(driversID); //authenticated
 				//unusableID = false;
@@ -285,6 +292,14 @@ public class Accounts {
 				if(!UIUtil.determineContinue()) { throw new UserExit(); }
 			}
 			return false; //continue the main authentication loop
+		}
+
+
+		public int checkPasswordStrength(String p1) {
+			int strength = 0;
+			if(Password.hasUppercase(p1)) strength++;
+			if(Password.hasLowercase(p1)) strength++;
+			return strength;
 		}
 		
 	}

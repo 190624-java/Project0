@@ -134,13 +134,26 @@ public class UIUtil {
 	}
 	
 	
+	/**
+	 * Tries to get a long value from user input.
+	 * Clears the newLine character form input (so next readLines() won't be blank)
+	 * 
+	 * @return 
+	 * <br>if valid input, the value received from keyboard input
+	 * <br>else displays error message and throws exception  
+	 * @throws InvalidInput
+	 */
 	public static long getLong() throws InvalidInput {
 		if(UIUtil.s.hasNextLong()) {
 			long val = s.nextLong(); // get the menu selection
 			s.nextLine(); //removed the newline character
 			return val;
 		}			
-		else throw new InvalidInput("Invalid Input: should have been a long number value");
+		else {
+			InvalidInput iv = new InvalidInput("Invalid Input: should have been a long number value");
+			iv.printMessage();
+			throw iv;
+		}
 	}
 	
 	
@@ -171,6 +184,7 @@ public class UIUtil {
 			integer = UIUtil.s.nextInt();
 			UIUtil.s.nextLine(); //clear newline character from integer input
 		}catch(Exception e) {
+			UIUtil.echoProblem("Error: must be integer input");
 			throw new InvalidInput("Error: must be integer input");
 		}
 		

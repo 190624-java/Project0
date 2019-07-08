@@ -25,7 +25,7 @@ import com.revature.things.Payment;
  * @author Jarvis Adams
  *
  */
-public class Contract {
+public class ContractMngr {
 
 	//--------------------------
 	//	Fields
@@ -43,7 +43,7 @@ public class Contract {
 	//	Constructor
 	//--------------------------
 	
-	public Contract(Offer offer){
+	public ContractMngr(Offer offer){
 		this.remainingBalance = offer.getAmount();
 		this.payments = new LinkedList<Payment>();
 		this.soldOffer = new Offer(offer);

@@ -1,13 +1,22 @@
 package com.revature.things.logins;
 
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.UserExit;
+import com.revature.parties.Customer;
+import com.revature.things.Car;
+import com.revature.things.Offer;
+import com.revature.things.Password;
 import com.revature.utilities.UIUtil;
 
 public class CustomerAccount extends Account{
 
 	
+	public CustomerAccount(Customer driverWithID, Password password) {
+		super(driverWithID,password);
+	}
+
 	@Override
 	public int start() throws LogOut {
 		try {
@@ -64,4 +73,35 @@ public class CustomerAccount extends Account{
 		return -1;
 	}
 	
+	/**
+	 * Car will be passed in when Customer is browsing.
+	 * Ask for amount
+	 * Verify correct amount in loop till (exit || correctDataType_given)
+	 * Construct an offer with the car's offer's list, the price, and the Customer
+	 * if no errors, return the 1 for pass
+	 * else return error code
+	 * @param offer
+	 * @param amount offer amount
+	 */
+	public int createOffer(Car carDesired, float amount) { //, Employee salesperson) {
+		
+		Offer newOffer = new Offer(carDesired, this, amount);
+		
+		//Add the offer to the carDesired's offers container
+		carDesired.getOffersMngr().addOffer(newOffer);
+		return 0;
+	}
+	
+
+	
+	@Override
+	public Customer getUser() {
+		return (Customer)super.getUser();
+	}
+	
+	class CoreFunctionality {
+		
+	}
+	
+
 }

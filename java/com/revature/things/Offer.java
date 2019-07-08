@@ -1,8 +1,8 @@
 package com.revature.things;
 
-import com.revature.parties.DSystem;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
+import com.revature.utilities.DSystem;
 
 /**
  * 
@@ -16,25 +16,38 @@ public class Offer {
 	private User offeree; //primary: userID
 	
 	private float amount;
-	private Employee salesperson;
-	private int offerID;
+	//private Employee salesperson; //(deprecated) would need if organizing data by salesperson, but not required for this assignment
+	private int offerID; //TODO 
 	private int termInMonths = 48;
 	private float rateAPR = 0.072f; 
 
 	public Offer(Offer offer) {
 		this.amount = offer.amount;
 		this.product = offer.product;
-		this.offeree = offer.offeree;
-		this.salesperson = offer.salesperson;
+		/**
+		 * Note: Need the "offeree" User when constructing.
+		 * Reason: need to know who made the offer
+		 * and which account to later set the contract to.
+		 */
+		this.offeree = offer.offeree;		
 	}
 	
-	public Offer(float amount, Car product, User offeree, Employee salesperson){
+	public Offer(Car product, User offeree, float amount) { //, Employee salesperson){
 		this.amount = amount;
 		this.product = product;
 		this.offeree = offeree;
-		this.salesperson = salesperson;
-		
+		//this.salesperson = salesperson;		
 	}
+
+	
+	/**
+	 * Note: Need the "offeree" user.
+	 * Reason: need to know who made the offer
+	 * and which account to later set the contract to.
+	 */
+//	public Offer(Car carDesired, float amount2) {
+//		this.product = carDesired;		
+//	}
 
 	/**
 	 * Returns give % off the MSRP

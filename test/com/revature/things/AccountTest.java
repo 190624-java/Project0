@@ -19,33 +19,33 @@ public class AccountTest {
 	@Test
 	public void testHasLowerCase_Mix() {
 		s = "skwiiKSLlsl";
-		assertTrue(m_noLC, acc.hasLowerCase(s));
+		assertTrue(m_noLC, acc.getPassword().hasLowercase(s));
 	}
 	@Test
 	public void testHasLowerCase_AllUpper() {
 		s = "DJWNOWKLWIWIOKLQ";
-		assertTrue(m_noLC, acc.hasLowerCase(s));
+		assertTrue(m_noLC, acc.getPassword().hasLowercase(s));
 	}
 	@Test
 	public void testAllLowerCase_AllLower() {
 		s = "skwiiwjosl";
-		assertTrue(m_noLC, acc.hasLowerCase(s));
+		assertTrue(m_noLC, acc.getPassword().hasLowercase(s));
 	}
 
 	@Test
 	public void testHasUpperCase_Mix() {
 		s = "skwiiKSLlsl";
-		assertTrue(m_noUC, acc.hasUpperCase(s));
+		assertTrue(m_noUC, acc.getPassword().hasLowercase(s));
 	}
 	@Test
 	public void testHasUpperCase_AllUpper() {
 		s = "DJWNOWKLWIWIOKLQ";
-		assertTrue(m_noUC, acc.hasUpperCase(s));
+		assertTrue(m_noUC, acc.getPassword().hasLowercase(s));
 	}
 	@Test
 	public void testAllUpperCase_AllLower() {
 		s = "skwiiwjosl";
-		assertTrue(m_noUC, !acc.hasUpperCase(s));
+		assertTrue(m_noUC, !acc.getPassword().hasLowercase(s));
 	}
 
 	

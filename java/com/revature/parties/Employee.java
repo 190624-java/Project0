@@ -9,6 +9,8 @@ import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.things.Car;
 import com.revature.things.Offer;
 import com.revature.things.logins.Account;
+import com.revature.things.logins.EmployeeAccount.CoreFunctionalityUI;
+import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
 /**
@@ -27,19 +29,20 @@ import com.revature.utilities.UIUtil;
 public class Employee extends User{
 
 	//----------------------
-	//	Field
+	//	Fields
 	//----------------------
 	
-	private Employee employer;
+	//private Employee employer;
+	public CoreFunctionalityUI coreUI = new CoreFunctionalityUI();
+	
 	
 	
 	//----------------------
 	//	Constructor
 	//----------------------
 		
-	public Employee(int driversID, Account account, Employee dealer) {
-		super(driversID, account);
-		this.employer = dealer;
+	public Employee(int driversID) {
+		super(driversID);		
 	}
 
 	
@@ -77,17 +80,7 @@ public class Employee extends User{
 		}while(carNotFound);		
 	}
 
-	public void reject(Offer o) {
-		// TODO Auto-generated method stub
-		this.offers.remove(o);		
-	}
 
-	
-	public void accept(Offer ao) {
-		//create new contract based on offer		
-		Contract acceptedOfferContract = new Contract(ao);
-		//attach contract to the car
-	}
 	
 //	/**
 //	 * (Deprecated)-this is a GUI user decision, not automated
@@ -103,43 +96,6 @@ public class Employee extends User{
 //		return true;
 //	}
 	
-
-	public void processOffers1AtATime(Car car) {
-		int sel = -1;
-		boolean invalidSelection = true;
-		Iterator<Offer> oIt = car.getOffersHSetIterator();
-		//Iterator<Offer> it = this.offers.iterator();
-		Offers offers = car.getOffers();
-		Offer o;
-		
-		//for(Offer o : offers) {
-		while(oIt.hasNext()) {
-			o = oIt.next();
-			o.displayRow();
-			offers.displayOfferMenu();			
-			
-			do {
-				try {
-					switch(UIUtil.getMenuSelection()) {
-						case 1:	//next offer				
-							continue;
-						case 2: //accept offer 
-							accept(o);
-							return;
-						case 3:	//reject offer	
-							reject(o);
-							continue;
-						case 4:
-							break;
-						case 0:
-							break;
-					}
-				} catch (InvalidMenuSelection e) { 
-					//don't ask to try again, that's what the menu, exit option 0, is for.
-				} 				
-			} while(invalidSelection);
-		}
-	}
 	
 	/**
 	 * Gets the dealership that the employee is hired by to sale vehicles
@@ -149,20 +105,82 @@ public class Employee extends User{
 //		return this.employer;
 //	}
 
-	/**
-	 * 
-	 * @param carToRemove
-	 */
-	public void removeCarFromLot(Car carToRemove) {
-		System.out.println("Enter Car Registration ID");
-		long regID = UIUtil.getLong();		
-		this.account.
-	}
+
 	
-	//TODO
-	public void viewPayments() {
 
+	class CoreFunctionalityUI {
+		/**
+		 * 
+		 * @param carToRemove
+		 */
+		public void removeCarFromLot(Car carToRemove) {
+			System.out.println("Enter Car Registration ID");
+			long regID = UIUtil.getLong();		
+			this.account.
+		}
+		
+		
+		public void addCarToLot(Car carToAdd) {
+			System.out.println("Enter Car Registration ID");
+			long regID = UIUtil.getLong();		
+			this.account.
+		}
+		
+		
+		public void reject(Offer o) {
+			// TODO Auto-generated method stub
+			this.offers.remove(o);		
+		}
+
+		
+		public void accept(Offer ao) {
+			//create new contract based on offer		
+			Contract acceptedOfferContract = new Contract(ao);
+			//attach contract to the car
+		}	
+
+
+		public void processOffers1AtATime(Car car) {
+			int sel = -1;
+			boolean invalidSelection = true;
+			Iterator<Offer> oIt = car.getOffersHSetIterator();
+			//Iterator<Offer> it = this.offers.iterator();
+			Offers offers = car.getOffers();
+			Offer o;
+			
+			//for(Offer o : offers) {
+			while(oIt.hasNext()) {
+				o = oIt.next();
+				o.displayRow();
+				offers.displayOfferMenu();			
+				
+				do {
+					try {
+						switch(UIUtil.getMenuSelection()) {
+							case 1:	//next offer				
+								continue;
+							case 2: //accept offer 
+								accept(o);
+								return;
+							case 3:	//reject offer	
+								reject(o);
+								continue;
+							case 4:
+								break;
+							case 0:
+								break;
+						}
+					} catch (InvalidMenuSelection e) { 
+						//don't ask to try again, that's what the menu, exit option 0, is for.
+					} 				
+				} while(invalidSelection);
+			}
+		}
+		
+		//TODO
+		public void viewPayments() {
+
+		}
 	}
-
 	
 }

@@ -4,7 +4,9 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import com.revature.exceptions.InvalidMenuSelection;
+import com.revature.things.Car;
 import com.revature.things.Offer;
+import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
 /**
@@ -25,18 +27,64 @@ import com.revature.utilities.UIUtil;
  * @author Jarvis Adams
  *
  */
-public class Offers {
+public class OffersMngr {
+	
+	//--------------------------
+	//	Fields
+	//--------------------------
+	
+	Car carNeedingManagement;
+	
+	//--------------------------
+	//	Containers
+	//--------------------------
 	
 	private LinkedHashSet<Offer> offersHSet;
+
+	
+	//--------------------------
+	//	Constructor
+	//--------------------------
+
+	public OffersMngr(Car car) {
+		this.offersHSet = new LinkedHashSet<>();
+		this.carNeedingManagement = car;
+	}
+	
+	
+	//--------------------------
+	//	Methods
+	//--------------------------
 	
 	public LinkedHashSet<Offer> getOffersHSet() {
 		return offersHSet;
 	}
-
-
-	public Offers() {
-		this.offersHSet = new LinkedHashSet<>();
+	
+	
+	/**
+	 * -Adds the offer to the current car's offers hash set.
+	 * -Tries to add the car to the DSys's carsWithOffers container 
+	 * (but it won't if it is already there) 
+	 * @param offer
+	 */
+	public void addOffer(Offer offer) {
+		this.getOffersHSet().add(offer);
+		//Add the car to the cars with Offers container 
+		DSystem.getInstance().carsWithOffers.add(this.carNeedingManagement);
 	}
+	
+	/**
+	 * -Removes the offer from the current car's offers hash set
+	 * -Checks to see if the offers container is empty, and if so, removes the associated car from DSys's carsWithOffers 
+	 * @param offer
+	 */
+	public void removeOffer(Offer offer) {
+		this.getOffersHSet().remove(offer);
+		//if no more offers, then remove the car from the DSystem's offers container
+		if(this.getOffersHSet().isEmpty()) 
+			DSystem.getInstance().carsWithOffers.remove(this.carNeedingManagement);		
+	}
+	
 	
 	/**
 	 * Show the offers on a car.
