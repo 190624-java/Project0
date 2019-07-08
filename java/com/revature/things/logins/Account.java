@@ -56,6 +56,7 @@ public class Account {
 		
 		this.paymentHistory = new LinkedList<>();
 		this.type = -1; //unknown
+		this.loggedIn = false;
 	}
 	
 	
@@ -98,7 +99,7 @@ public class Account {
 	 * For credentials and main menu capabilities
 	 * @return
 	 */
-	private User getUser() {
+	protected User getUser() {
 		return this.user;
 	}
 	
@@ -108,8 +109,8 @@ public class Account {
 		else this.loggedIn = true;		
 	}
 
-	public Garage getGarage() {
-		return garage;
+	public Lot getLot() {
+		return this.lot;
 	}
 
 	public LinkedList<Payment> getPaymentHistory() {

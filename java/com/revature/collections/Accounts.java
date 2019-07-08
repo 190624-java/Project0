@@ -5,6 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
@@ -21,7 +22,7 @@ public class Accounts {
 	//	Fields
 	//---------------------------
 	
-	private HashMap<Integer,Account> accounts;
+	private HashMap<Integer,Account> accountsMap;
 	private Employee ownerOfDealership; //used for creation of employee accounts
 	protected DSystem dSys;
 	private Account activeAccount;
@@ -33,7 +34,7 @@ public class Accounts {
 	
 	
 	public Accounts(Employee owner){
-		this.accounts = new HashMap<>();
+		this.accountsMap = new HashMap<>();
 		this.ownerOfDealership = owner;
 		this.dSys = DSystem.getInstance();
 		authenticator = new Authenticator();
@@ -48,45 +49,35 @@ public class Accounts {
 	}
 
 	
-	public void showCreationMenu() {
-		System.out.println("Enter Type of Account: ");
-		System.out.println("1 - Employee");
-		System.out.println("2 - Customer");
-		System.out.println("0 - Exit");
-	}
+
 	
 	
 	/**
 	 * Additionally checks for type of user.
-	 * If choosing Employee, dealership owner user password 
-	 * must be entered as a form of admin approval to become
-	 * an employee.
+	 * If choosing Employee, 
+	 * - dealership owner's user password must be entered as 
+	 *   a form of admin approval to become an employee.
+	 * If 
 	 * @param driversID
 	 * @param passHash
 	 */
-	public void createAccount(int driversID, int passHash) throws UserExit{
-
-		Scanner s = new Scanner(System.in);
-		int choice = -1;
-		
+	public void createAccount(int driversID, int passHash) throws UserExit{		
+		int choice = -1;		
 		boolean needAuthorization = true;
 		
 		UIUtil ui = new UIUtil();
-		boolean cont = true;
+		boolean doMenu = true;
 		
 	
-		do {
-			ui.clearScreen();
-			showCreationMenu();
-			try {
-			choice = s.nextInt();
-			}catch(Exception e) {
-				ui.printException(e);
-				if(!ui.determineContinue()) {s.close();throw new UserExit();} //exit creation process
-			}
-		}while(choice>0 && choice<4);
+		//Display Menu and Get Menu Choice
+		do {			
+			dSys.mPrint.accountCreation();			
+			choice = UIUtil.getMenuSelection();
+			if(choice>0 || choice<4) doMenu = false;
+			else {UIUtil.echoProblem("Invalid Choice. Must be a menu number");}
+		}while(doMenu);
 		
-		//Handle the choice
+		//Handle the Menu Choice
 		switch(choice) {
 			case 1: { //employee
 					try{this.seekAuthorization();} //throws UserExit
@@ -94,19 +85,18 @@ public class Accounts {
 						s.close();
 						throw ue;
 					}
-					this.accounts.put(driversID, new Account(
+					this.accountsMap.put(driversID, new Account(
 							driversID, passHash, UserTypes.EMPLOYEE
 							));
 					break;
 			}
 			case 2: { //customer
-				this.accounts.put(driversID, new Account(
+				this.accountsMap.put(driversID, new Account(
 						driversID, passHash, UserTypes.CUSTOMER
 						));
 				break;
 			}
 			case 3: { //exit
-				s.close(); 
 				throw new UserExit(); 
 			}
 		} //end switch
@@ -160,7 +150,7 @@ public class Accounts {
 
 	
 	public Account getUserAccount(int driversID) {
-		return accounts.get(driversID);
+		return accountsMap.get(driversID);
 	}
 	
 
@@ -196,8 +186,10 @@ public class Accounts {
 	//save the user's information to the files,
 	//unlink the user
 	//exit the main menu
-	public void logOut() {
-		this
+	public void logOut(Account acc) {
+		try {
+			acc.setLoggedIn(false);
+		} catch (LogOut e) {}
 	}
 
 	public class Authenticator{
@@ -210,7 +202,7 @@ public class Accounts {
 		
 		
 		public boolean passwordMatchesUser(int userID, int passHash) {
-			if(accounts.get(userID).getPassword().passwordMatches(passHash)) return true;
+			if(accountsMap.get(userID).getPassword().passwordMatches(passHash)) return true;
 			else return false;
 		}
 		
@@ -222,7 +214,7 @@ public class Accounts {
 
 		
 		public boolean hasUser(int licenseID) {
-			return accounts.containsKey(licenseID);
+			return accountsMap.containsKey(licenseID);
 		}
 		
 		

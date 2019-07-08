@@ -49,13 +49,17 @@ public class Offers {
 				  "----------------------"
 				+ "       Offers"
 				+ "----------------------");
-		displayOfferColumns();		
+		displayAllCarsOfferColumns();		
 		displayOfferRows();
 		
 	}
 	
 	
-	public void displayOfferColumns() {
+	public void displayAllCarsOfferColumns() {
+		System.out.println("OfferID\t\t"+"CAR\t\t"+"CUSTOMER\t\t"+"AMOUNT\t\t");
+	}
+	
+	public void displayOneCarsOfferColumns() {
 		System.out.println("OfferID\t\t"+"CUSTOMER\t\t"+"AMOUNT\t\t");
 	}
 	
@@ -67,7 +71,7 @@ public class Offers {
 	
 	public void displayOfferRows() {
 		for(Offer o : offersHSet) {
-			o.displayRow();
+			o.displayOneCarsRow();
 		}
 	};
 	

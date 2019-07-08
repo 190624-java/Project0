@@ -56,7 +56,16 @@ public class Offer {
 	 * Format: 
 	 * OfferID		CustomerID		OfferAmount 
 	 */
-	public void displayRow() {		
+	public void displayOneCarsRow() {		
+		System.out.println(getOfferID()+"\t\t"+getOfferee().getDriversID()+"\t\t"+this.getAmount());
+	}
+	
+	/**
+	 * Displays the data only, so it can be output as rows in the Offers class.
+	 * Format: 
+	 * OfferID		CarID   	CustomerID  	OfferAmount 
+	 */
+	public void displayAllCarsRow() {		
 		System.out.println(getOfferID()+"\t\t"+getOfferee().getDriversID()+"\t\t"+this.getAmount());
 	}
 

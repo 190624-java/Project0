@@ -10,6 +10,7 @@ import java.util.Scanner;
 import com.revature.collections.Accounts;
 import com.revature.collections.lots.Lot;
 import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
@@ -78,14 +79,14 @@ public class DSystem {
 	public final MenuPrinter mPrint = new MenuPrinter();
 	private Lot dLot;
 	
-	private Accounts accounts;
+	private Accounts accountsObj;
 	//private String dealershipName;
 	private EmployeeAccount dealer;
 //	private Scanner scanner;
 		
 	private DSystem() {
 		this.dealer = new EmployeeAccount(-1000000, "admin".hashCode());
-		this.accounts = new Accounts(dealer);
+		this.accountsObj = new Accounts(dealer);
 		this.dLot = new Lot(100,this.dealer);	
 		
 	}
@@ -95,11 +96,6 @@ public class DSystem {
 	};
 	
 
-	public static float calMonthlyPayment(User carOwner, Car ownedCar) {
-		
-		return 0;
-		
-	}
 	
 //	/**
 //	 * Go through all the offers on the car.
@@ -124,7 +120,7 @@ public class DSystem {
 	 */
 	public void beginLogin() throws UserExit {
 	//Method 2
-		Integer userID = accounts.getAuthenticator().authenticateUser();
+		Integer userID = accountsObj.getAuthenticator().authenticateUser();
 		//authenticate will throw an exception if problem occurs and
 		//user cancels, otherwise it will not be null.		
 		if(userID==null) {
@@ -133,29 +129,37 @@ public class DSystem {
 		}
 		
 		//is already a particular type upon account creation
-		Account acc = accounts.getUserAccount(userID.intValue());
+		Account acc = accountsObj.getUserAccount(userID.intValue());
 		
 		//test which type of employee it is.		
 		// if it is a Customer, then display customer menu		
 		// if it is an employee, then display the employee menu		
 		//start that particular menu until logout		
-		switch(acc.getAccountType()) {
-			case UserTypes.CUSTOMER:
-				Logins.serveCustomer();
-				break;
-			case UserTypes.EMPLOYEE:
-				Logins.serveEmployee();
-				break;
-			case UserTypes.DEALER:
-				Logins.serveEmployee();
-				break;
-		}
+		try {			
+			acc.start();
+		} catch (LogOut e) {
+			this.accountsObj.logOut(acc);
+		}		
 		UIUtil.echoCompletion("finished serving account");
 	}
 
 	
 	
-	//TODO
+	/**
+	 * Gets:
+	 * - Username (i.e. the driversID) 
+	 * - Password
+	 * 
+	 * Authenticates them as: 
+	 * - unique (new relative to existing accounts)
+	 * - valid format
+	 * 
+	 * Begins creation or Exits
+	 * 
+	 * Has various checks and loops for input corrections.
+	 * 
+	 * @throws UserExit exit to main system menu
+	 */
 	public void tryCreateAccount() throws UserExit {
 		//local variables
 		//------------------------------------
@@ -182,12 +186,16 @@ public class DSystem {
 			catch(InputMismatchException e) {
 				System.out.println("Invalid entry. ID must be a number.");
 				if(UIUtil.determineContinue()) continue; //restart do..while
-				else return;
+				else {
+					System.out.println("Exiting to main menu");
+					return; //exit to main menu
+				}
 			} catch (InvalidInput e) {
 				e.printMessage(); //should have been integer
+				continue; //start the loop over to get a User ID
 			}
 			//Check UserID
-			if(accounts.hasUser(driversID)) {				
+			if(accountsObj.getAuthenticator().hasUser(driversID)) {				
 				System.out.println("Error: Username Already Exists\n");
 				noExit = UIUtil.determineContinue();
 			}
@@ -211,7 +219,7 @@ public class DSystem {
 				p2 = UIUtil.s.nextLine();
 				UIUtil.echo(p2);
 				
-				accounts.checkPasswords(p1,p2);
+				accountsObj.getAuthenticator().checkPasswords(p1,p2);
 				System.out.println("Password Accepted");
 				//no exception, then passwords check.
 				needPassword = false; //continue, break from while loop
@@ -221,7 +229,7 @@ public class DSystem {
 			}		
 		}while(needPassword);
 		
-		if(!needPassword) accounts.createAccount(driversID,p1.hashCode());
+		if(!needPassword) accountsObj.createAccount(driversID,p1.hashCode());
 		System.out.println("Account Created.\n");
 		//end--------------------------------------------------------
 	}
@@ -235,7 +243,7 @@ public class DSystem {
 		
 	}
 	
-	public Lot getdLot() {
+	public Lot getDealershipLot() {
 		return dLot;
 	}
 
@@ -276,9 +284,16 @@ public class DSystem {
 			System.out.println("\t\t"+"2 - Accept or Reject an Offer");
 			System.out.println("\t\t"+"3 - Remove a car from the lot");
 			System.out.println("\t\t"+"4 - View all payments for a car");
+			System.out.println("\t\t"+"5 - View all payments for a car");
 			System.out.println("\t\t"+"0 - Exit");
 		}
 		
+		public void accountCreation() {
+			System.out.println("Enter Type of Account: ");
+			System.out.println("1 - Employee");
+			System.out.println("2 - Customer");
+			System.out.println("0 - Exit");
+		}
 		
 		
 //		/**

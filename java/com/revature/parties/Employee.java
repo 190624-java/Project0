@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import com.revature.collections.Contract;
 import com.revature.collections.Offers;
-import com.revature.collections.lots.Lot;
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.things.Car;
 import com.revature.things.Offer;
@@ -47,14 +47,35 @@ public class Employee extends User{
 	//	Methods
 	//----------------------
 	
-	//TODO
-	public void addCarToLot(Car car, Lot lot) {
-		//find an empty location in the lot
-		Car space = findEmptyLotSpace(lot);
-		if(space==null)
-		lot.parkCar(car, spaceNumber)
-	}
+
 	
+	/**
+	 * Displays the park car UI to get a car description from the user
+	 * Exits with 
+	 * 	-1 if car not found
+	 * 	1 - car found, successful park
+	 *  0 - car found, failed park
+	 * 
+	 * 
+	 */
+	public int parkCar() {		
+		long carRegID = -1;
+		boolean carNotFound= true;
+		
+		do {
+			System.out.println("Enter the Car Registration ID");
+			try {
+				carRegID = UIUtil.getLong();
+			} catch (InvalidInput e) {
+				e.printMessage();				
+				//keep checking for Registration ID
+				continue;
+				//return -1; //go back to the dSys's account menu
+			}
+			carNotFound = this.account.getGarage();
+			
+		}while(carNotFound);		
+	}
 
 	public void reject(Offer o) {
 		// TODO Auto-generated method stub

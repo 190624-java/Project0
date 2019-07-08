@@ -63,7 +63,7 @@ public class Customer extends User {
 	 * @param ownedLot
 	 */
 	public void viewPrivateLot(Lot ownedLot) {
-		Lot g = this.account.getGarage();
+		Lot g = this.account.getLot();
 		
 		System.out.println(
 				  "-------------------\n"

@@ -56,10 +56,6 @@ public class Lot {
 	}
 	
 	
-	public void setOwner(User user) {
-		this.owner = user;
-	}
-	
 	/**
 	 * 
 	 * @param id
@@ -79,33 +75,14 @@ public class Lot {
 		
 	}
 	
-	
-	
-	/**
-	 * Displays the park car UI to get a car description from the user
-	 * Exits with 
-	 * 	-1 if car not found
-	 * 	1 - car found, successful park
-	 *  0 - car found, failed park
-	 * 
-	 * 
-	 */
-	public int parkCar() {		
-		long carRegID = -1;
-		boolean carNotFound= true;
-		
-		do {
-			System.out.println("Enter the Car Registration ID");
-			try {
-				carRegID = UIUtil.getLong();
-			} catch (InvalidMenuSelection e) {
-				e.printError();
-				return -1; //go back to the dSys's account menu
-			}
-			carNotFound = spaces.contains(new Car())
-			
-		}while(carNotFound);		
-	}
+//	//TODO
+//	public void addCarToLot(Car car, Lot lot) {
+//		//find an empty location in the lot
+//		Car space = lot.findSpace();
+//		if(isSpace(space))
+//			lot.parkCar(car, spaceNumber)
+//	}
+
 	
 	/**	 
 	 * 
@@ -114,14 +91,21 @@ public class Lot {
 	 * if a blank space can be found on the lot, then it will be parked and 
 	 * true will be returned,
 	 * else false will be returned.
+	 * @throws NoParkingAvailable 
 	 */
-	public boolean parkCar(Car car) {
+	public boolean addCar(Car car) throws NoParkingAvailable {
 		
 		//if a blank space can be found on the lot, then it will be parked and 
+		Car freeSpace = this.findSpace();
 		//true will be returned.
+		if(isSpace(freeSpace)) {
+			freeSpace = car;
+			return true;
+		}
 		//else false will be returned.
 		return false;
 	}
+	
 	
 	/**
 	 * 
@@ -129,7 +113,7 @@ public class Lot {
 	 * @param spaceNumber
 	 * @return
 	 */
-	public boolean parkCar(Car car, Car carSpace) {
+	public boolean addCarToSpace(Car car, Car carSpace) {
 		//if the car can be parked in the space, it will return true.
 		if(isSpace(carSpace)) {
 			carSpace = car;
@@ -139,7 +123,7 @@ public class Lot {
 		return false;
 	}
 	
-//	public boolean parkCar(Car car, int spaceNumber) {
+//	public boolean addCarToSpace(Car car, int spaceNumber) {
 //		//if the car can be parked in the space, it will return true.
 //		//else return's false, indicating the parking space is full or invalid
 //		return true;
