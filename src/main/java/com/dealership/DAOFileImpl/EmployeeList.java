@@ -1,4 +1,4 @@
-package com.dealership;
+package com.dealership.DAOFileImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +11,10 @@ import java.security.AccessControlException;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.dealership.Employee;
+import com.dealership.User;
+import com.dealership.DAOinterface.EmployeeAccessor;
+
 /**
  * A hashset-wrapping record of registered employees.
  * Modifying the hashset requires employees with mid to high level access
@@ -18,7 +22,7 @@ import java.util.Set;
  * and used to create first user
  *
  */
-public class EmployeeList extends UserList{
+public class EmployeeList extends UserList implements EmployeeAccessor{
 	private static final float RESTRICTED_ACTION_RATIO = 0.5f; 
 	private static final String EMPLOYEE_FILE = "Employee_Data.txt";
 	private static EmployeeList INSTANCE;
@@ -43,7 +47,7 @@ public class EmployeeList extends UserList{
 	
 	public Employee findByID(String id) {
 		for(User user: userList) {
-			if(((Employee) user).id.equals(id))
+			if(((Employee) user).getId().equals(id))
 				return (Employee) user;
 		}
 		return null;
@@ -74,8 +78,8 @@ public class EmployeeList extends UserList{
 			if(verifier.isAdmin() || verifier.isManager()) {
 				if(verifier.isManager() && newbie.getAccessLevel() != 'S')
 				{
-					throw new AccessControlException("Provided user (" + verifier.id + 
-							") does not have authorization to add user (" + newbie.id +
+					throw new AccessControlException("Provided user (" + verifier.getId() + 
+							") does not have authorization to add user (" + newbie.getId() +
 							") at or above manager level.\nPlease add as sales and then promote if needed.");
 				}
 				if(containsUser(newbie))
@@ -85,13 +89,13 @@ public class EmployeeList extends UserList{
 					newbie.validateAndUpdateID(this);
 					userList.add(newbie);
 					System.out.println("Successfully added employee. ID is " + newbie.getId() +
-							" and password is " + newbie.password + ". These will be needed to login, please remember them.");
+							" and password is " + newbie.getPassword() + ". These will be needed to login, please remember them.");
 				}
 				
 			}
 			else
-				throw new AccessControlException("Provided user (" + verifier.id + 
-						") does not have authorization to add user (" + newbie.id + ")");
+				throw new AccessControlException("Provided user (" + verifier.getId() + 
+						") does not have authorization to add user (" + newbie.getId() + ")");
 		}
 	}
 	
@@ -104,7 +108,7 @@ public class EmployeeList extends UserList{
 		{
 			if(!userList.contains(emp))
 			{
-				throw new AccessControlException("Warning: An endorser to a restricted action (" + emp.id + 
+				throw new AccessControlException("Warning: An endorser to a restricted action (" + emp.getId() + 
 						") is not within the list of employees attempted to modify");
 			}
 			

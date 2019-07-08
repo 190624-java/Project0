@@ -1,4 +1,4 @@
-package com.dealership;
+package com.dealership.DAOFileImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,7 +9,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashSet;
 
-public class CustomerList extends UserList{
+import com.dealership.Customer;
+import com.dealership.User;
+import com.dealership.DAOinterface.CustomerAccessor;
+
+public class CustomerList extends UserList implements CustomerAccessor{
 
 	private static final String CUSTOMER_FILE = "Customer_Data.txt";
 	private static CustomerList INSTANCE;
@@ -35,7 +39,7 @@ public class CustomerList extends UserList{
 	}
 
 	public boolean addCustomer(User cust) {
-		if(getInstance().containsID(cust.id))
+		if(getInstance().containsID(cust.getId()))
 		{
 			return false;
 		}
@@ -48,7 +52,7 @@ public class CustomerList extends UserList{
 	
 	public Customer findByID(String id) {
 		for(User user: userList) {
-			if(((Customer) user).id.equals(id))
+			if(((Customer) user).getId().equals(id))
 				return (Customer) user;
 		}
 		return null;

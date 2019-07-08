@@ -5,6 +5,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.dealership.DAOFileImpl.EmployeeList;
+
 /*
  * Can add or remove cars from a lot, accept or reject offers in the system, view all payments in system
  */
@@ -12,16 +14,6 @@ public class Employee extends User {
 	public static final Employee SYSTEM_ACCOUNT = new Employee();
 	private static transient final String SYSTEM_PW = "CtrlAltDel"; // Super secret, don't share
 	private char accessLevel;
-	
-	/*
-	 * An employee is given an id on creation. They are also given an access level
-	 * 
-	 * On start, System will attempt to read an employee list.
-	 * If none is found, it will create an admin account for the system and prompt for a user to create an account.
-	 * 
-	 * Employees may be promoted from any level if they have approval by an admin or a majority of managers.
-	 * 
-	 */
 	
 	public static Employee createEmployee()
 	{
@@ -69,7 +61,7 @@ public class Employee extends User {
 		this.firstName = "System";
 		this.lastName = "Account";
 		this.id = "sys_acct";
-		this.password = SYSTEM_PW;
+		this.setPassword(SYSTEM_PW);
 		this.accessLevel = 'A';
 	}
 	
@@ -170,7 +162,7 @@ public class Employee extends User {
 
 	@Override
 	public String toString() {
-		return "Employee [accessLevel=" + accessLevel + ", id=" + id + ", password=" + password + ", firstName="
+		return "Employee [accessLevel=" + accessLevel + ", id=" + id + ", password=" + getPassword() + ", firstName="
 				+ firstName + ", lastName=" + lastName + "]";
 	}
 

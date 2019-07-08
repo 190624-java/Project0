@@ -1,4 +1,4 @@
-package com.dealership;
+package com.dealership.DAOFileImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashSet;
+
+import com.dealership.Car;
+import com.dealership.Customer;
+import com.dealership.Loan;
+import com.dealership.Offer;
 
 public class OfferList {
 	private static OfferList instance; 

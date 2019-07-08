@@ -3,16 +3,16 @@ package com.dealership;
 import java.io.Serializable;
 import java.util.Scanner;
 
-abstract class User implements Serializable {
+abstract public class User implements Serializable {
 	protected String id;
-	protected String password;
+	private String password;
 	protected String firstName;
 	protected String lastName;
 
 	
 	public boolean checkLogin(String id, String password)
 	{
-		if(id.equals(this.id) && password.equals(this.password))
+		if(id.equals(this.id) && password.equals(this.getPassword()))
 			return true;
 		return false;
 	}
@@ -24,12 +24,12 @@ abstract class User implements Serializable {
 	
 	public void assignNewPassword()
 	{
-		if(this.password == null)
+		if(this.getPassword() == null)
 		{
 			System.out.println("Enter a password for this user");
 			try
 			{
-				this.password = DealershipDriver.inScan.nextLine();
+				this.setPassword(DealershipDriver.inScan.nextLine());
 			}
 			catch(Exception e)
 			{
@@ -37,12 +37,12 @@ abstract class User implements Serializable {
 			}
 			
 		}
-		else if(this.password.isEmpty())
+		else if(this.getPassword().isEmpty())
 		{
 			System.out.println("Enter a password for this user");
 			try
 			{
-				this.password = DealershipDriver.inScan.nextLine();
+				this.setPassword(DealershipDriver.inScan.nextLine());
 			}
 			catch(Exception e)
 			{
@@ -57,5 +57,13 @@ abstract class User implements Serializable {
 	
 	public String getName() {
 		return (firstName + " " + lastName);
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -3,6 +3,11 @@ package com.dealership;
 import java.security.AccessControlException;
 import java.util.Scanner;
 
+import com.dealership.DAOFileImpl.CustomerList;
+import com.dealership.DAOFileImpl.EmployeeList;
+import com.dealership.DAOFileImpl.LoanList;
+import com.dealership.DAOFileImpl.OfferList;
+
 public class DealershipDriver {
 	public static User activeAccount;
 	public static Scanner inScan;
@@ -60,7 +65,7 @@ public class DealershipDriver {
 			while(!adminAcctExists)
 			{
 				registerAccount();
-				for(User emp : EmployeeList.getInstance().userList)
+				for(User emp : EmployeeList.getInstance().getUserList())
 				{
 					if(((Employee) emp).isAdmin())
 					{

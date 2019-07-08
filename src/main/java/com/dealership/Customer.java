@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import com.dealership.DAOFileImpl.CustomerList;
+
 public class Customer extends User implements Serializable {
 	
 
@@ -69,6 +71,6 @@ public class Customer extends User implements Serializable {
 	@Override
 	public String toString() {
 		return "Customer [offers=" + offers + ", ownedCars=" + ownedCars + ", loans=" + loans + ", id=" + id
-				+ ", password=" + password + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+				+ ", password=" + getPassword() + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 }

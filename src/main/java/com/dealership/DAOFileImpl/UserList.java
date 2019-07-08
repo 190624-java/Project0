@@ -1,6 +1,8 @@
-package com.dealership;
+package com.dealership.DAOFileImpl;
 
 import java.util.HashSet;
+
+import com.dealership.User;
 
 public abstract class UserList {
 	
@@ -25,5 +27,9 @@ public abstract class UserList {
 	public boolean isEmpty()
 	{
 		return userList.isEmpty();
+	}
+	
+	public HashSet<User> getUserList() {
+		return userList;
 	}
 }
