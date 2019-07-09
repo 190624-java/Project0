@@ -14,7 +14,7 @@ import com.revature.things.logins.Account;
  */
 public class User {
 
-	private Account account;
+	protected Account account;
 	protected int driversID;
 
 //	/**

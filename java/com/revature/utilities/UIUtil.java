@@ -120,16 +120,17 @@ public class UIUtil {
 	}
 	
 	
-	public static int getMenuSelection() throws InvalidMenuSelection{
+	public static int getMenuSelection() throws InvalidInput{
 		int sel;
 		try {
+			System.out.println("Enter a menu number: ");
 			sel = UIUtil.s.nextInt(); // get the menu selection
 			UIUtil.s.nextLine(); //to get the newline character
 			return sel;
 		}
 		catch(Exception e) {
-			UIUtil.echoProblem("Invalid Selection");
-			throw new InvalidMenuSelection();
+			UIUtil.echoProblem("Invalid Input");
+			throw new InvalidInput();
 		}
 	}
 	

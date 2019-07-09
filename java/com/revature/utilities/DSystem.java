@@ -11,16 +11,22 @@ import java.util.Scanner;
 import com.revature.collections.AccountsMngr;
 import com.revature.collections.lots.Lot;
 import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.NoUppercase;
 import com.revature.exceptions.UserExit;
+import com.revature.interfaces.BasicsMenu;
+import com.revature.interfaces.InputTask;
+import com.revature.interfaces.Menu;
 import com.revature.main.UserTypes;
+import com.revature.parties.Customer;
 import com.revature.parties.Employee;
 import com.revature.things.Car;
 import com.revature.things.Offer;
 import com.revature.things.Password;
 import com.revature.things.logins.Account;
+import com.revature.things.logins.CustomerAccount;
 import com.revature.things.logins.EmployeeAccount;
 
 
@@ -171,12 +177,27 @@ public class DSystem {
 		//test which type of employee it is.		
 		// if it is a Customer, then display customer menu		
 		// if it is an employee, then display the employee menu		
-		//start that particular menu until logout		
-		try {			
-			acc.start();
+		//start that particular menu until logout
+		
+		//Method 2
+		try {		
+			switch(acc.getAccountType()) {
+				case UserTypes.CUSTOMER:					
+					((CustomerAccount)acc).start();
+				case UserTypes.EMPLOYEE:
+					((EmployeeAccount)acc).start();
+				case -1: //basic account
+					System.out.println("Problem with account type being undefined");
+					return;
+			}			
 		} catch (LogOut e) {
 			this.accountsMngr.logOut(acc);
-		}		
+			UIUtil.echo("User Exited Employee Services");
+		}	
+		
+		//Method 1
+		//acc.start();
+		
 		UIUtil.echoCompletion("finished serving account");
 	}
 
@@ -325,9 +346,10 @@ public class DSystem {
 	
 	
 	/**
+	 *
 	 * Prints menus most directly related to the assignment.
 	 * @author J
-	 *
+	 * @deprecated
 	 */
 	public class MenuPrinter {
 		
@@ -396,6 +418,223 @@ f		 * 	- remove a car from the lot.
 	}
 	
 	class FileLoader{
+		
+	}
+	
+	class Menus {
+		
+		
+		class SystemMenus{
+			
+			class Main<T> extends BasicsMenu<T>{			
+				
+				AccountCreate<T> accountCreationMenu = new AccountCreate<>();
+				
+				public Main() {
+					super("Main",2);
+					
+				}
+
+				@Override
+				public void display() {
+					System.out.println("Hello! Welcome to the Dealership System!\n");
+//					System.out.println("Enter a menu number: ");
+					System.out.println("\t\t"+"1 - Login");
+					System.out.println("\t\t"+"2 - Create Account");
+					System.out.println("\t\t"+"0 - Exit");			
+				}
+
+
+				@Override
+				public void react(T user) {
+					switch(this.selection) {
+						case 1:
+							//TODO - Run LogIn InputTask
+						case 2:
+							//call account creation menu
+							accountCreationMenu.run(null);
+							break;
+						case 3:
+							this.exitMenu();
+					}
+					
+				}
+				
+			}
+		
+//			class LogIn<T> extends InputTask<T>{
+//	
+//				public LogIn() {
+//					super("Log-In");
+//				}
+//	
+//				@Override
+//				public void display() {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//	
+//				@Override
+//				public void react(T user) {
+//					switch(this.selection) {
+//						case 1:
+//							
+//							break;
+//						case 2:
+//							
+//							break;
+//						case 3:
+//							
+//							break;
+//					}
+//					
+//				}
+//	
+//							
+//			}//menu
+			
+			class AccountCreate<T> extends BasicsMenu<T>{
+				
+				public AccountCreate() {
+					super("Account Creation",2);
+				}
+
+				@Override
+				public void display() {
+					System.out.println("Enter Type of Account: ");
+					System.out.println("1 - Employee");
+					System.out.println("2 - Customer");
+					System.out.println("0 - Exit");
+					
+				}
+
+				@Override
+				public void react(T user) {
+					// TODO Auto-generated method stub
+					switch(this.selection) {
+						case 1:
+							//TODO - DSystem.getInstance().accountsMngr.createAccount(//driversID, //pass);
+							//employeeMainMenu.react(null);
+							//call Employee Creation InputTask
+							//employeeMainMenu.run();
+							break;
+						case 2:
+							//TODO - call Customer Creation InputTask
+							//customerMainMenu.run();
+							break;
+						case 3:
+							this.exitMenu();
+							
+					}
+				}
+				
+			}//menu
+		
+			
+		}//System Menus
+		
+		
+		
+		class EmployeeMain<T> extends BasicsMenu<T>{
+
+			public EmployeeMain() {
+				super("Employee Main",4);
+			}
+
+			@Override
+			public void display() {
+				System.out.println("\t\t"+"1 - Add a car to the lot");
+				System.out.println("\t\t"+"2 - Accept or Reject an Offer"); //#TODO
+				System.out.println("\t\t"+"3 - Remove a car from the lot"); //#TODO
+				System.out.println("\t\t"+"4 - View all payments"); //#TODO
+				System.out.println("\t\t"+"0 - Exit");
+				
+			}
+
+			@Override
+			public void react(T user) {
+				switch(this.selection) {
+					case 1:
+						//TODO - CarID InputTask
+						//TODO - Create a CreateCar_InputTask
+						//TODO - call Employee.core.addCarToLot(car); 
+						break;
+					case 2:
+						//TODO - Get Offers
+						//TODO - (For each set of 5 offers or less) || (Until ExitMenu), make a Offers Menu and call it's run
+						// this will repeatably allow the core task functions of Employee:
+						// - Employee.core.accept(offersList, offerToRemove) (creates a contract, calls the DSystem.core. 
+						// - Employee.core.reject(offersList, offerToRemove)						
+						break;
+					case 3:
+						//TODO - Get DealershipLot DSystem.getInstance.dLot;
+						
+						//Method1
+						//TODO - Run the CarID InputTask
+						
+						//Method2
+						//TODO - For each non-empty space in the lot, add the CarSpace to a list
+						//TODO - (For every 5 items in the list) || (Until ExitMenu), create and run a RemoveCar Menu
+						// this will repeatably allow the core task function of Employee: 
+						// - Employee.core.removeCar  (car)||(carID)||(lot,car)||...; 
+						break;
+					case 4:
+						
+						break;
+					case 0:
+						break;
+				}
+				
+			}
+
+						
+		}
+		
+		class CustomerMain<T> extends BasicsMenu<T>{
+
+			public CustomerMain() {
+				super("Customer Main",4);
+			}
+
+			@Override
+			public void display() {
+				System.out.println("\t\t"+"1 - View Cars on the Dealer Lot");
+				System.out.println("\t\t"+"2 - Make an Offer on a car"); 
+				System.out.println("\t\t"+"3 - View My Car Lot");
+				System.out.println("\t\t"+"4 - View remaining payments for a car");
+				System.out.println("\t\t"+"0 - Exit");
+				
+			}
+
+			@Override
+			public void react(T user) {
+				switch(this.selection) {
+					case 1:
+						
+						break;
+					case 2:
+						
+						break;
+					case 3:
+						
+						break;
+					case 4:
+					
+						break;
+					case 0:
+						break;
+				}
+				
+			}
+
+						
+		}
+		
+		
+		
+		
+		
+		
 		
 	}
 

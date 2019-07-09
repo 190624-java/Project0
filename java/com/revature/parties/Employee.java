@@ -75,7 +75,8 @@ public class Employee extends User{
 				continue;
 				//return -1; //go back to the dSys's account menu
 			}
-			carNotFound = this.account.getGarage();
+			this.account.getLot();
+			carNotFound = ;
 			
 		}while(carNotFound);		
 	}

@@ -67,7 +67,9 @@ public class Account {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		basicInit();
+		this.userPaymentHistory = new LinkedList<>();
+		this.loggedIn = false;
+		this.lot = new Lot(10,this);	
 
 		//---------
 		//Overrides
@@ -79,13 +81,7 @@ public class Account {
 	//------------------------
 	//	Methods
 	//------------------------		
-	
-	private void basicInit() {
-		this.userPaymentHistory = new LinkedList<>();
-		this.loggedIn = false;
-		this.lot = new Lot(10,this.user);		
-	}
-	
+
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}

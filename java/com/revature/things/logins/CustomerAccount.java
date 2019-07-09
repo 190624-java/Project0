@@ -19,32 +19,50 @@ public class CustomerAccount extends Account{
 
 	@Override
 	public int start() throws LogOut {
+		//-------------------------------------------
+		//Login
 		try {
 			this.setLoggedIn(true);
 		} catch (LogOut e1) {
 			e1.printStackTrace();
 		}
-		int sel;
+		//-------------------------------------------
+		//Display Menu, Get Selection, Test Selection
+		int sel = -1;
 		while(isLoggedIn()){
+			//Display Menu
 			dSys.mPrint.customer();
 			try {
-				sel = UIUtil.getMenuSelection();				
+				//Get Selection
+				sel = UIUtil.getMenuSelection();
+				//Test Selection
 				switch(serveCustomer(sel)) {
 					case 0: return 0; //user chose menu option "exit"
 					case -1: break; //something went wrong
 					case 1: break; //task complete
 				}				
 			} catch (UserExit e) { 
-				UIUtil.echo("User Exited Employee Services");
-				this.setLoggedIn(false); //throws LogOut
+				this.logout();
 				//return 1;
 			} catch (InvalidMenuSelection e) {
 				UIUtil.echoProblem("Invalid Selection");
 				//if(!UIUtil.determineContinue()) return -1; //something went wrong
 			}
 		}
+		
+		//-------------------------------------------
+		//React to selection
+		try {
+			this.serveCustomer(sel);
+		} catch (UserExit e) {
+			this.logout();
+		}
 		return 1;
 		
+	}
+
+	private void logout() throws LogOut{		
+		this.setLoggedIn(false);		
 	}
 
 	//TODO

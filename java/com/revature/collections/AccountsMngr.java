@@ -192,13 +192,24 @@ public class AccountsMngr {
 	}
 	
 	//TODO 
-	//save the user's information to the files,
-	//unlink the user
-	//exit the main menu
+	//Save the user's information to the files,
+	//Unlink the user
+	//Exit the main menu
 	public void logOut(Account acc) {
 		try {
+			this.save();
 			acc.setLoggedIn(false);
-		} catch (LogOut e) {}
+		} catch (LogOut e) {
+			System.out.println("Information saved. Logged out.\n");
+		}
+	}
+
+	//TODO
+	/**
+	 * Save data to file
+	 */
+	private void save() {		
+		
 	}
 
 	public class Authenticator{
