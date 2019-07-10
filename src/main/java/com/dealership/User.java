@@ -1,7 +1,6 @@
 package com.dealership;
 
 import java.io.Serializable;
-import java.util.Scanner;
 
 abstract public class User implements Serializable {
 	protected String id;
@@ -58,6 +57,12 @@ abstract public class User implements Serializable {
 	public String getName() {
 		return (firstName + " " + lastName);
 	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
 
 	public String getPassword() {
 		return password;
@@ -65,5 +70,8 @@ abstract public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }

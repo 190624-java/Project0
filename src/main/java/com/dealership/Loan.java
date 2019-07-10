@@ -6,6 +6,14 @@ public class Loan implements Serializable {
 
 	public Customer loanHolder;
 	private int totalMonths;
+	public int getTotalMonths() {
+		return totalMonths;
+	}
+
+	public void setTotalMonths(int totalMonths) {
+		this.totalMonths = totalMonths;
+	}
+
 	public int remainingMonths;
 	public double annualInterestRate;
 	public double principal;
@@ -27,6 +35,15 @@ public class Loan implements Serializable {
 		this.loanHolder = loanHolder;
 	}
 	
+	public Loan(double principal, double annualInterestRate, int totalMonths, int remainingMonths, double pastPayments, Customer loanHolder)
+	{
+		this.principal = principal;
+		this.annualInterestRate = annualInterestRate;
+		this.totalMonths = totalMonths;
+		this.remainingMonths = remainingMonths;
+		this.pastPayments = pastPayments;
+		this.loanHolder = loanHolder;
+	}
 	public void pay()
 	{
 		double monthly = calculateMonthlyPayment();

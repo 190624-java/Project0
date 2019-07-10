@@ -3,7 +3,6 @@ package com.dealership;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Scanner;
 
 import com.dealership.DAOFileImpl.CustomerList;
 
@@ -24,6 +23,16 @@ public class Customer extends User implements Serializable {
 		
 	}
 	
+	public Customer(String id, String password, String firstName, String lastName) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.id = id;
+		this.setPassword(password);
+		offers = new HashSet<Offer>();
+		ownedCars = new ArrayList<Car>();
+		loans = new ArrayList<Loan>();
+	}
+	
 	public void displayOffers() {
 		offers.forEach(offer -> {
 			System.out.println("Offer on: " + offer.car.toString() + "\n\tOffer amount: " + String.valueOf(offer.amount));
@@ -42,6 +51,7 @@ public class Customer extends User implements Serializable {
 		}
 	}
 	
+	//TODO have scanner be a parameter rather than referencing it from the driver
 	public static Customer createCustomer()
 	{
 		String fName = ""; String lName = ""; String id = "";
@@ -57,6 +67,10 @@ public class Customer extends User implements Serializable {
 			}
 			finally
 			{
+				Customer newCust = new Customer(fName, lName, id);
+				newCust.assignNewPassword();
+				return newCust;
+				/*
 				if(!CustomerList.getInstance().containsID(id))
 				{
 					Customer newCust = new Customer(fName, lName, id);
@@ -65,6 +79,7 @@ public class Customer extends User implements Serializable {
 				}
 				else
 					System.out.println("Sorry, that username is already taken. Try again.");
+					*/
 			}
 		}
 	}

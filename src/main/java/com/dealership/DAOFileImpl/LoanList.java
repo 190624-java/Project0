@@ -10,8 +10,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import com.dealership.Loan;
+import com.dealership.DAOinterface.LoanAccessor;
 
-public class LoanList {
+public class LoanList implements LoanAccessor {
 	private static LoanList instance;
 	private static final String LOAN_FILE = "Loan_Data.txt";
 	public ArrayList<Loan> loans;
@@ -71,5 +72,12 @@ public class LoanList {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public ArrayList<Loan> getLoansForCustomer(String custId) {
+		return null;
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -7,15 +7,29 @@ import com.dealership.DAOFileImpl.CustomerList;
 import com.dealership.DAOFileImpl.EmployeeList;
 import com.dealership.DAOFileImpl.LoanList;
 import com.dealership.DAOFileImpl.OfferList;
+import com.dealership.DAOinterface.*;
+import com.dealership.DAODatabaseImpl.*;
 
 public class DealershipDriver {
 	public static User activeAccount;
 	public static Scanner inScan;
+	public static CustomerAccessor custAccessor;
+	public static EmployeeAccessor empAccessor;
+	public static LoanAccessor loanAccessor;
+	public static OfferAccessor offerAccessor;
+	public static CarAccessor carAccessor;
 	
 	
 	public static void main(String[] args) {
 		try(Scanner inputScanner = new Scanner(System.in))
 		{
+			// Initializing DAOs
+			custAccessor = new CustomerDataAccessor();
+			empAccessor = new EmployeeDataAccessor();
+			loanAccessor = new LoanDataAccessor();
+			offerAccessor = new OfferDataAccessor();
+			carAccessor = new CarDataAccessor();
+			
 			inScan = inputScanner;
 			initialize();
 			boolean done = false;
@@ -42,11 +56,27 @@ public class DealershipDriver {
 		}
 		finally
 		{
-			CustomerList.getInstance().write();
-			EmployeeList.getInstance().write();
-			OfferList.getInstance().write();
-			LoanList.getInstance().write();
-			Lot.getInstance().write();
+			
+			if(custAccessor instanceof CustomerList)
+			{
+				((CustomerList)custAccessor).write();
+			}
+			if(empAccessor instanceof EmployeeList)
+			{
+				((EmployeeList)empAccessor).write();
+			}
+			if(offerAccessor instanceof OfferList)
+			{
+				((OfferList)offerAccessor).write();
+			}
+			if(loanAccessor instanceof OfferList)
+			{
+				((LoanList)loanAccessor).write();
+			}
+			if(carAccessor instanceof Lot)
+			{
+				((Lot)carAccessor).write();
+			}
 		}
 	}
 	
@@ -56,23 +86,16 @@ public class DealershipDriver {
 		System.out.println("Creating System employee account");
 		activeAccount = Employee.SYSTEM_ACCOUNT;
 		System.out.println("Attempting to retrieve employee list");
-		if(EmployeeList.getInstance().isEmpty())
+		if(empAccessor.isEmpty())
 		{
 			System.out.println("Adding system account to employee list");
-			EmployeeList.getInstance().addEmployee((Employee)activeAccount, (Employee)activeAccount);
+			empAccessor.addEmployee((Employee)activeAccount, (Employee)activeAccount);
 			System.out.println("Please register an admin account");
 			boolean adminAcctExists = false;
 			while(!adminAcctExists)
 			{
 				registerAccount();
-				for(User emp : EmployeeList.getInstance().getUserList())
-				{
-					if(((Employee) emp).isAdmin())
-					{
-						if((Employee) emp != Employee.SYSTEM_ACCOUNT)
-							adminAcctExists = true;
-					}
-				}
+				adminAcctExists = empAccessor.nonSystemAdminExists();
 			}
 		}	
 		System.out.println("System initialized");
@@ -85,7 +108,7 @@ public class DealershipDriver {
 		if(activeAccount == null)
 		{
 			Customer newCust = Customer.createCustomer();
-			if(CustomerList.getInstance().addCustomer(newCust))
+			if(custAccessor.addCustomer(newCust))
 			{
 				System.out.println("Successfully registered your account!");
 				return true;
@@ -103,7 +126,7 @@ public class DealershipDriver {
 			try {
 				if(activeAccount instanceof Employee)
 				{
-					EmployeeList.getInstance().addEmployee(newEmp, (Employee)activeAccount);
+					empAccessor.addEmployee(newEmp, (Employee)activeAccount);
 					return true;
 				}
 				else
@@ -132,23 +155,30 @@ public class DealershipDriver {
 		String username = inScan.nextLine();
 		System.out.println("Enter password");
 		String password = inScan.nextLine();
-		if(CustomerList.getInstance().containsID(username)) {
-			if(CustomerList.getInstance().findByID(username).checkLogin(username, password))
-				activeAccount = CustomerList.getInstance().findByID(username);
+		if(custAccessor.containsID(username)) {
+			Customer tmpCust = custAccessor.findByID(username);
+			if(tmpCust.checkLogin(username, password))
+			{
+				activeAccount = tmpCust;
+				((Customer)activeAccount).loans = loanAccessor.getLoansForCustomer(activeAccount.getId());
+				((Customer)activeAccount).ownedCars = carAccessor.retrunCarsOwnedBy(activeAccount.getId());
+			}
 		}
 		else
 			System.out.println("Login failed");
 	}
+	
 	
 	public static void employeeLogin() {
 		System.out.println("Enter username");
 		String username = inScan.nextLine();
 		System.out.println("Enter password");
 		String password = inScan.nextLine();
-		if(EmployeeList.getInstance().containsID(username))
+		if(empAccessor.containsID(username))
 		{
-			if(EmployeeList.getInstance().findByID(username).checkLogin(username, password))
-				activeAccount = EmployeeList.getInstance().findByID(username);
+			Employee tmpEmp = (Employee)empAccessor.findByID(username);
+			if(tmpEmp.checkLogin(username, password))
+				activeAccount = tmpEmp;
 		}
 		else
 			System.out.println("Username not found");
@@ -168,8 +198,7 @@ public class DealershipDriver {
 					+ "Enter 3 to login as an employee");
 			choice = inScan.nextInt(); inScan.nextLine();
 			switch(choice) {
-				case 0: logOut();
-					break;
+				case 0: return true;
 				case 1: customerLogin();
 					break;
 				case 2: registerAccount();
@@ -195,7 +224,7 @@ public class DealershipDriver {
 			switch(optionSelect) {
 			case 1: displayLot();
 				break;
-			case 2: ((Customer) activeAccount).displayOffers();
+			case 2: offerAccessor.displayOfferesByCustomer(activeAccount.id);
 				break;
 			case 3: displayOwnedCars();
 				break;
@@ -216,10 +245,10 @@ public class DealershipDriver {
 			switch(optionSelect) {
 			case 1: displayLot();
 				break;
-			case 2:OfferList.getInstance().displayAllOffers();
+			case 2:offerAccessor.displayAllOffers();
 				displayOfferMenu();
 				break;
-			case 3: LoanList.getInstance().displayAllLoans();
+			case 3: loanAccessor.displayAllLoans();
 				break;
 			case 4: registerAccount();
 				break;
@@ -247,7 +276,7 @@ public class DealershipDriver {
 					System.out.println("Could not locate correct number of arguments to pull up a specific offer");
 				else
 				{
-					Customer cust = CustomerList.getInstance().findByID(offerParts[0]);
+					Customer cust = custAccessor.findByID(offerParts[0]);
 					if(cust != null) {
 						Offer targetOffer = null;
 						for(Offer offer : cust.offers) {
@@ -257,9 +286,9 @@ public class DealershipDriver {
 						if(targetOffer != null)
 						{
 							if(offerParts[3] == String.valueOf(1))
-								OfferList.getInstance().acceptOffer(targetOffer);
+								offerAccessor.acceptOffer(targetOffer);
 							else if(offerParts[3].equals(String.valueOf(2)))
-								OfferList.getInstance().rejectOffer(targetOffer);
+								offerAccessor.rejectOffer(targetOffer);
 						}
 							
 						else
@@ -276,11 +305,12 @@ public class DealershipDriver {
 	{
 		int input = -1;
 		while(input != 0) {
-			Lot.getInstance().displayLot();
+			carAccessor.displayLot();
 			System.out.println("Enter 0 to go back\nEnter 1 to examine cars\nEnter 2 to add a car");
 			input = inScan.nextInt(); inScan.nextLine();
 			switch(input) {
-			case 1: displayCarsOfType();
+			case 1: //displayCarsOfType();
+				displayCarInteractionMenu();
 				break;
 			case 2: displayAddCar();
 				break;
@@ -303,7 +333,7 @@ public class DealershipDriver {
 		System.out.println("Enter the price");
 		double price = inScan.nextDouble();inScan.nextLine();
 		Car tmpCar = new Car(make, model, year, color, price);
-		Lot.getInstance().addCar(tmpCar);
+		carAccessor.addCar(tmpCar);
 	}
 	
 	public static void displayCarsOfType()
@@ -315,13 +345,13 @@ public class DealershipDriver {
 			carKey = inScan.nextLine();
 			if(carKey.equals("0"))
 				break;
-			else if(Lot.getInstance().lotContainsType(carKey)) {
-				Lot.getInstance().displayOfType(carKey);
+			else if(carAccessor.lotContainsType(carKey)) {
+				carAccessor.displayOfType(carKey);
 				int carIndex = -2;
 				while(carIndex != -1) {
 					System.out.println("Please enter an index of a specific car you would like to interact with, or -1 to exit");
 				 	carIndex = inScan.nextInt(); inScan.nextLine();
-				 	if(carIndex >= 0 && carIndex < Lot.getInstance().numberOfType(carKey)) {
+				 	if(carIndex >= 0 && carIndex < carAccessor.numberOfType(carKey)) {
 				 		displayCarInteractionMenu(carKey, carIndex);
 				 	}
 				}
@@ -332,8 +362,62 @@ public class DealershipDriver {
 		}
 	}
 	
+	public static void displayCarInteractionMenu() {
+		System.out.println("Enter the id of the car you would like to examine. Enter -1 to exit");
+		int choice = -1;
+		Car tmpCar = null;
+		while(tmpCar == null)
+		{
+			choice = inScan.nextInt(); inScan.nextLine();
+			if(choice == -1)
+			{
+				break;
+			}
+			tmpCar = carAccessor.getById(choice);
+		}
+		
+		if(tmpCar!= null) {
+			displayCarInteractionMenu(tmpCar);
+		}
+	}
+	
+	public static void displayCarInteractionMenu(Car car) {
+		if(activeAccount instanceof Customer)
+		{
+			int choice = -1;
+			while(choice != 0)
+			{
+				System.out.println("Enter 0 to exit\nEnter 1 to make an offer on this car");
+				choice = inScan.nextInt(); inScan.nextLine();
+				if(choice == 1)
+				{
+					System.out.println("Enter an offer");
+					double offerAmount = inScan.nextDouble(); inScan.nextLine();
+					Offer newOff = new Offer((Customer)activeAccount, car, offerAmount);
+					//car.offers.add(newOff);
+					//((Customer) activeAccount).offers.add(newOff);
+					offerAccessor.addOffer(newOff);
+				}
+			}
+		}
+		else if(activeAccount instanceof Employee)
+		{
+			int choice = -1;
+			while(choice != 0)
+			{
+				System.out.println("Enter 0 to exit\nEnter 1 to remove this car");
+				choice = inScan.nextInt(); inScan.nextLine();
+				if(choice == 1)
+				{
+					carAccessor.removeCar(car);
+					choice = 0;
+				}
+			}
+		}
+	}
+	
 	public static void displayCarInteractionMenu(String carKey, int carIndex){
-		Car tmpCar = Lot.getInstance().returnCar(carKey, carIndex);
+		Car tmpCar = carAccessor.returnCar(carKey, carIndex);
 		// Customer behavior
 		if(activeAccount instanceof Customer)
 		{
@@ -349,7 +433,7 @@ public class DealershipDriver {
 					Offer newOff = new Offer((Customer)activeAccount, tmpCar, offerAmount);
 					tmpCar.offers.add(newOff);
 					((Customer) activeAccount).offers.add(newOff);
-					OfferList.getInstance().offers.add(newOff);
+					offerAccessor.addOffer(newOff);
 				}
 			}
 		}
@@ -362,12 +446,10 @@ public class DealershipDriver {
 				choice = inScan.nextInt(); inScan.nextLine();
 				if(choice == 1)
 				{
-					Lot.getInstance().removeCar(tmpCar);
+					carAccessor.removeCar(tmpCar);
 					choice = 0;
 				}
 			}
-			
-			
 		}
 	}
 	

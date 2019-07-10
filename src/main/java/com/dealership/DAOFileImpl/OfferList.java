@@ -13,15 +13,15 @@ import com.dealership.Car;
 import com.dealership.Customer;
 import com.dealership.Loan;
 import com.dealership.Offer;
+import com.dealership.DAOinterface.OfferAccessor;
 
-public class OfferList {
+public class OfferList implements OfferAccessor{
 	private static OfferList instance; 
 	private static final String OFFER_FILE = "Offer_Data.txt";
-	public HashSet<Offer> offers;
+	private HashSet<Offer> offers;
 	
 	private OfferList()
 	{
-		//TODO attempt to read offers from file
 		offers = new HashSet<Offer>();
 	}
 	
@@ -70,6 +70,14 @@ public class OfferList {
 		offers.remove(offer);
 	}
 	
+	public HashSet<Offer> getOffers() {
+		return offers;
+	}
+	
+	public void addOffer(Offer offer)
+	{
+		offers.add(offer);
+	}
 	// TODO allow a sorted collection type to be used for convenience of employees viewing offers.
 	// Include comparator for Offer
 	public void displayAllOffers() {
@@ -107,5 +115,23 @@ public class OfferList {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public HashSet<Offer> getOfferByCustomer(Customer customer) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void displayOfferesByCustomer(String customerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Offer getOfferByCustCar(String custId, int carId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

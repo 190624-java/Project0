@@ -1,8 +1,6 @@
 package com.dealership;
 
-import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 import com.dealership.DAOFileImpl.EmployeeList;
@@ -12,7 +10,7 @@ import com.dealership.DAOFileImpl.EmployeeList;
  */
 public class Employee extends User {
 	public static final Employee SYSTEM_ACCOUNT = new Employee();
-	private static transient final String SYSTEM_PW = "CtrlAltDel"; // Super secret, don't share
+	private static transient final String SYSTEM_PW = "r_bW4,Zl&9)*"; // Super secret, don't share
 	private char accessLevel;
 	
 	public static Employee createEmployee()
@@ -53,6 +51,13 @@ public class Employee extends User {
 		this.id = generateID();
 	}
 	
+	public Employee(String firstName, String lastName, char accessLevel, String id)
+	{
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.accessLevel = accessLevel;
+		this.id = id;
+	}
 	/**
 	 * Constructor specifically for generating system account
 	 */

@@ -2,6 +2,7 @@ package com.dealership.DAOFileImpl;
 
 import java.util.HashSet;
 
+import com.dealership.Employee;
 import com.dealership.User;
 
 public abstract class UserList {
@@ -13,6 +14,14 @@ public abstract class UserList {
 		if(userList.contains(user))
 			return true;
 		return false;
+	}
+	
+	public User findByID(String id) {
+		for(User user: userList) {
+			if(user.getId().equals(id))
+				return user;
+		}
+		return null;
 	}
 	
 	public boolean containsID(String id) {

@@ -12,7 +12,9 @@ public class Car implements Serializable {
 	private int paymentsRemaining;
 	private boolean sold = false;
 	private Customer owner;
+	private int id;
 	public HashSet<Offer> offers;
+	
 	
 	public Car(String make, String model, int year, String color, double price)
 	{
@@ -22,9 +24,25 @@ public class Car implements Serializable {
 		this.color = color;
 		this.price = price;
 		offers = new HashSet<Offer>();
+		generateId();
 	}
 	
+	public Car(String make, String model, int year, String color, double price, int id)
+	{
+		this.make = make;
+		this.model = model;
+		this.year = year;
+		this.color = color;
+		this.price = price;
+		offers = new HashSet<Offer>();
+		this.id = id;
+	}
 	
+	//TODO write a trigger in the database that makes this obsolete
+	private void generateId() {
+		int tmp = 0;
+		HashSet<Integer> idList = DealershipDriver.carAccessor.getAllIds();
+	}
 	
 	@Override
 	public String toString() {
@@ -38,6 +56,7 @@ public class Car implements Serializable {
 	public String getCarkey() {
 		return make + " " + model + " " + year;
 	}
+	
 	
 	/*
 	 * Getters
@@ -64,6 +83,9 @@ public class Car implements Serializable {
 		return owner;
 	}
 	
+	public int getId() {
+		return this.id;
+	}
 	/*
 	 * Setters
 	 */
@@ -88,6 +110,8 @@ public class Car implements Serializable {
 	public void setOwner(Customer owner) {
 		this.owner = owner;
 	}
-	
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 }

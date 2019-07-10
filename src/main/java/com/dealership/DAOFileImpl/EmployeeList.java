@@ -45,19 +45,17 @@ public class EmployeeList extends UserList implements EmployeeAccessor{
 		return INSTANCE;
 	}
 	
-	public Employee findByID(String id) {
-		for(User user: userList) {
-			if(((Employee) user).getId().equals(id))
-				return (Employee) user;
-		}
-		return null;
-	}
-	
 	private EmployeeList() {
 		userList = new HashSet<User>();
 	}
 	
-	
+	public Employee findByID(String id) {
+		for(User emp : userList) {
+			if(emp.getId() == id)
+				return (Employee)emp;
+		}
+		return null;
+	}
 	/**
 	 * Adds a new employee to list. Must be verified by a manager or admin.
 	 * Managers may only add employees at the sales level.
@@ -170,5 +168,18 @@ public class EmployeeList extends UserList implements EmployeeAccessor{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean nonSystemAdminExists() {
+		for(User emp : userList)
+		{
+			if(((Employee) emp).isAdmin())
+			{
+				if((Employee) emp != Employee.SYSTEM_ACCOUNT)
+					return true;
+			}
+		}
+		return false;
 	}
 }

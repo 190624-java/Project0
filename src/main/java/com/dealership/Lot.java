@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-public class Lot {
+import com.dealership.DAOinterface.CarAccessor;
+
+public class Lot implements CarAccessor{
 	private Hashtable<String, LinkedList<Car>> carList;
 	private static final String LOT_FILE = "Lot_Data.txt";
 	private static Lot mySelf; 
@@ -49,6 +52,7 @@ public class Lot {
 		carList.get(tmpKey).add(newCar);
 	}
 	
+	// TODO: move scanner to a helper function.
 	public void removeCar(Car newCar)
 	{
 		String tmpKey = newCar.getMake() + " " + newCar.getModel() + " " + newCar.getYear();
@@ -105,7 +109,7 @@ public class Lot {
 		return carList.get(carKey).size();
 	}
 	
-	//TODO load lot from file function
+	
 	public void write() {
 		
 		carList.forEach((k,v) -> {
@@ -139,6 +143,35 @@ public class Lot {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+
+	@Override
+	public HashSet<Integer> getAllIds() {
+		HashSet<Integer> tmpHash = new HashSet<>();
+		carList.forEach((k,v)->{
+			for(Car c : v) {
+				tmpHash.add(c.getId());
+			}
+		});
+		return tmpHash;
+	}
+
+
+
+	@Override
+	public ArrayList<Car> retrunCarsOwnedBy(String custId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public Car getById(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
