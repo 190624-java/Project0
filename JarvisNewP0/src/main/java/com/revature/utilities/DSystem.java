@@ -96,8 +96,8 @@ public class DSystem {
 	
 	//Local Class Objects
 	//---------------------------------------------------------
-	public final MenuPrinter mPrint = new MenuPrinter();
-	public final CoreFunctionality core = new CoreFunctionality();
+	public final MenuPrinter mPrint;
+	public final CoreFunctionality core;
 	private final EmployeeAccount dealer;
 	private final Menus ms = new Menus();
 	
@@ -134,6 +134,8 @@ public class DSystem {
 		this.dLotMngr = new LotMngr();
 		this.dLot = new Lot(100,this.dealer);	
 		this.offersMngr = new OffersMngr();
+		this.mPrint = new MenuPrinter();
+		this.core = new CoreFunctionality();
 		
 	}	
 	

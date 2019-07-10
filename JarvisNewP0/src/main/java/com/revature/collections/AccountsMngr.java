@@ -72,7 +72,7 @@ public class AccountsMngr {
 	
 		//Display Menu and Get Menu Choice
 		do {			
-			dSys.mPrint.accountCreationType();			
+			DSystem.getInstance().mPrint.accountCreationType();			
 			try {
 				choice = UIUtil.getMenuSelection();
 				//if user input/choice is within range of menu options, exit menu with success
