@@ -9,7 +9,8 @@ import java.util.LinkedHashSet;
 import java.util.Scanner;
 
 import com.revature.collections.AccountsMngr;
-import com.revature.collections.lots.Lot;
+import com.revature.collections.LotMngr;
+import com.revature.collections.OffersMngr;
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
@@ -24,6 +25,7 @@ import com.revature.parties.Customer;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
 import com.revature.things.Car;
+import com.revature.things.Lot;
 import com.revature.things.Offer;
 import com.revature.things.Password;
 import com.revature.things.logins.Account;
@@ -101,13 +103,15 @@ public class DSystem {
 	
 	//Objects
 	//---------------------------------------------------------
-	private Lot dLot;	
 	private AccountsMngr accountsMngr;
+	private OffersMngr offersMngr;
+	private LotMngr dLotMngr;
 	
 	//Data Structures
 	//---------------------------------------------------------
 	public final LinkedHashSet<Car> carsWithOffers = new LinkedHashSet<>();
-	public final LinkedHashSet<Car> carsWithPayments = new LinkedHashSet<>();
+	public final LinkedHashSet<Car> carsWithContracts = new LinkedHashSet<>();	
+	private Lot dLot;	
 
 	//---------------------------------------------------------
 	//	Singleton
@@ -127,7 +131,9 @@ public class DSystem {
 		}		
 		this.dealer = new EmployeeAccount(new Employee(-10000),dPass);		
 		this.accountsMngr = new AccountsMngr(dealer);
+		this.dLotMngr = new LotMngr();
 		this.dLot = new Lot(100,this.dealer);	
+		this.offersMngr = new OffersMngr();
 		
 	}	
 	
@@ -154,6 +160,10 @@ public class DSystem {
 	//---------------------------------------------------------
 	//	Methods
 	//---------------------------------------------------------
+	
+	public OffersMngr getOffersManager() {
+		return this.offersMngr;
+	}
 	
 	/**
 	 * TODO
@@ -323,10 +333,13 @@ public class DSystem {
 		
 	}
 	
+	public LotMngr getLotManager() {
+		return dLotMngr;
+	}
+
 	public Lot getDealershipLot() {
 		return dLot;
 	}
-
 	
 
 	//---------------------------------------------------------
@@ -343,7 +356,7 @@ public class DSystem {
 		 *  "when an offer is accepted."
 		 */
 		public void rejectOtherOffers(Car car) {
-			LinkedHashSet<Offer> offers = car.getOffersMngr().getOffersHSet();
+			LinkedHashSet<Offer> offers = car.getOffers();
 			offers.removeAll(offers);
 		}
 		
@@ -432,7 +445,7 @@ f		 * 	- remove a car from the lot.
 	
 	class Menus {
 		
-		private SystemMenus.AccountCreate<User> accountCreationMenu;;
+		private SystemMenus.AccountCreate<Account> accountCreationMenu;;
 		
 		class SystemMenus{
 			

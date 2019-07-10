@@ -2,11 +2,8 @@ package com.revature.things;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-
-import com.revature.collections.ContractMngr;
 import com.revature.collections.OffersMngr;
-import com.revature.parties.User;
+import com.revature.things.logins.Account;
 import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
@@ -22,23 +19,23 @@ public class Car {
 	
 	//Containers
 	//----------
-	private OffersMngr offersMngr;
-	private ContractMngr contract;
+	private Contract contract;
+	private LinkedHashSet<Offer> offers;
 	
 	
 	/**
 	 * To verify that the car belongs to the correct user when using the system
 	 * static function to calculate monthly payments.
 	 */
-	private User owner;
+	private Account owner;
 	
 	
-	public Car(CarRegistration reg, User owner){
+	public Car(CarRegistration reg, Account owner){
 		//if(reg==null) new Registration(); //empty due
 		this.reg = reg;
 		this.setOwner(owner);
 		//this.color = color;
-		this.addOffer(new OffersMngr());
+		
 		//contract is not created till a sale is made; it needs to be null
 		// till then to know the state of the car ownership
 	}
@@ -51,6 +48,9 @@ public class Car {
 		return this.reg.getMSRP();
 	}
 	
+	public void setContract(Contract c) {
+		this.contract = c;
+	}
 	/**
 	 * Method1: Return iterator and compare each offer
 	 * Method2: Store accepted offer into new offer, delete the list, assign new list.
@@ -61,7 +61,11 @@ public class Car {
 //	}
 
 	public OffersMngr getOffersMngr() {
-		return offersMngr;
+		return DSystem.getInstance().getOffersManager();
+	}
+	
+	public LinkedHashSet<Offer> getOffers(){
+		return this.offers;
 	}
 	
 	public String getMake() {
@@ -92,15 +96,15 @@ public class Car {
 		return this.reg.getREG_ID();
 	}
 
-	public User getOwner() {
+	public Account getOwner() {
 		return this.owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(Account owner) {
 		this.owner = owner;
 	}
 
-	public ContractMngr getContract() {
+	public Contract getContract() {
 		return contract;
 	}
 
@@ -113,12 +117,12 @@ public class Car {
 		if(this.contract!=null)
 			UIUtil.echoProblem("Warning: contract already exists for this car");		
 			//throw new Exception();
-		this.contract = new ContractMngr(acceptedOffer);
+		this.contract = new Contract(acceptedOffer);
 
 	}
 
 	public Iterator<Offer> getOffersHSetIterator() {		
-		return offersMngr.getOffersHSet().iterator();
+		return offers.iterator();
 	}
 
 

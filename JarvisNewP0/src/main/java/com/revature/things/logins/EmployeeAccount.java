@@ -1,11 +1,15 @@
 package com.revature.things.logins;
 
-import com.revature.collections.lots.Lot;
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
+
+import java.util.Iterator;
+
 import com.revature.collections.ContractMngr;
+import com.revature.collections.LotMngr;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
 import com.revature.things.Car;
@@ -28,7 +32,6 @@ public class EmployeeAccount extends Account{
 //		public EmployeeAccount(User userID, String password, Employee authorizer) {
 		super(userWithID, password);
 		core = new CoreFunctionality(this);
-		this.lot = new Lot(100, this.getUser());
 		this.type = UserTypes.EMPLOYEE;
 		
 	}
@@ -76,10 +79,9 @@ public class EmployeeAccount extends Account{
 			} catch (UserExit e) { 
 				UIUtil.echo("User Exited Employee Services");
 				this.setLoggedIn(false); //throws LogOut
-				//return 1;
-			} catch (InvalidMenuSelection e) {
-				UIUtil.echoProblem("Invalid Selection");
-				//if(!UIUtil.determineContinue()) return -1; //something went wrong
+				//return 1;			
+			} catch (InvalidInput e) {
+				System.out.println("Invalid menu selection");
 			}
 		}//end while
 		return 1;
@@ -109,7 +111,13 @@ public class EmployeeAccount extends Account{
 				break;
 			case 2: //Accept or Reject an Offer
 				//go to menu to display offers or find offers associated to a car
-				((Employee)this.getUser()).processOffers1AtATime(car);		
+				//for all cars:
+				Iterator<Car> carsIt = dSys.carsWithOffers.iterator();
+				Car c;
+				while(carsIt.hasNext()) {
+					c = carsIt.next();
+					((Employee)this.getUser()).coreUI.processOffers1AtATime(c);
+				}
 				break;
 			case 3: //Remove a car from the lot
 				
@@ -145,19 +153,22 @@ public class EmployeeAccount extends Account{
 		 * @param carToRemove
 		 */
 		public void removeCarFromLot(Car carToRemove) {
-			System.out.println("Enter Car Registration ID");
-			long regID = UIUtil.getLong();		
-			//EmployeeAccount.this.account
+//			System.out.println("Enter Car Registration ID");
+//			long regID = UIUtil.getLong();			
+			dSys.getLotManager().removeCar(dSys.getDealershipLot(),carToRemove);
 		}
 		
 		/**
 		 * TODO
+		 * implemented in the Employee class
+		 * @deprecated
 		 * @param carToAdd
 		 */
 		public void addCarToLot(Car carToAdd) {
-			System.out.println("Enter Car Registration ID");
-			long regID = UIUtil.getLong();		
-			this.account.
+//			dSys.getLotManager().addCar(dSys.getDealershipLot(), carToAdd);
+//			System.out.println("Enter Car Registration ID");
+//			long regID = UIUtil.getLong();		
+//			dSys.getLotManager().addCar(dSys.getDealershipLot(),carToAdd);
 		}
 		
 		
@@ -167,7 +178,7 @@ public class EmployeeAccount extends Account{
 		 */
 		public void reject(Offer o) {
 			// TODO Auto-generated method stub
-			offers.remove(o);		
+			dSys.getOffersManager().removeOffer(o);		
 		}
 
 		/**
@@ -175,8 +186,10 @@ public class EmployeeAccount extends Account{
 		 * @param ao
 		 */
 		public void accept(Offer ao) {
-			//create new contract based on offer		
-			Contract acceptedOfferContract = new Contract(ao);
+			
+			
+			//create new contract based on offer			
+			//Contract acceptedOfferContract = new Contract(ao);
 			//attach contract to the car
 		}	
 
@@ -187,4 +200,5 @@ public class EmployeeAccount extends Account{
 		}
 	
 	
-}
+	}//end Core class
+}//end Employee Account class

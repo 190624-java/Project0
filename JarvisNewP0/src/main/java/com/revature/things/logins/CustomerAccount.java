@@ -2,13 +2,14 @@ package com.revature.things.logins;
 
 import java.util.Iterator;
 
-import com.revature.collections.lots.Lot;
+import com.revature.collections.LotMngr;
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.UserExit;
 import com.revature.parties.Customer;
 import com.revature.things.Car;
+import com.revature.things.Lot;
 import com.revature.things.Offer;
 import com.revature.things.Password;
 import com.revature.utilities.SpacesIterator;
@@ -118,15 +119,15 @@ public class CustomerAccount extends Account{
 		//Loop 1------------------------------------------
 		//Loop through the next 5 items, until there are no more to show.
 		while(showNext5 && lotIt.hasNext()) {			
-			
+			selection = -1; //clear selection			
 			//------Print Menu-------
 			//Print Next Menu
-			Lot.displayTableHeader();
+			LotMngr.displayTableHeader();
 			lotItAgain.returnState(lotIt);//preset the lotItAgain iterator
 			tempIt.returnState(lotItAgain);
-			genOptions = buildNext5Menu(lotIt); //advance lotIt			
+			genOptions = buildNext5Menu(lotIt,selection); //advance lotIt			
 			System.out.println(genOptions);
-			System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");		
+			System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");			
 			
 			
 			//Loop 2------------------------------------------
@@ -142,22 +143,33 @@ public class CustomerAccount extends Account{
 
 			//Prime Loop
 			choosingSelection = true;
-			while(choosingSelection) {				
-				
+			while(choosingSelection) {
+				//--------------
+				//--Get Choice--
+				//--------------
 				choice = UIUtil.getString().toLowerCase();
-				//TODO - check for empty lot spaces and escape if empty.
+				
 				switch(choice) {
+					case "0":
+						System.out.println("Exiting Customer View Cars Menu");
+						throw new UserExit();
 					case "1": 
 					case "2":
 					case "3":
 					case "4":
-					case "5":
+					case "5":						
 						selection =  Integer.valueOf(choice)%5; //set the selection value for building the next menu with the selection.
 						choosingSelection = true;
+						//Check for selected empty lot spaces, and clear selection before next rebuilt menu, if so.
+						if( this.hasEmptySelection(genOptions, choice)) {
+							System.out.println("Invalid Selection. Try Again.\n");
+							selection = -1; //reset selection
+														
+						}
 						//------Print Menu-------
 						//Print Same Menu, but with new selection
-						Lot.displayTableHeader();
-						genOptions = buildNext5Menu(tempIt);
+						LotMngr.displayTableHeader();
+						genOptions = buildNext5Menu(tempIt,selection);
 						tempIt.returnState(lotItAgain);//return the lotItAgain iterator
 						System.out.println(genOptions);
 						System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");
@@ -169,6 +181,7 @@ public class CustomerAccount extends Account{
 						interactWithASelection = false; //exit interactionLoop					
 						break;
 					case "m":
+						selection = -1; //reset selection to none
 						choosingSelection = false;						
 						//TODO - show offer menu
 						//Regen the last Menu without selection
@@ -176,17 +189,13 @@ public class CustomerAccount extends Account{
 						
 						//------Print Menu-------
 						//Print Same Menu, clearing the selection, and one of the items might have changed.
-						Lot.displayTableHeader();
-						genOptions = buildNext5Menu(tempIt); //genOptions is the same for the "make offer" case
+						LotMngr.displayTableHeader();
+						genOptions = buildNext5Menu(tempIt,selection); //genOptions is the same for the "make offer" case
 						tempIt.returnState(lotItAgain);//return the lotItAgain iterator
 						System.out.println(genOptions);
 						System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");						
-						
 						break;
-					case "0":
-						System.out.println("Exiting Customer View Cars Menu");
-						throw new UserExit();
-					
+										
 				}
 			}//while - choosingSelection
 			}//while - interactWithOptions
@@ -194,8 +203,20 @@ public class CustomerAccount extends Account{
 		
 	}
 
-	public String buildNext5Menu(SpacesIterator lotIt){
-		return Lot.generateMenuOptions(lotIt,-1);
+	
+	public boolean hasEmptySelection(String genOptions, String choice) {
+		if(
+				(genOptions.contains("1- empty space") && choice.equals("1")) ||
+				(genOptions.contains("2- empty space") && choice.equals("2")) ||
+				(genOptions.contains("3- empty space") && choice.equals("3")) ||
+				(genOptions.contains("4- empty space") && choice.equals("4")) ||
+				(genOptions.contains("5- empty space") && choice.equals("5"))
+				) return true;
+		else return false;
+	}
+	
+	public String buildNext5Menu(SpacesIterator lotIt, int selection){
+		return LotMngr.generateMenuOptions(lotIt,selection);
 	}
 	
 	
@@ -226,8 +247,10 @@ public class CustomerAccount extends Account{
 		return (Customer)this.user;
 	}
 	
-	class CoreFunctionality {
-		
+
+	public Lot getLot() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

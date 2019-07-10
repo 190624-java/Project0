@@ -2,6 +2,9 @@ package com.revature.interfaces;
 
 import java.util.LinkedList;
 
+import com.revature.exceptions.InvalidInput;
+import com.revature.exceptions.InvalidMenuSelection;
+
 class BasicInputTask implements InputTask{
 	protected final LinkedList<InputTask> tasks;
 	/**
@@ -27,6 +30,36 @@ class BasicInputTask implements InputTask{
 	public void display() {
 		System.out.println(taskInstruction);
 		
+	}
+
+	@Override
+	public void run(Object user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getInput() throws InvalidMenuSelection, InvalidInput {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void react(Object user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public LinkedList exitTask() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

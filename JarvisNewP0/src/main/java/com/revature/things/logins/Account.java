@@ -2,16 +2,10 @@ package com.revature.things.logins;
 
 import java.util.LinkedList;
 
-import com.revature.collections.ContractMngr;
-import com.revature.collections.lots.Garage;
-import com.revature.collections.lots.Lot;
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidUserID;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NoUppercase;
-import com.revature.main.UserTypes;
-import com.revature.parties.Customer;
-import com.revature.parties.Employee;
 import com.revature.parties.User;
 import com.revature.things.Password;
 import com.revature.things.Payment;
@@ -27,7 +21,7 @@ public class Account {
 	/**
 	 * So checks can be done with authorization.
 	 */
-	protected final int type; //override
+	protected int type; //override
 	
 	//------------------------
 	//	Objects
@@ -35,7 +29,7 @@ public class Account {
 	
 	protected final User user; //set user's account		
 	protected Password password;	
-	protected Lot lot; //TODO construct in other classes; make abstract
+	//protected LotMngr lotManager; //TODO construct in other classes; make abstract
 	
 	protected DSystem dSys = DSystem.getInstance();
 	
@@ -69,7 +63,7 @@ public class Account {
 		}
 		this.userPaymentHistory = new LinkedList<>();
 		this.loggedIn = false;
-		this.lot = new Lot(10,this);	
+		
 
 		//---------
 		//Overrides
@@ -115,9 +109,6 @@ public class Account {
 		else this.loggedIn = true;		
 	}
 
-	public Lot getLot() {
-		return this.lot;
-	}
 
 	public LinkedList<Payment> getPaymentHistory() {
 		return userPaymentHistory;
@@ -127,6 +118,7 @@ public class Account {
 	public int getUserID() {
 		return this.user.getDriversID();
 	}
+
 
 
 	public int getAccountType() {

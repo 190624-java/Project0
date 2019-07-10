@@ -2,7 +2,7 @@ package com.revature.collections;
 
 import java.util.LinkedList;
 
-import com.revature.things.Offer;
+import com.revature.things.Contract;
 import com.revature.things.Payment;
 
 /**
@@ -31,23 +31,13 @@ public class ContractMngr {
 	//	Fields
 	//--------------------------
 	
-	private float remainingBalance;
-	private LinkedList<Payment> payments;
-	private Offer soldOffer;
-	private float balance;
-	private float bill;
-	private int termInMonths;
-	
 	
 	//--------------------------
 	//	Constructor
 	//--------------------------
 	
-	public ContractMngr(Offer offer){
-		this.remainingBalance = offer.getAmount();
-		this.payments = new LinkedList<Payment>();
-		this.soldOffer = new Offer(offer);
-		this.termInMonths = offer.getTerm();
+	public ContractMngr(){
+		
 	}
 
 	
@@ -63,26 +53,27 @@ public class ContractMngr {
 		System.out.println("ID     \tAmount      \tDate");
 	}
 	
-	public void displayPaymentRows() {
-		for(Payment p : payments) {
+	public void displayPaymentRows(Contract c) {
+		for(Payment p : c.getPayments()) {
 			System.out.println(p.getID()+"    \t"+p.getAmount()+"    \t"+p.getDate());
 		}
 	}
 
-	public void makePayment(Payment payment) {
+	public void makePayment(Contract c, Payment payment) {
+		LinkedList<Payment> payments = c.getPayments();
 		if(payments==null) {
 			System.out.println("Error: can't make payment, null list");
 			return;
 		}
-		this.payments.add(payment);
-		this.balance+=payment.getAmount();
+		payments.add(payment);
+		c.setBalance(c.getBalance()+payment.getAmount());
 	}
 
-	public float getBalance() {
-		return balance;
+	public float getBalance(Contract c) {
+		return c.getBalance();
 	}
 
-	public float getBill() {
-		return this.bill;
+	public float getBill(Contract c) {
+		return c.getBill();
 	}
 }

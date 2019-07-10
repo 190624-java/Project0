@@ -1,11 +1,13 @@
 package com.revature.parties;
 
-import com.revature.collections.lots.Lot;
+import com.revature.collections.LotMngr;
 import com.revature.exceptions.InvalidInput;
 import com.revature.main.UserTypes;
 import com.revature.things.Car;
+import com.revature.things.Lot;
 import com.revature.things.Offer;
 import com.revature.things.logins.Account;
+import com.revature.things.logins.CustomerAccount;
 import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 
@@ -22,6 +24,8 @@ import com.revature.utilities.UIUtil;
  */
 public class Customer extends User {
 
+	CoreFunctionalityUI coreUI = new CoreFunctionalityUI();
+	
 	public Customer(int driversID) {
 		super(driversID);
 	}
@@ -32,7 +36,8 @@ public class Customer extends User {
 	 * @param lotToView
 	 */
 	public void viewLot(Lot lotToView) {
-		lotToView.display();		
+		DSystem.getInstance().getLotManager().display(lotToView);
+		
 	}
 	
 	
@@ -64,20 +69,21 @@ public class Customer extends User {
 		return  ((int)Math.random()) % 30;
 	}
 	
-
-	
-
 	
 	public void printPaymentsRemaining(float remaining, float bill) {
 		String message = String.format("There are %.0f remaining bills of %.2f", remaining, bill);
 		System.out.println(message);
 	}
+	
+	
 	public void printPaymentsRemaining(Car ownedCar) {		
 		String message = String.format("There are %.0f remaining bills of %.2f", 
-				getPaymentsRemaining(ownedCar), 
-				ownedCar.getContract().getBill());
+				this.coreUI.getPaymentsRemaining(ownedCar), 
+				ownedCar.getContract().getBill()
+				);
 		System.out.println(message);
 	}
+	
 
 	class CoreFunctionalityUI {
 		/**
@@ -92,15 +98,15 @@ public class Customer extends User {
 		 * Displays in table form, the cars in a customer's garage/private_lot
 		 * @param ownedLot
 		 */
-		public void viewPrivateLot(Lot ownedLot) {
-			Lot g = this.account.getLot();
+		public void viewPrivateLot(LotMngr ownedLot) {
+			Lot g = Customer.this.getAccount().getLot();
 			
 			System.out.println(
 					  "-------------------\n"
 					+ "		My Garage\n"
 					+ "-------------------");
 			//System.out.println("CarID    \tMake    \tModel");
-			g.display();
+			dSys.getLotManager().display(g);
 		}
 		
 		
@@ -115,21 +121,23 @@ public class Customer extends User {
 		 */
 		public int makeOffer() { 
 			Car carDesired;
+			long id = -1;
 			float amount = -1.0f;
 			
 			System.out.println("Enter the car registration ID of the car desired for purchase.");
 			try {
-				UIUtil.getLong();
+				id = UIUtil.getLong();
 			} catch (InvalidInput e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			carDesired = dSys.getLotManager().searchForCarByID(dSys.getDealershipLot(), id);
 			//create and add the offer to the appropriate containers
-			this.getUser().createOffer(carDesired, amount);
+			Offer o = new Offer(carDesired, Customer.this.getAccount(), amount);
 			return 0;
-		}
-		
+		}	
+
+
 		/**
 		 * 
 		 * @param ownedCar
@@ -142,6 +150,12 @@ public class Customer extends User {
 
 			return remaining;
 		}
+	}
+
+	@Override
+	public CustomerAccount getAccount() {
+		// TODO Auto-generated method stub
+		return (CustomerAccount) this.account;
 	}
 	
 	

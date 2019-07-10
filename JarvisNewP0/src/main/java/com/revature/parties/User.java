@@ -1,9 +1,10 @@
 package com.revature.parties;
 
-import com.revature.collections.lots.Lot;
+import com.revature.collections.LotMngr;
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidUserID;
 import com.revature.things.logins.Account;
+import com.revature.utilities.DSystem;
 
 /**
  * Users can:
@@ -12,11 +13,11 @@ import com.revature.things.logins.Account;
  * @author Jarvis Adams
  *
  */
-public class User {
+public abstract class User {
 
 	protected Account account;
 	protected int driversID;
-
+	protected DSystem dSys = DSystem.getInstance();
 //	/**
 //	 * not needed since the system just requires the unique identifier, driversID.
 //	 */
@@ -54,12 +55,18 @@ public class User {
 //	}
 
 
+	/**
+	 * Gets the respective Account Type 
+	 * @return
+	 */
+	abstract public Account getAccount();
+//	public Account getAccount() {
+//		return this.account;
+//	}
 
 	public int getDriversID() {
 		return this.driversID;
 	}
 	
-	public Account getAccount() {
-		return this.account;
-	}
+
 }

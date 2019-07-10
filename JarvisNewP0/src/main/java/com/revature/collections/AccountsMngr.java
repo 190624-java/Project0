@@ -2,8 +2,6 @@ package com.revature.collections;
 
 import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Scanner;
-
 import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
@@ -12,7 +10,6 @@ import com.revature.exceptions.UserExit;
 import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.parties.Employee;
-import com.revature.parties.User;
 import com.revature.things.Password;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
@@ -97,9 +94,11 @@ public class AccountsMngr {
 					//------Construct Account
 					Employee employeeWithID = new Employee(driversID);
 					
-					this.accountsMap.put(driversID, new EmployeeAccount(
-							employeeWithID, password
-							));
+					this.accountsMap.put(driversID, 
+							new EmployeeAccount(
+									employeeWithID, password
+							)
+							);
 					System.out.println("Success! Employee Account Created.");
 					break;
 			}

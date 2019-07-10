@@ -1,39 +1,28 @@
-package com.revature.collections.lots;
+package com.revature.collections;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.revature.exceptions.InvalidMenuSelection;
+import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.NoParkingAvailable;
-import com.revature.parties.User;
 import com.revature.things.Car;
+import com.revature.things.Lot;
 import com.revature.things.logins.Account;
 import com.revature.utilities.SpacesIterator;
-import com.revature.utilities.UIUtil;
 
 
-public class Lot {
+public class LotMngr {
 
-	private ArrayList<Car> spaces;
-	private int cap; //capacity of space available to hold cars
-	private Account owner;
 	
-	public Lot(int capacity, Account owner){
-		this.cap = capacity;
-		this.owner = owner;
-		this.spaces = new ArrayList<>(capacity);
-//		for(i=0;i<capacity;i++) {
-//			
-//		}
+	public LotMngr(){
+
 	}
-	public SpacesIterator getSpacesIterator(){
-		return new SpacesIterator(spaces);
-	}
+	
 	/**
 	 * For populating the lot array with empty spaces
 	 * @return
 	 */
-	private Car createEmptyCar() {
+	private Car createEmptyCarSpace() {
 		return new Car(null, null);
 	}
 	
@@ -43,8 +32,8 @@ public class Lot {
 	 * @return empty car (symbolizing an address to a car space in the lot)
 	 * @throws NoParkingAvailable
 	 */
-	public Car findSpace() throws NoParkingAvailable {
-		for(Car space : spaces) {
+	public Car findSpace(Lot lot) throws NoParkingAvailable {
+		for(Car space : lot.getSpaces()) {
 			if(isSpace(space)) return space; //no reg means empty car 
 		}
 		throw new NoParkingAvailable();
@@ -67,8 +56,8 @@ public class Lot {
 	 * null if car not found
 	 * Car if found
 	 */
-	public Car searchForCarByID(long id) {
-		Iterator<Car> it = spaces.iterator();
+	public Car searchForCarByID(Lot lot, long id) {
+		Iterator<Car> it = lot.getSpaces().iterator();
 		Car c;
 		while(it.hasNext()) {
 			c = it.next();
@@ -97,10 +86,10 @@ public class Lot {
 	 * else false will be returned.
 	 * @throws NoParkingAvailable 
 	 */
-	public boolean addCar(Car car) throws NoParkingAvailable {
+	public boolean addCar(Lot lot, Car car) throws NoParkingAvailable {
 		
 		//if a blank space can be found on the lot, then it will be parked and 
-		Car freeSpace = this.findSpace();
+		Car freeSpace = this.findSpace(lot);
 		//true will be returned.
 		if(isSpace(freeSpace)) {
 			freeSpace = car;
@@ -141,16 +130,16 @@ public class Lot {
 	 * @param spaceNumber
 	 * @return
 	 */
-	public boolean removeCar(int spaceNumber) {
+	public boolean removeCar(Lot lot, int spaceNumber) {
 		try {
-			if(spaces.get(spaceNumber)==null) return false;
+			if(lot.getSpaces().get(spaceNumber)==null) return false;
 		}catch(IndexOutOfBoundsException oobe) {
 			System.out.println("The lot doesn't have this parking space, try another.");
 			return false;
 		}
 		//otherwise, a car is there, and needs to be removed.
 		//it can be placed in a system temporarily
-		spaces.set(spaceNumber, null);
+		lot.getSpaces().set(spaceNumber, null);
 		return true;
 	}
 
@@ -166,11 +155,11 @@ public class Lot {
 	 *  		
 	 * @param lot
 	 */
-	public int display() {
+	public int display(Lot lot) {
 		//System.out.println("Space   CarID    Make   Model   Year   Color   MSRP");
 		System.out.println("Space   CarID    Make   Model   Year   ");
 		int spaceNumber=1;
-		for(Car space : this.spaces) {
+		for(Car space : lot.getSpaces()) {
 			System.out.print((spaceNumber++)+ "\t");
 			if(space==null) System.out.println("");
 			else System.out.println(
@@ -193,6 +182,14 @@ public class Lot {
 	 * @return
 	 */
 	public static String generateMenuOptions(SpacesIterator spaces, int selection) {
+		//Method1 (deprecated)-it just won't choose in later check.
+		//If non-valid-selection number chosen, 
+		//set selection to -1;
+		//String case:
+		//if(!selection.matches("[1-5]")) selection = "-1";
+		//int case:
+		//if(selection<0 || selection>6) selection = -1;
+		
 		String out = "";
 		String selectionBuffer = "( ) ";
 		int spaceCount = 1;
@@ -200,6 +197,7 @@ public class Lot {
 		while(spaces.hasNext() && spaceCount<=5) {			
 			space = spaces.next();
 			if(spaceCount==selection) selectionBuffer="(*) ";
+//			if(spaceCount==Integer.valueOf(selection)) selectionBuffer="(*) ";
 			out = out + selectionBuffer + spaces.getPosition() + spaceCount + "- " + getSpaceInfo(space);			
 		}
 		return out;
@@ -228,6 +226,36 @@ public class Lot {
 				+" \t"+
 				String.valueOf(c.getMSRP())
 				+"\n";
+	}
+
+	public boolean removeCar(Lot lot, Car carToRemove) {
+		Car c = null;
+		for(int i = 0; i<lot.getSpaces().size(); i++) {
+			lot.getSpaces().get(i);
+			if(isInSpace(lot, carToRemove, i)) {
+				lot.getSpaces().remove(i);
+				return true;
+			}
+		}		
+		return false;
+	}
+	
+	public int findSpaceLocation(Lot lot, Car parkedCar) throws InvalidInput {
+		if(parkedCar==null) throw new InvalidInput();
+		
+		Car c = null;
+		for(int i = 0; i<lot.getSpaces().size(); i++) {
+			lot.getSpaces().get(i);
+			if(isInSpace(lot, parkedCar, i)) return i;
+		}
+		return -1; //not found
+	}
+	
+	public boolean isInSpace(Lot lot, Car parkedCar, int space) {
+		Car cOrS = lot.getSpaces().get(space);
+		if(cOrS==null) return false;
+		else if(cOrS.hasRegistration() && cOrS.getRegID()==parkedCar.getRegID()) return true;		
+		else return false;
 	}
 
 	

@@ -2,6 +2,7 @@ package com.revature.things;
 
 import com.revature.parties.Employee;
 import com.revature.parties.User;
+import com.revature.things.logins.Account;
 import com.revature.utilities.DSystem;
 
 /**
@@ -13,7 +14,7 @@ public class Offer {
 
 	//primary
 	private Car product;  //primary: carID
-	private User offeree; //primary: userID
+	private Account offeree; //primary: userID
 	
 	private float amount;
 	//private Employee salesperson; //(deprecated) would need if organizing data by salesperson, but not required for this assignment
@@ -32,7 +33,7 @@ public class Offer {
 		this.offeree = offer.offeree;		
 	}
 	
-	public Offer(Car product, User offeree, float amount) { //, Employee salesperson){
+	public Offer(Car product, Account offeree, float amount) { //, Employee salesperson){
 		this.amount = amount;
 		this.product = product;
 		this.offeree = offeree;
@@ -70,7 +71,7 @@ public class Offer {
 	 * OfferID		CustomerID		OfferAmount 
 	 */
 	public void displayOneCarsRow() {		
-		System.out.println(getOfferID()+"\t\t"+getOfferee().getDriversID()+"\t\t"+this.getAmount());
+		System.out.println(getOfferID()+"\t\t"+getOfferee().getUserID()+"\t\t"+this.getAmount());
 	}
 	
 	/**
@@ -79,7 +80,7 @@ public class Offer {
 	 * OfferID		CarID   	CustomerID  	OfferAmount 
 	 */
 	public void displayAllCarsRow() {		
-		System.out.println(getOfferID()+"\t\t"+getOfferee().getDriversID()+"\t\t"+this.getAmount());
+		System.out.println(getOfferID()+"\t\t"+getOfferee().getUserID()+"\t\t"+this.getAmount());
 	}
 
 	
@@ -92,11 +93,11 @@ public class Offer {
 		this.offerID = offerID;
 	}
 	
-	public User getOfferee() {
+	public Account getOfferee() {
 		return offeree;
 	}
 
-	public void setOfferee(User offeree) {
+	public void setOfferee(Account offeree) {
 		this.offeree = offeree;
 	}
 

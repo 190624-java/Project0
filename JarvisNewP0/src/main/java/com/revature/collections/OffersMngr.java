@@ -1,5 +1,7 @@
 package com.revature.collections;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
@@ -33,22 +35,21 @@ public class OffersMngr {
 	//	Fields
 	//--------------------------
 	
-	Car carNeedingManagement;
+	//Car carNeedingManagement;
 	
 	//--------------------------
 	//	Containers
 	//--------------------------
 	
-	private LinkedHashSet<Offer> offersHSet;
+	//private LinkedHashSet<Offer> offersHSet;
 
 	
 	//--------------------------
 	//	Constructor
 	//--------------------------
 
-	public OffersMngr(Car car) {
-		this.offersHSet = new LinkedHashSet<>();
-		this.carNeedingManagement = car;
+	public OffersMngr() {
+		//this.offersHSet = new LinkedHashSet<>();
 	}
 	
 	
@@ -56,8 +57,9 @@ public class OffersMngr {
 	//	Methods
 	//--------------------------
 	
-	public LinkedHashSet<Offer> getOffersHSet() {
-		return offersHSet;
+	public LinkedHashSet<Car> getCarsWithOffersHSet() {
+		//return offersHSet;
+		return DSystem.getInstance().carsWithOffers;
 	}
 	
 	
@@ -68,9 +70,9 @@ public class OffersMngr {
 	 * @param offer
 	 */
 	public void addOffer(Offer offer) {
-		this.getOffersHSet().add(offer);
+		this.getCarsWithOffersHSet().add(offer.getDesiredCar());
 		//Add the car to the cars with Offers container 
-		DSystem.getInstance().carsWithOffers.add(this.carNeedingManagement);
+		DSystem.getInstance().carsWithOffers.add(offer.getDesiredCar());
 	}
 	
 	/**
@@ -79,10 +81,10 @@ public class OffersMngr {
 	 * @param offer
 	 */
 	public void removeOffer(Offer offer) {
-		this.getOffersHSet().remove(offer);
+		this.getCarsWithOffersHSet().remove(offer);
 		//if no more offers, then remove the car from the DSystem's offers container
-		if(this.getOffersHSet().isEmpty()) 
-			DSystem.getInstance().carsWithOffers.remove(this.carNeedingManagement);		
+		if(this.getCarsWithOffersHSet().isEmpty()) 
+			DSystem.getInstance().carsWithOffers.remove(offer.getDesiredCar());		
 	}
 	
 	
@@ -92,13 +94,13 @@ public class OffersMngr {
 	 *	Car product
 	 *	User offeree
 	 */
-	public void displayOffers() {
+	public void displayOffers(Car car) {
 		System.out.println(
 				  "----------------------"
 				+ "       Offers"
 				+ "----------------------");
 		displayAllCarsOfferColumns();		
-		displayOfferRows();
+		displayOfferRows(car);
 		
 	}
 	
@@ -117,10 +119,14 @@ public class OffersMngr {
 	}
 	
 	
-	public void displayOfferRows() {
-		for(Offer o : offersHSet) {
-			o.displayOneCarsRow();
+	public void displayOfferRows(Car car) {
+		Iterator<Offer> offers = car.getOffersHSetIterator();
+		while(offers.hasNext()) {
+			offers.next().displayOneCarsRow();
 		}
+//		for(Offer o : ) {
+//			o.displayOneCarsRow();
+//		}
 	};
 	
 
