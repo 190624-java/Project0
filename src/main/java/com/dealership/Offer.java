@@ -14,6 +14,12 @@ public class Offer implements Serializable {
 		this.car = car;
 		this.amount = amount;
 	}
+	
+	public Offer(String custId, int carId, double amount) {
+		this.customer = new Customer("","",custId);
+		this.car = new Car("","", 0, "", 0, carId);
+		this.amount = amount;
+	}
 
 
 	@Override

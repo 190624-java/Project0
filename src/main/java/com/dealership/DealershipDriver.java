@@ -264,7 +264,7 @@ public class DealershipDriver {
 		while(!input.equals("0"))
 		{
 			System.out.println("Enter 0 to exit\nEnter the following separated by a semicolon to accept an offer:\n"
-					+ "Customer's username, Car make model and year (space separated), the amount offered, and the number 1\n" +
+					+ "Customer's username, Car id, and the number 1\n" +
 					"To reject an offer, end the line in 2 instead");
 			input = inScan.nextLine();
 			if(!input.equals("0"))
@@ -272,10 +272,20 @@ public class DealershipDriver {
 			else
 			{
 				String[] offerParts = input.split(";");
-				if(offerParts.length != 4)
+				if(offerParts.length != 3)
 					System.out.println("Could not locate correct number of arguments to pull up a specific offer");
 				else
 				{
+					Offer offerSkel = offerAccessor.getOfferByCustCar(offerParts[0], Integer.parseInt(offerParts[1]));
+					if(Integer.parseInt(offerParts[2])==1)
+					{
+						offerAccessor.acceptOffer(offerSkel);
+					}
+					else if(Integer.parseInt(offerParts[2])==2)
+					{
+						offerAccessor.rejectOffer(offerSkel);
+					}
+					/*
 					Customer cust = custAccessor.findByID(offerParts[0]);
 					if(cust != null) {
 						Offer targetOffer = null;
@@ -296,6 +306,7 @@ public class DealershipDriver {
 					}
 					else
 						System.out.println("Was unable to parse offer data from String");
+					*/
 				}
 			}
 		}

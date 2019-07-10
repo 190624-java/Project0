@@ -134,8 +134,22 @@ public class OfferDataAccessor implements OfferAccessor {
 
 	@Override
 	public Offer getOfferByCustCar(String custId, int carId) {
-		// TODO Auto-generated method stub
-		return null;
+		try(Connection conn = ConnectionFactory.getConnection()) {
+			String sql = "SELECT customer_id, car_id, offer_amount FROM offers WHERE customer_id = ? AND car_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, custId);
+			stmt.setInt(2, carId);
+			ResultSet results = stmt.executeQuery();
+			Offer off = null;
+			while(results.next())
+			{
+				off = new Offer(results.getString("customer_id"), results.getInt("car_id"), results.getDouble("offer_amount"));
+			}
+			return off;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
