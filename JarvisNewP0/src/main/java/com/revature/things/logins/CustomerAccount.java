@@ -7,11 +7,13 @@ import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.UserExit;
+import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.things.Car;
 import com.revature.things.Lot;
 import com.revature.things.Offer;
 import com.revature.things.Password;
+import com.revature.utilities.DSystem;
 import com.revature.utilities.SpacesIterator;
 import com.revature.utilities.UIUtil;
 
@@ -36,7 +38,7 @@ public class CustomerAccount extends Account{
 		int sel = -1;
 		while(isLoggedIn()){
 			//Display Menu
-			dSys.mPrint.customer();
+			DSystem.getInstance().mPrint.customer();
 			try {
 				//Get Selection
 				sel = UIUtil.getMenuSelection();
@@ -107,9 +109,9 @@ public class CustomerAccount extends Account{
 		boolean showNext5 = true;
 		boolean choosingSelection = true;
 		boolean interactWithASelection = true;
-		SpacesIterator lotIt = this.dSys.getDealershipLot().getSpacesIterator();
-		SpacesIterator lotItAgain = this.dSys.getDealershipLot().getSpacesIterator();
-		SpacesIterator tempIt = this.dSys.getDealershipLot().getSpacesIterator();
+		SpacesIterator lotIt = DSystem.getInstance().getDealershipLot().getSpacesIterator();
+		SpacesIterator lotItAgain = DSystem.getInstance().getDealershipLot().getSpacesIterator();
+		SpacesIterator tempIt = DSystem.getInstance().getDealershipLot().getSpacesIterator();
 		
 		String genOptions="";
 		String choice="";
@@ -251,6 +253,11 @@ public class CustomerAccount extends Account{
 	public Lot getLot() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getAccountType() {		
+		return UserTypes.CUSTOMER;
 	}
 	
 

@@ -11,7 +11,7 @@ import com.revature.things.Password;
 import com.revature.things.Payment;
 import com.revature.utilities.DSystem;
 
-public class Account {
+public abstract class Account {
 
 	//------------------------
 	//	Fields
@@ -31,7 +31,7 @@ public class Account {
 	protected Password password;	
 	//protected LotMngr lotManager; //TODO construct in other classes; make abstract
 	
-	protected DSystem dSys = DSystem.getInstance();
+	
 	
 	//------------------------
 	//	Data Structures
@@ -121,9 +121,8 @@ public class Account {
 
 
 
-	public int getAccountType() {
-		return this.type;
-	}
+	public abstract int getAccountType();
+	
 		
 
 	public Password getPassword() {

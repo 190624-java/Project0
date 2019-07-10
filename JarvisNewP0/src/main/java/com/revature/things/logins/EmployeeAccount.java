@@ -65,7 +65,7 @@ public class EmployeeAccount extends Account{
 		while(isLoggedIn()){
 			
 			//Display Menu
-			dSys.mPrint.employee();
+			DSystem.getInstance().mPrint.employee();
 			try {				
 				//Get Selection
 				sel = UIUtil.getMenuSelection();
@@ -100,7 +100,7 @@ public class EmployeeAccount extends Account{
 			case 1: //Add a car to the lot	
 				//Method 2 - Have User class Handle UI
 				this.getUser().parkCar();
-				//Method 1 - dSys.getDealershipLot().parkCar();
+				//Method 1 - DSystem.getInstance().getDealershipLot().parkCar();
 				
 				//Method 3 - handle here
 				//ask what car ID is to be added
@@ -112,7 +112,7 @@ public class EmployeeAccount extends Account{
 			case 2: //Accept or Reject an Offer
 				//go to menu to display offers or find offers associated to a car
 				//for all cars:
-				Iterator<Car> carsIt = dSys.carsWithOffers.iterator();
+				Iterator<Car> carsIt = DSystem.getInstance().carsWithOffers.iterator();
 				Car c;
 				while(carsIt.hasNext()) {
 					c = carsIt.next();
@@ -155,7 +155,7 @@ public class EmployeeAccount extends Account{
 		public void removeCarFromLot(Car carToRemove) {
 //			System.out.println("Enter Car Registration ID");
 //			long regID = UIUtil.getLong();			
-			dSys.getLotManager().removeCar(dSys.getDealershipLot(),carToRemove);
+			DSystem.getInstance().getLotManager().removeCar(DSystem.getInstance().getDealershipLot(),carToRemove);
 		}
 		
 		/**
@@ -165,10 +165,10 @@ public class EmployeeAccount extends Account{
 		 * @param carToAdd
 		 */
 		public void addCarToLot(Car carToAdd) {
-//			dSys.getLotManager().addCar(dSys.getDealershipLot(), carToAdd);
+//			DSystem.getInstance().getLotManager().addCar(DSystem.getInstance().getDealershipLot(), carToAdd);
 //			System.out.println("Enter Car Registration ID");
 //			long regID = UIUtil.getLong();		
-//			dSys.getLotManager().addCar(dSys.getDealershipLot(),carToAdd);
+//			DSystem.getInstance().getLotManager().addCar(DSystem.getInstance().getDealershipLot(),carToAdd);
 		}
 		
 		
@@ -178,7 +178,7 @@ public class EmployeeAccount extends Account{
 		 */
 		public void reject(Offer o) {
 			// TODO Auto-generated method stub
-			dSys.getOffersManager().removeOffer(o);		
+			DSystem.getInstance().getOffersManager().removeOffer(o);		
 		}
 
 		/**
@@ -201,4 +201,10 @@ public class EmployeeAccount extends Account{
 	
 	
 	}//end Core class
+
+
+	@Override
+	public int getAccountType() {
+		return UserTypes.EMPLOYEE;
+	}
 }//end Employee Account class
