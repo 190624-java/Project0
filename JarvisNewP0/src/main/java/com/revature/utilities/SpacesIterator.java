@@ -33,6 +33,12 @@ public class SpacesIterator implements Iterator<Car>{
 		return false;
 	}
 	
+	/**
+	 * Returns the pointer to the index of another iterator.
+	 */
+	public void returnState(SpacesIterator previousStateIt) {
+		this.listPosition = previousStateIt.listPosition;
+	}
 
 	@Override
 	public Car next() {

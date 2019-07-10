@@ -101,61 +101,96 @@ public class CustomerAccount extends Account{
 		return -1;
 	}
 	
-	private void doDealerLotMenu() {
+	private void doDealerLotMenu() throws UserExit {
 		//Build menu
 		boolean showNext5 = true;
 		boolean choosingSelection = true;
-		boolean interactWithOptions = true;
+		boolean interactWithASelection = true;
 		SpacesIterator lotIt = this.dSys.getDealershipLot().getSpacesIterator();
-		SpacesIterator lotItAgain;
+		SpacesIterator lotItAgain = this.dSys.getDealershipLot().getSpacesIterator();
+		SpacesIterator tempIt = this.dSys.getDealershipLot().getSpacesIterator();
+		
 		String genOptions="";
 		String choice="";
-		int index = -1;
 		int selection = -1;
 		
 		
-		while(showNext5 && lotIt.hasNext()) {
+		//Loop 1------------------------------------------
+		//Loop through the next 5 items, until there are no more to show.
+		while(showNext5 && lotIt.hasNext()) {			
 			
+			//------Print Menu-------
+			//Print Next Menu
+			Lot.displayTableHeader();
+			lotItAgain.returnState(lotIt);//preset the lotItAgain iterator
+			tempIt.returnState(lotItAgain);
+			genOptions = buildNext5Menu(lotIt); //advance lotIt			
+			System.out.println(genOptions);
+			System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");		
+			
+			
+			//Loop 2------------------------------------------
+			//Allow an offer to be made and return to the same place where left off.
 			//Prime Loop
-			interactWithOptions = true;
-			while(interactWithOptions) {
+			interactWithASelection = true;			
+			while(interactWithASelection) {
 			
-			
-			lotItAgain = new SpacesIterator(lotIt);
+						
+			//Loop 3------------------------------------------
+			//Loops through building the same menu, but allowing the user to change the item selected.
+			//The buildMenu() requires iterating, so the iterator must be reset with a prior iterator each time it loops
+
 			//Prime Loop
 			choosingSelection = true;
-			while(choosingSelection) {
-				genOptions = buildNext5Menu(lotItAgain);
-				System.out.println(genOptions);
-				System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");
+			while(choosingSelection) {				
+				
 				choice = UIUtil.getString().toLowerCase();
 				//TODO - check for empty lot spaces and escape if empty.
-				index=lotIt.getPosition()-5;
 				switch(choice) {
 					case "1": 
 					case "2":
 					case "3":
 					case "4":
 					case "5":
-						selection =  Integer.valueOf(choice)%5;
+						selection =  Integer.valueOf(choice)%5; //set the selection value for building the next menu with the selection.
 						choosingSelection = true;
+						//------Print Menu-------
+						//Print Same Menu, but with new selection
+						Lot.displayTableHeader();
+						genOptions = buildNext5Menu(tempIt);
+						tempIt.returnState(lotItAgain);//return the lotItAgain iterator
+						System.out.println(genOptions);
+						System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");
+
 						break;
-					case "n": 
-						choosingSelection = false;
-						lotIt = lotItAgain;
+					case "n":
+						selection = -1; //reset selection to none
+						choosingSelection = false; //exit choosingSelectionLoop
+						interactWithASelection = false; //exit interactionLoop					
 						break;
 					case "m":
-						choosingSelection = false;
-						interactWithOptions = false;
+						choosingSelection = false;						
 						//TODO - show offer menu
+						//Regen the last Menu without selection
+						//Reason: may remove the car sometimes, or may add a car sometimes, and want to reuse the code.
+						
+						//------Print Menu-------
+						//Print Same Menu, clearing the selection, and one of the items might have changed.
+						Lot.displayTableHeader();
+						genOptions = buildNext5Menu(tempIt); //genOptions is the same for the "make offer" case
+						tempIt.returnState(lotItAgain);//return the lotItAgain iterator
+						System.out.println(genOptions);
+						System.out.println("(1-5)-(Select) n-(Next Spaces) m-(Make Offer) 0-(Exit)");						
+						
 						break;
 					case "0":
-						return;
+						System.out.println("Exiting Customer View Cars Menu");
+						throw new UserExit();
 					
 				}
-			}//while - interactWithOptions
 			}//while - choosingSelection
-		}//while	
+			}//while - interactWithOptions
+		}//while - browsing	
 		
 	}
 

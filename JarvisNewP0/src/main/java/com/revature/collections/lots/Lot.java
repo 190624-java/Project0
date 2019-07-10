@@ -154,6 +154,10 @@ public class Lot {
 		return true;
 	}
 
+	public static void displayTableHeader() {
+		System.out.println("    Space   CarID    Make   Model   Year   MSRP");
+	}
+	
 	/**
 	 * Prints the list of cars and their descriptions all at once
 	 *  				Space   CarID    Make   Model   Year
@@ -164,7 +168,7 @@ public class Lot {
 	 */
 	public int display() {
 		//System.out.println("Space   CarID    Make   Model   Year   Color   MSRP");
-		System.out.println("Space   CarID    Make   Model   Year");
+		System.out.println("Space   CarID    Make   Model   Year   ");
 		int spaceNumber=1;
 		for(Car space : this.spaces) {
 			System.out.print((spaceNumber++)+ "\t");
@@ -196,7 +200,7 @@ public class Lot {
 		while(spaces.hasNext() && spaceCount<=5) {			
 			space = spaces.next();
 			if(spaceCount==selection) selectionBuffer="(*) ";
-			out = out + selectionBuffer + spaceCount + "- " + getSpaceInfo(space);			
+			out = out + selectionBuffer + spaces.getPosition() + spaceCount + "- " + getSpaceInfo(space);			
 		}
 		return out;
 				
