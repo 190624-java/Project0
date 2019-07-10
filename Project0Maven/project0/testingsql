@@ -1,0 +1,42 @@
+
+CREATE TABLE cave (
+    cave_id INTEGER PRIMARY KEY,
+    cave_name VARCHAR(100),
+    max_bears VARCHAR(4)
+    );
+
+CREATE TABLE bear_type (
+    bear_type_id INTEGER PRIMARY KEY,
+    bear_type_name VARCHAR(100)
+);
+
+CREATE TABLE bear (
+    bear_id INTEGER PRIMARY KEY,
+    bear_name VARCHAR(100),
+    bear_weight NUMBER(5, 2) DEFAULT 200.00,
+    bear_type_id INTEGER CONSTRAINT fk_bear_type REFERENCES bear_type,
+    cave_id INTEGER 
+    );
+    
+ALTER TABLE bear
+ADD CONSTRAINT fk_bear_cave
+FOREIGN KEY (cave_id) REFERENCES cave(cave_id);
+
+INSERT INTO bear_type VALUES (1, 'Grizzly');
+INSERT INTO bear_type VALUES (2, 'Polar');
+
+INSERT ALL INTO cave
+VALUES (1, 'Awesome Cave 1', 10)
+INTO cave(cave_id, cave_name)
+VALUES (2, 'Awesome Cave 2')
+SELECT * FROM DUAL;
+
+INSERT ALL INTO bear
+VALUES (1, 'Dan', 201.00, 1, 1)
+INTO bear
+VALUES (2, 'Minnie', 180.50, 1, 1)
+INTO bear
+VALUES (3, 'Donald', 200,00, 2, 2)
+SELECT * FROM DUAL;
+
+SELECT * FROM bear;
