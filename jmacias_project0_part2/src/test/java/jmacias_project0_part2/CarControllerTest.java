@@ -2,34 +2,28 @@ package jmacias_project0_part2;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import beans.Car;
+import dataAccessObjects.CarDAO;
+import dbControllers.CarController;
 
 public class CarControllerTest {
 
-	@Test
-	public void testAddCar() {
-		fail("Not yet implemented");
-	}
+	
 
 	@Test
-	public void testGetCar() {
-		fail("Not yet implemented");
+	public void testGetCar() throws IOException {
+		CarDAO carDAO = new CarController();
+		Car newCar = new Car("Chevy Spectrum", 150);
+		carDAO.addCar(newCar);
+		Car car = carDAO.getCar(1);
+		assertEquals(newCar.getMakeAndModel(), car.getMakeAndModel());
 	}
 
 
-	@Test
-	public void testGetCars() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testCreateOffer() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetOffers() {
-		fail("Not yet implemented");
-	}
+	
 
 }
