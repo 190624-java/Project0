@@ -2,6 +2,7 @@ package com.revature.utilities;
 
 
 
+import java.sql.Connection;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -162,6 +163,7 @@ public class DSystem {
 	//---------------------------------------------------------
 	//	Methods
 	//---------------------------------------------------------
+	
 	
 	public OffersMngr getOffersManager() {
 		return this.offersMngr;

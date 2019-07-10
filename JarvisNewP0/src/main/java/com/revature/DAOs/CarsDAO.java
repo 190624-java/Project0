@@ -1,7 +1,15 @@
 package com.revature.DAOs;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.revature.things.Car;
+import com.revature.utilities.ConnectionFactory;
 public class CarsDAO {
 
+	
+	
 	//----------------------------
 	//	Create
 	//----------------------------
@@ -12,7 +20,28 @@ public class CarsDAO {
 		//Registration info: regID, make, model, year, color, msrp
 		//lotSpaceNumber (nullable - to change owner / facilitate the remove/add car project menu requirements)
 
-	
+	public void addCar(Car car) {
+		try(Connection conn = ConnectionFactory.getConnection()){
+			String sql = "INSERT INTO Cars (regID, make, model, year, msrp) VALUES (?, ?, ?, ?, ?)";
+//			String[] keys = {
+//					String.valueOf(car.getRegID()),
+//					car.getMake(),
+//					car.getModel(),
+//					String.valueOf(car.getYear()),
+//					String.valueOf(car.getMSRP())
+//			};
+			PreparedStatement ps_addCar = conn.prepareStatement(sql);
+			ps_addCar.setLong(1, car.getRegID());
+			ps_addCar.setString(2, car.getMake());
+			ps_addCar.setString(3, car.getModel());
+			ps_addCar.setInt(4, car.getYear());
+			ps_addCar.setFloat(5, car.getMSRP());
+			
+		}catch(SQLException sqle) {
+			sqle.printStackTrace();
+		};
+		//ConnectionFactory.getConnection("JDB", username, password);
+	}
 	
 	//----------------------------
 	//	Read
