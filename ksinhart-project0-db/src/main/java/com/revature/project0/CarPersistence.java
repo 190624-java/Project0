@@ -90,7 +90,7 @@ public class CarPersistence {
 	
 	public static void changeOwner(String username, String license, double amt) {
 		try(Connection conn = ConnectionSetUp.getConnection()){
-			String sql = "UPDATE car_lot SET c_owner = ? AND price = ? WHERE license = ?";
+			String sql = "UPDATE car_lot SET c_owner = ? , price = ? WHERE license = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1,username);
 			stmt.setDouble(2, amt);
