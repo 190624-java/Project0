@@ -9,29 +9,29 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 
-import com.revature.collections.AccountsMngr;
-import com.revature.collections.LotMngr;
-import com.revature.collections.OffersMngr;
-import com.revature.exceptions.InvalidInput;
-import com.revature.exceptions.InvalidMenuSelection;
-import com.revature.exceptions.LogOut;
-import com.revature.exceptions.NewPasswordMismatch;
-import com.revature.exceptions.NoUppercase;
-import com.revature.exceptions.UserExit;
-import com.revature.interfaces.BasicsMenu;
-import com.revature.interfaces.InputTask;
-import com.revature.interfaces.Menu;
-import com.revature.parties.Customer;
-import com.revature.parties.Employee;
-import com.revature.parties.User;
-import com.revature.things.Car;
-import com.revature.things.Lot;
-import com.revature.things.Offer;
-import com.revature.things.Password;
+import com.revature.beans.parties.Customer;
+import com.revature.beans.parties.Employee;
+import com.revature.beans.parties.User;
+import com.revature.beans.things.Car;
+import com.revature.beans.things.Lot;
+import com.revature.beans.things.Offer;
+import com.revature.beans.things.Password;
+import com.revature.interfaces.menus.BasicsMenu;
+import com.revature.interfaces.menus.Menu;
+import com.revature.interfaces.tasks.InputTask;
+import com.revature.services.AccountsMngr;
+import com.revature.services.LotMngr;
+import com.revature.services.OffersMngr;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
 import com.revature.things.logins.EmployeeAccount;
 import com.revature.things.logins.UserTypes;
+import com.revature.utilities.exceptions.InvalidInput;
+import com.revature.utilities.exceptions.InvalidMenuSelection;
+import com.revature.utilities.exceptions.LogOut;
+import com.revature.utilities.exceptions.NewPasswordMismatch;
+import com.revature.utilities.exceptions.NoUppercase;
+import com.revature.utilities.exceptions.UserExit;
 
 
 /*--------------------------------

@@ -2,14 +2,14 @@ package com.revature.things.logins;
 
 import java.util.LinkedList;
 
-import com.revature.exceptions.InvalidInput;
-import com.revature.exceptions.InvalidUserID;
-import com.revature.exceptions.LogOut;
-import com.revature.exceptions.NoUppercase;
-import com.revature.parties.User;
-import com.revature.things.Password;
-import com.revature.things.Payment;
+import com.revature.beans.parties.User;
+import com.revature.beans.things.Password;
+import com.revature.beans.things.Payment;
 import com.revature.utilities.DSystem;
+import com.revature.utilities.exceptions.InvalidInput;
+import com.revature.utilities.exceptions.InvalidUserID;
+import com.revature.utilities.exceptions.LogOut;
+import com.revature.utilities.exceptions.NoUppercase;
 
 public abstract class Account {
 

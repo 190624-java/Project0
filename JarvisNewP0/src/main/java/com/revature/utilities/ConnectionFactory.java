@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.revature.exceptions.InvalidPassword;
-import com.revature.exceptions.InvalidUserID;
+import com.revature.utilities.exceptions.InvalidPassword;
+import com.revature.utilities.exceptions.InvalidUserID;
 
 public class ConnectionFactory {
 

@@ -1,21 +1,20 @@
 package com.revature.things.logins;
 
-import com.revature.exceptions.InvalidInput;
-import com.revature.exceptions.InvalidMenuSelection;
-import com.revature.exceptions.LogOut;
-import com.revature.exceptions.UserExit;
-
 import java.util.Iterator;
 
-import com.revature.collections.ContractMngr;
-import com.revature.collections.LotMngr;
-import com.revature.parties.Employee;
-import com.revature.parties.User;
-import com.revature.things.Car;
-import com.revature.things.Offer;
-import com.revature.things.Password;
+import com.revature.beans.parties.Employee;
+import com.revature.beans.parties.User;
+import com.revature.beans.things.Car;
+import com.revature.beans.things.Offer;
+import com.revature.beans.things.Password;
+import com.revature.services.ContractMngr;
+import com.revature.services.LotMngr;
 import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
+import com.revature.utilities.exceptions.InvalidInput;
+import com.revature.utilities.exceptions.InvalidMenuSelection;
+import com.revature.utilities.exceptions.LogOut;
+import com.revature.utilities.exceptions.UserExit;
 
 public class EmployeeAccount extends Account{
 

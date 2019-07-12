@@ -3,7 +3,7 @@ package com.revature.utilities;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.revature.things.Car;
+import com.revature.beans.things.Car;
 
 public class SpacesIterator implements Iterator<Car>{
 

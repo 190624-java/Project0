@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import com.revature.exceptions.InvalidInput;
-import com.revature.exceptions.InvalidMenuSelection;
+import com.revature.utilities.exceptions.InvalidInput;
+import com.revature.utilities.exceptions.InvalidMenuSelection;
 
 /**
  * Helps with user input
