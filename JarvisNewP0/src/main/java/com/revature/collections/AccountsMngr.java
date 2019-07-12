@@ -7,13 +7,13 @@ import com.revature.exceptions.LogOut;
 import com.revature.exceptions.NewPasswordMismatch;
 import com.revature.exceptions.NoUppercase;
 import com.revature.exceptions.UserExit;
-import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.parties.Employee;
 import com.revature.things.Password;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
 import com.revature.things.logins.EmployeeAccount;
+import com.revature.things.logins.UserTypes;
 import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 

@@ -7,7 +7,6 @@ import com.revature.exceptions.InvalidInput;
 import com.revature.exceptions.InvalidMenuSelection;
 import com.revature.exceptions.LogOut;
 import com.revature.exceptions.UserExit;
-import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.things.Car;
 import com.revature.things.Lot;

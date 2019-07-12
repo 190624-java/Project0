@@ -2,12 +2,12 @@ package com.revature.parties;
 
 import com.revature.collections.LotMngr;
 import com.revature.exceptions.InvalidInput;
-import com.revature.main.UserTypes;
 import com.revature.things.Car;
 import com.revature.things.Lot;
 import com.revature.things.Offer;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
+import com.revature.things.logins.UserTypes;
 import com.revature.utilities.DSystem;
 import com.revature.utilities.UIUtil;
 

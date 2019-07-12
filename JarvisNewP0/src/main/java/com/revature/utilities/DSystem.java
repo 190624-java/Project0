@@ -21,7 +21,6 @@ import com.revature.exceptions.UserExit;
 import com.revature.interfaces.BasicsMenu;
 import com.revature.interfaces.InputTask;
 import com.revature.interfaces.Menu;
-import com.revature.main.UserTypes;
 import com.revature.parties.Customer;
 import com.revature.parties.Employee;
 import com.revature.parties.User;
@@ -32,6 +31,7 @@ import com.revature.things.Password;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
 import com.revature.things.logins.EmployeeAccount;
+import com.revature.things.logins.UserTypes;
 
 
 /*--------------------------------
