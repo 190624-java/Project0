@@ -1,11 +1,22 @@
 package com.revature.services;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Iterator;
+import java.util.LinkedList;
 
+import com.revature.utilities.ConnectionFactory;
+import com.revature.DAOs.UsersDAOImp;
 import com.revature.beans.parties.Customer;
 import com.revature.beans.parties.Employee;
+import com.revature.beans.parties.User;
+import com.revature.beans.parties.UserBean;
 import com.revature.beans.things.Password;
+import com.revature.interfaces.dao.UserDAO;
 import com.revature.things.logins.Account;
 import com.revature.things.logins.CustomerAccount;
 import com.revature.things.logins.EmployeeAccount;
@@ -37,6 +48,7 @@ public class AccountsMngr {
 	
 	public AccountsMngr(EmployeeAccount owner){
 		this.accountsMap = new HashMap<>();
+		this.loadAccounts();
 		this.ownerOfDealership = owner;
 		this.dSys = DSystem.getInstance();
 		authenticator = new Authenticator();
@@ -45,6 +57,51 @@ public class AccountsMngr {
 	//---------------------------
 	//	Methods
 	//---------------------------
+	
+	public void loadAccounts() {
+		LinkedList<UserBean> beans;
+		try {
+			beans = (new UsersDAOImp()).getAllUsers();
+			Iterator<UserBean> it = beans.iterator();
+			UserBean ubean;
+			
+			while(it.hasNext()) {
+				ubean = it.next();
+				switch(ubean.getType()) {
+				case UserTypes.EMPLOYEE:
+					Employee eUser = new Employee(ubean.getUserDriversID());
+					try {
+						EmployeeAccount eAcc = new EmployeeAccount(eUser, new Password(ubean.getPassword()));
+						this.accountsMap.put(ubean.getUserDriversID(), eAcc);
+					} catch (NoUppercase e) {
+						System.out.println(
+								"Warning: password from database user "+
+						ubean.getUserDriversID() +"not strong");
+						e.printStackTrace();					
+					}
+					break;
+				case UserTypes.CUSTOMER:
+					Customer cUser = new Customer(ubean.getUserDriversID());
+					try {
+						CustomerAccount cAcc = new CustomerAccount(cUser, new Password(ubean.getPassword()));
+						this.accountsMap.put(ubean.getUserDriversID(), cAcc);
+					} catch (NoUppercase e) {
+						System.out.println(
+								"Warning: password from database user "+
+						ubean.getUserDriversID() +"not strong");
+						e.printStackTrace();					
+					}
+					break;
+				}
+			}
+		} catch (SQLException e1) {
+			System.out.println("Couldn't load the accounts.");
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+	
 	
 	public Authenticator getAuthenticator() {
 		return authenticator;
@@ -93,13 +150,13 @@ public class AccountsMngr {
 						throw ue;
 					}					
 					//------Construct Account
-					Employee employeeWithID = new Employee(driversID);
-					
-					this.accountsMap.put(driversID, 
-							new EmployeeAccount(
-									employeeWithID, password
-							)
-							);
+//					Employee employeeWithID = new Employee(driversID);
+					this.addEmployeeAccount(driversID, password);
+//					this.accountsMap.put(driversID, 
+//							new EmployeeAccount(
+//									employeeWithID, password
+//							)
+//							);
 					System.out.println("Success! Employee Account Created.");
 					break;
 			}
@@ -122,7 +179,23 @@ public class AccountsMngr {
 		//Method 2: the user would continue to the particular account menu of choice
 	} //end create account
 	
-	
+	/**
+	 * Add to remote storage
+	 * If succeed, Add to local data structure
+	 * @param driversID
+	 * @param password
+	 */
+	public void addEmployeeAccount(int driversID, Password password) {
+		// TODO Auto-generated method stub
+		UsersDAOImp.addUser(driversID, password.getString(), UserTypes.EMPLOYEE);
+		Employee employeeWithID = new Employee(driversID);
+		this.accountsMap.put(driversID, 
+				new EmployeeAccount(
+						employeeWithID, password
+				)
+				);
+	}
+
 	/**
 	 * Requires login information of an employee
 	 * @return
@@ -145,8 +218,26 @@ public class AccountsMngr {
 		UIUtil.echoProblem("Problem: Account Authority Not Recognized. Must be Dealer Account");
 		return false;		
 	}
+//	private boolean seekAuthorization_wDAO(int driversID) {
+//		getUserPasswordPS_noProfile(int driversID);
+//	}
 
-
+	/**
+	 * Add to remote storage
+	 * If succeed, Add to local data structure
+	 * @param driversID
+	 * @param password
+	 */
+	public void addCustomerAccount(int driversID, Password password) {
+		UsersDAOImp.addUser(driversID, password.getString(), UserTypes.CUSTOMER);
+		
+		Customer customerWithID = new Customer(driversID);
+		this.accountsMap.put(driversID, 
+				new CustomerAccount(
+						customerWithID, password
+				)
+				);
+	}
 	
 	
 	//TODO finish
@@ -261,6 +352,17 @@ public class AccountsMngr {
 		}
 
 		
+//		public boolean hasUser(int licenseID, String givenPassword) {
+//			String s = UsersDAOImp.getUserPasswordPS_noProfile(licenseID);
+//			if(s==null) {
+//				System.out.println("Nu");
+//			}
+//		}
+		/**
+		 * @deprecated
+		 * @param licenseID
+		 * @return
+		 */
 		public boolean hasUser(int licenseID) {
 			return accountsMap.containsKey(licenseID);
 		}
@@ -290,7 +392,48 @@ public class AccountsMngr {
 			}//end while
 		}//end method
 
-		
+		public String getUserPasswordPS_noProfile(int driversID){
+
+			//public  
+			try(Connection conn = ConnectionFactory.getConnection()){
+				//Prepare Statement
+				//Method 1 - works on SQL Developer, throws exception here.
+				String psql = "SELECT password FROM Users WHERE userDriversID = ? ";
+				//Method 2 - doesn't work on SQL Developer 
+//				String bsql = "SELECT password FROM Users WHERE userDriversID = " + driversID;
+				//Method 1
+//				String[] cols = {"userDriversID"};
+//				PreparedStatement ps = conn.prepareStatement(psql,cols);
+				//Method 2
+				PreparedStatement ps = conn.prepareStatement(psql);//			
+				ps.setInt(1, driversID);
+				
+				
+				//Get Resulting Data
+				ResultSet rs = ps.executeQuery();
+				//Method 1
+				// - clean output
+//				if(rs.next()==false) {
+//					System.out.println("There was no data returned");
+//					return "";
+//				}
+//				return rs.getString("Password");
+				//Method 2
+				// - shows exception
+				rs.next();
+				return rs.getString("password");
+				
+			}catch(SQLException sqle) {
+				System.out.println("Couldn't use connection!");
+				//sqle.printStackTrace();
+				return null;
+			}
+//			} catch (IOException e) {
+//				System.out.println("IOException happened");
+//				e.printStackTrace();
+//			};
+//			return null;	
+		}
 		/**
 		 * Only 1 username attempt per method run.
 		 * @return

@@ -78,4 +78,11 @@ public class Password {
 	private boolean checkPasswordStrength(String pass) {
 		return Password.hasUppercase(pass);
 	}
+
+
+
+	public String getString() {
+		// TODO Auto-generated method stub
+		return this.pText;
+	}
 }

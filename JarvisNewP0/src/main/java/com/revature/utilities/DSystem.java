@@ -125,7 +125,7 @@ public class DSystem {
 	private DSystem() {
 		Password dPass = null;
 		try {
-			dPass = new Password("1AaaaBbbb");
+			dPass = new Password("Admin");
 		} catch (NoUppercase e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,6 +179,7 @@ public class DSystem {
 	 */
 	public void beginLogin() throws UserExit {
 	//Method 2
+		
 		Integer userID = accountsMngr.getAuthenticator().authenticateUser();
 		//authenticate will throw an exception if problem occurs and
 		//user cancels, otherwise it will not be null.		
@@ -205,6 +206,55 @@ public class DSystem {
 				case -1: //basic account
 					System.out.println("Problem with account type being undefined");
 					return;
+			}			
+		} catch (LogOut e) {
+			this.accountsMngr.logOut(acc);
+			UIUtil.echo("User Exited Employee Services");
+		}	
+		
+		//Method 1
+		//acc.start();
+		
+		UIUtil.echoCompletion("finished serving account");
+	}
+	/**
+	 * TODO
+	 * 
+	 * Gets user/drivers ID and Password from user input
+	 * Checks them for system compatibility
+	 * If so, Logs into the accounts object (i.e. continues menus)
+	 * Else, returns to main menu.
+	 * @throws UserExit 
+	 */
+	public void beginLoginV1() throws UserExit {
+		//Method 2
+		
+		Integer userID = accountsMngr.getAuthenticator().authenticateUser();
+		//authenticate will throw an exception if problem occurs and
+		//user cancels, otherwise it will not be null.		
+		if(userID==null) {
+			System.out.println("Error: null authentication");
+			return; //authentication cancelled by user
+		}
+		
+		//is already a particular type upon account creation
+		Account acc = accountsMngr.getUserAccount(userID.intValue());
+		
+		//test which type of employee it is.		
+		// if it is a Customer, then display customer menu		
+		// if it is an employee, then display the employee menu		
+		//start that particular menu until logout
+		
+		//Method 2
+		try {		
+			switch(acc.getAccountType()) {
+			case UserTypes.CUSTOMER:					
+				((CustomerAccount)acc).start();
+			case UserTypes.EMPLOYEE:
+				((EmployeeAccount)acc).start();
+			case -1: //basic account
+				System.out.println("Problem with account type being undefined");
+				return;
 			}			
 		} catch (LogOut e) {
 			this.accountsMngr.logOut(acc);

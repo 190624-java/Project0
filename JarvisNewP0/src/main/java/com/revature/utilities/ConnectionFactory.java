@@ -24,18 +24,28 @@ public class ConnectionFactory {
 	 */
 	public static Connection getConnection() throws SQLException {
 		String port = "1521";
-		String hostname = "class-and-project0.cvriicvj5pb8.us-east-2.rds.amazonaws.com";
+		String hostname = "project0.cvriicvj5pb8.us-east-2.rds.amazonaws.com"; //a.k.a. endpoint
 		String dbName = "ORCL";
-		String admin_username = "abc";
-		String admin_password = "abcdefghij";
-		//Port 1521
-		String url_ds = "jdbc:driver://"
+		String admin_username = "myAdmin";
+		String admin_password = "Project000";
+		
+		String url_ds = "jdbc:oracle:thin:@"
 				+hostname
 				+":"+port
-				+"/"+dbName
-				+"?user="+admin_username
-				+"&password="+admin_password;
-		return DriverManager.getConnection(url_ds,admin_username,admin_password);
+				+":"+dbName;
+		//-----------
+		//Test for getting Connection without potentially destroying the connection on exit of this function.
+		Connection c;
+		try {
+			c = DriverManager.getConnection(url_ds, admin_username, admin_password);
+		}catch(SQLException e) {
+			System.out.println("Couldn't establish connection!");
+			//e.printStackTrace();
+			return null;
+		}
+		return c;
+//		System.out.println(url_ds);		
+//		return DriverManager.getConnection(url_ds, admin_username, admin_password);
 	}
 
 	/**
